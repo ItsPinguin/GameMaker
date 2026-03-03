@@ -1,0 +1,17 @@
+{
+  "attribute": {
+    "strength": {
+      "prefix": "§c",
+      "suffix": "§c░"
+    }
+  },
+  "lore": {
+    "attribute": "{attribute}: {value}"
+  },
+  "type": {
+    "sword": {
+      "lore": "SWORD",
+      "text": "sword"
+    }
+  }
+}

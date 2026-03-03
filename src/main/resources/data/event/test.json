@@ -1,0 +1,15 @@
+{
+  "trigger": "interaction",
+  "actions": [
+    {
+      "action": "message_player",
+      "message": "Hello you"
+    }
+  ],
+  "criterion": [
+    {
+      "criteria": "entity_tag",
+      "tags": ["test_entity"]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "trigger": "player_click",
+  "criteria": [
+    {
+      "criterion": "item",
+      "item": "oculus/the_amulet"
+    },
+    {
+      "criterion": "cooldown",
+      "group": "amulet",
+      "cooldown": 5.0
+    }
+  ],
+  "actions": [
+    {
+      "action": "message_player",
+      "message": "You have used the amulet!"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+name: GameMaker
+version: '1.0-SNAPSHOT'
+main: fr.ping.gamemaker.GameMakerPlugin
+api-version: '1.19'
+prefix: GameMaker
+load: STARTUP
+authors: [ ItsPinguin ]
+
+commands:
+  gamemaker:
+    permission: gamemaker.main
+    aliases:
+      - gm
+      - gmk
+      - gmkr
+      - gmaker
+

@@ -1,0 +1,9 @@
+{
+  "name": "The Amulet",
+  "material": "gold_nugget",
+  "lore": [
+    "Not a big deal"
+  ],
+  "rarity": "legendary",
+  "type": "accessory"
+}

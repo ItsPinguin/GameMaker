@@ -1,0 +1,14 @@
+{
+  "title": "My Inventory Here",
+  "slots": [
+    {
+      "type": "single",
+      "slot": 4,
+      "item": "some_item",
+      "action": "blabla"
+    },
+    {
+      "": ""
+    }
+  ]
+}

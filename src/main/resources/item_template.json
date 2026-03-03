@@ -1,0 +1,60 @@
+{
+  "id": "frozen_fangs",
+  "name": "Frozen Fangs",
+  "material": "iron_sword",
+  "rarity": "common",
+  "type": "sword",
+  "lore": [
+    "Forged within the deepest glaciers"
+  ],
+  "attributes": {
+    "damage": 200,
+    "strength": 50
+  },
+  "requirements": [
+    {
+      "type": "skill",
+      "skill": "combat",
+      "level": 20
+    },
+    {
+      "type": "player_level",
+      "level": 50
+    }
+  ],
+  "abilities": [
+    {
+      "trigger": "right_click",
+      "actions":  [
+        {
+          "type": "iced_up"
+        },
+        {
+          "type": "retrieve_mana",
+          "mana": 50
+        },
+        {
+          "type": "ability_used_message",
+          "mana": 50,
+          "ability_name": "iced_up"
+        }
+      ]
+    },
+    {
+      "trigger": "jump",
+      "actions": [
+        {
+          "type": "apply_potion_effect",
+          "potion": "jump",
+          "level": 4
+        }
+      ]
+    }
+  ],
+  "enchants": {
+    "greater_freeze": 1
+  },
+  "tags": [
+    "ice"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "trigger": "interaction",
+  "actions": [
+    {
+      "action": "npc_dialog",
+      "npc": "oculus"
+    }
+  ],
+  "criterion": [
+    {
+      "criteria": "is_npc",
+      "npc": "oculus"
+    }
+  ]
+}

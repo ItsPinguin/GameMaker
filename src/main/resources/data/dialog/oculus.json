@@ -1,0 +1,36 @@
+{
+  "dialog_lines": [
+    "hi",
+    "Who are you?",
+    "you who comes to me.",
+    "What is this place?",
+    "I know not",
+    "but here i've been",
+    "now for many years",
+    "or so",
+    "...",
+    "anyways",
+    "oh one last thing",
+    "take this",
+    {
+      "actions": [
+        {
+          "action": "give_item",
+          "item": "oculus/the_amulet",
+          "should_message": true
+        },
+        {
+          "action": "hide_npc",
+          "npc": "oculus"
+        },
+        {
+          "action": "message_player",
+          "message": "HIIII"
+        }
+      ]
+    },
+    "blabla"
+  ],
+  "loops": true,
+  "cooldown": 0.100
+}
