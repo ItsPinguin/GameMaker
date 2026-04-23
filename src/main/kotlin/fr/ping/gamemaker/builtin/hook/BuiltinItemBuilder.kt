@@ -21,7 +21,7 @@ object BuiltinItemBuilder : ItemHandlerHook {
       "lore" -> {
         if (value == null || value !is List<*>) return null
         @Suppress("UNCHECKED_CAST")
-        return value.map { i18n?.resource?.translateAndInsert("lore_line", mapOf("lore" to it as String)).toString() }.let {
+        return value.map { if (it.toString().startsWith($$"$t")) i18n?.resource?.translateAndInsert("lore_line", mapOf("lore" to it.toString().removePrefix($$"$t"))).toString() else it.toString() }.let {
           if (config.insertSpaceAfter.getOrPut(key) { true }) it + listOf("") else it
         }
       }
