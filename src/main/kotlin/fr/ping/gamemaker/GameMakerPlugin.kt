@@ -35,7 +35,8 @@ class GameMakerPlugin : JavaPlugin() {
   }
 
   override fun onDisable() {
-    AddonManager.save()
+    if (config.save_resources)
+      AddonManager.save()
     AddonManager.unload()
     ResourceManager.clean()
   }
@@ -49,6 +50,7 @@ class GameMakerPlugin : JavaPlugin() {
   }
 
   data class Config(
+    var save_resources: Boolean = true,
     var builtins: Builtins = Builtins(),
     @SerializedName("item_lore_order")
     var itemLoreOrder: List<String> = listOf("attributes", "lore", "enchants")
