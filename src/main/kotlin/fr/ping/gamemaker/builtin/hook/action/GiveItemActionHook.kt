@@ -1,14 +1,14 @@
 package fr.ping.gamemaker.builtin.hook.action
 
-import fr.ping.gamemaker.GameMakerPlugin.Companion.gmk
 import fr.ping.gamemaker.addon.ActionExecutorHook
-import fr.ping.gamemaker.builtin.resource.I18n
+import fr.ping.gamemaker.builtin.hook.BuiltinRegistryCreator
 import fr.ping.gamemaker.resource.Action
 import fr.ping.gamemaker.resource.ItemTemplate
+import fr.ping.utils.resources.ResourceManager
 import org.bukkit.entity.Player
 
 object GiveItemActionHook: ActionExecutorHook {
-  val lang by lazy { gmk.useRegistry<I18n>("lang").getHandle("actions/en_US") }
+  val lang by lazy { BuiltinRegistryCreator.langRegistry.resourceMap["en_US"] }
 
   override fun execute(
     action: Action,
@@ -18,7 +18,7 @@ object GiveItemActionHook: ActionExecutorHook {
     val itemId = action.data["item"] as? String ?: return
     val player = context["player"] as? Player ?: return
     @Suppress("DEPRECATION")
-    gmk.useRegistry<ItemTemplate>("items")[itemId]?.let { item ->
+    ResourceManager[itemId, ItemTemplate::class.java]?.resource?.let { item ->
       val itemStack = item.buildItem()
       player.inventory.addItem(itemStack)
       if ((action.data["should_message"] as? Boolean == true))
@@ -26,13 +26,5 @@ object GiveItemActionHook: ActionExecutorHook {
           "item_name" to itemStack.itemMeta.displayName
         )).toString())
     }
-  }
-
-  override fun getId(): String {
-    return "give_item"
-  }
-
-  override fun clean() {
-    lang?.release()
   }
 }

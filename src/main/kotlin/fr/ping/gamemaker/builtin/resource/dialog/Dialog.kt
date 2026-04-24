@@ -19,7 +19,7 @@ data class Dialog(
   var useTitle : Boolean? = null,
   @SerializedName("should_use_action_bar")
   var useActionBar : Boolean? = null
-) : Resource {
+) : Resource() {
   @Transient
   val cooldowns = mutableMapOf<String, Double>()
   @Transient
@@ -50,14 +50,6 @@ data class Dialog(
     if (loops)
       indexes[playerName] = indexes[playerName]!! % dialogLines.size
     cooldowns[playerName] = System.currentTimeMillis().toDouble()
-  }
-
-  override fun getId(): String {
-    return _id
-  }
-
-  override fun setId(id: String) {
-    this._id = id
   }
 
   override fun clean() {

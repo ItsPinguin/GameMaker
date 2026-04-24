@@ -11,7 +11,7 @@ import com.google.gson.stream.JsonWriter
 @JsonAdapter(I18n.Adapter::class)
 class I18n(
   private val translations: MutableMap<String, Any?> = mutableMapOf<String, Any?>()
-) : Resource {
+) : Resource() {
   fun translate(key: String) : String {
     val path = key.lowercase().split(".")
     var current = translations
@@ -32,10 +32,6 @@ class I18n(
     }
     return message
   }
-
-  override fun getId(): String = ""
-
-  override fun setId(id: String) = Unit
 
   override fun clean() {
     translations.clear()

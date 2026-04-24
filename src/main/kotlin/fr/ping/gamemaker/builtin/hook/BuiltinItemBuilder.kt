@@ -10,10 +10,7 @@ object BuiltinItemBuilder : ItemHandlerHook {
   private val config : Config
     get() = GameMakerPlugin.getInstance().config.builtins.itemBuilder
   private val i18n by lazy {
-    ResourceManager.useNamespace("gamemaker").useRegistry<I18n>("lang").getHandle("item_builder/en_US").let {
-      if (it?.resource == null) it?.resource = I18n()
-      it
-    }
+    ResourceManager["item_build/en_US", I18n::class.java]
   }
 
   override fun buildItemLore(key: String, value: Any?, data: Map<String, Any?>): List<String>? {
@@ -66,14 +63,6 @@ object BuiltinItemBuilder : ItemHandlerHook {
 
   override fun deserializeItem(key: String, value: Any?): Any? {
     TODO("Not yet implemented")
-  }
-
-  override fun clean() {
-    i18n?.release()
-  }
-
-  override fun getId(): String {
-    return "builtin_item_builder"
   }
 
   data class Config(

@@ -20,11 +20,4 @@ object ItemCriterionCheckerHook: CriteriaCheckerHook {
     GameMakerPlugin.getInstance().logger.info("ItemCriterionCheckerHook: received item: $item, expected item: $expectedItem, itemId: $itemId")
     return expectedItem == itemId
   }
-
-  override fun getId(): String {
-    return "item"
-  }
-
-  override fun clean() {
-  }
 }

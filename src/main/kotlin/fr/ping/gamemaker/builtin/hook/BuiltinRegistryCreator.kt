@@ -1,6 +1,6 @@
 package fr.ping.gamemaker.builtin.hook
 
-import fr.ping.gamemaker.GameMakerPlugin
+import fr.ping.fr.ping.utils.resources.ReadyRegistry
 import fr.ping.gamemaker.addon.RegistryCreatorHook
 import fr.ping.gamemaker.builtin.resource.I18n
 import fr.ping.gamemaker.builtin.resource.dialog.Dialog
@@ -10,17 +10,17 @@ import fr.ping.gamemaker.resource.Trigger
 import fr.ping.utils.resources.ResourceManager
 
 object BuiltinRegistryCreator : RegistryCreatorHook {
+  val itemRegistry = ReadyRegistry(ItemTemplate::class.java)
+  val langRegistry = ReadyRegistry(I18n::class.java)
+  val actionRegistry = ReadyRegistry(Action::class.java)
+  val triggerRegistry = ReadyRegistry(Trigger::class.java)
+  val dialogRegistry = ReadyRegistry(Dialog::class.java)
+
   override fun createRegistry() {
-    val gmk = ResourceManager.useNamespace("gamemaker")
-    gmk.useRegistry<ItemTemplate>("items")
-      .applyScheme(GameMakerPlugin.getInstance().getResource("schemes/item.json"))
-    gmk.useRegistry<I18n>("lang")
-    gmk.useRegistry<Action>("actions")
-    gmk.useRegistry<Trigger>("triggers")
-    gmk.useRegistry<Dialog>("dialogs")
+    ResourceManager["item"] = itemRegistry
+    ResourceManager["lang"] = langRegistry
+    ResourceManager["action"] = actionRegistry
+    ResourceManager["trigger"] = triggerRegistry
+    ResourceManager["dialog"] = dialogRegistry
   }
-
-  override fun getId(): String = "builtin_registry_creator"
-
-  override fun clean() = Unit
 }

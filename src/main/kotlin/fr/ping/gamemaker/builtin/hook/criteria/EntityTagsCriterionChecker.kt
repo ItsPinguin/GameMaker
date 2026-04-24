@@ -22,11 +22,4 @@ object EntityTagsCriterionChecker : CriteriaCheckerHook{
     }
     return true
   }
-
-  override fun getId(): String {
-    return "entity_tag"
-  }
-
-  override fun clean() {
-  }
 }

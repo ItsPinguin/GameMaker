@@ -18,7 +18,7 @@ import org.bukkit.persistence.PersistentDataType
 @JsonAdapter(ItemTemplate.Adapter::class)
 open class ItemTemplate(
   val data: MutableMap<String, Any> = mutableMapOf<String, Any>()
-) : Resource {
+) : Resource() {
 
   var material: Material
     get() = Material.getMaterial((data["material"] as? String)?.uppercase() ?: "AIR") ?: Material.AIR
@@ -54,18 +54,10 @@ open class ItemTemplate(
     itemMeta.lore = actualLore
     itemMeta.addItemFlags(*ItemFlag.entries.toTypedArray())
 
-    itemMeta.persistentDataContainer.set(NamespacedKey("gamemaker", "item"), PersistentDataType.STRING, getId())
+    itemMeta.persistentDataContainer.set(NamespacedKey("gamemaker", "item"), PersistentDataType.STRING, id)
 
     itemStack.itemMeta = itemMeta
     return itemStack
-  }
-
-  override fun getId(): String {
-    return data["id"] as? String ?: "invalid_id"
-  }
-
-  override fun setId(id: String) {
-    data["id"] = id
   }
 
   override fun clean() {
@@ -80,7 +72,7 @@ open class ItemTemplate(
     override fun read(`in`: JsonReader?): ItemTemplate {
       `in` ?: return ItemTemplate()
       if (`in`.peek() == JsonToken.BEGIN_OBJECT) {
-        val itemTemplate = ItemTemplate(GameMakerPlugin.Companion.gson.fromJson(`in`, MutableMap::class.java))
+        val itemTemplate = ItemTemplate(GameMakerPlugin.gson.fromJson(`in`, MutableMap::class.java))
         return itemTemplate
       }
       return ItemTemplate()

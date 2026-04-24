@@ -11,14 +11,7 @@ import com.google.gson.stream.JsonWriter
 @JsonAdapter(MapResource.Adapter::class)
 open class MapResource(
   var data: MutableMap<String, Any?> = mutableMapOf<String, Any?>()
-): Resource {
-  override fun getId(): String {
-    return data["id"] as? String ?: "no_id"
-  }
-
-  override fun setId(id: String) {
-    data["id"] = id
-  }
+): Resource() {
 
   override fun clean() {
     data.clear()

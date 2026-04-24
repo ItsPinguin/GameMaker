@@ -18,11 +18,4 @@ object MessagePlayerHook : ActionExecutorHook {
         GameMakerPlugin.getInstance().logger.info("Worked")
     }
   }
-
-  override fun getId(): String {
-    return "message_player"
-  }
-
-  override fun clean() {
-  }
 }

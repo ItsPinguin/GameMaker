@@ -24,13 +24,4 @@ object CooldownCriterionChecker : CriteriaCheckerHook {
       it
     }
   }
-
-  override fun getId(): String {
-    return "cooldown"
-  }
-
-  override fun clean() {
-    cooldowns.forEach { (_, map) -> map.clear() }
-    cooldowns.clear()
-  }
 }

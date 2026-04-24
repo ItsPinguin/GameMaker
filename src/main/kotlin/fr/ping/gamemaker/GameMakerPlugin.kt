@@ -8,6 +8,8 @@ import fr.ping.gamemaker.commands.GameMakerCommand
 import fr.ping.utils.resources.ResourceManager
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
+import fr.ping.fr.ping.utils.resources.ReadyRegistry
+import fr.ping.gamemaker.builtin.hook.BuiltinRegistryCreator.langRegistry
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
 
@@ -29,6 +31,10 @@ class GameMakerPlugin : JavaPlugin() {
   override fun onEnable() {
     AddonManager.load()
 
+    ResourceManager.addResourcePath("plugins/GameMaker/data")
+    ResourceManager.findSchemeResources(true)
+    ResourceManager.loadAllResources(true, true)
+
     registerCommands()
     registerEvents()
     System.gc()
@@ -39,6 +45,9 @@ class GameMakerPlugin : JavaPlugin() {
       AddonManager.save()
     AddonManager.unload()
     ResourceManager.clean()
+    langRegistry.listResources().forEach { i18n ->
+      i18n.file?.writeText(gson.toJson(i18n))
+    }
   }
 
   private fun registerCommands() {
@@ -61,7 +70,7 @@ class GameMakerPlugin : JavaPlugin() {
   }
 
   companion object {
-    val gmk by lazy { ResourceManager.useNamespace("gamemaker") }
+    //val gmk by lazy { ResourceManager.useNamespace("gamemaker") }
     val gmkFolder by lazy { getResourceFolder().resolve("gamemaker") }
 
     val gson = GsonBuilder().setPrettyPrinting().create()

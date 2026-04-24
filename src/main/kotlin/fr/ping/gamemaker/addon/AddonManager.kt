@@ -1,16 +1,14 @@
 package fr.ping.gamemaker.addon
 
 import fr.ping.gamemaker.GameMakerPlugin
-import fr.ping.gamemaker.GameMakerPlugin.Companion.gmk
 import fr.ping.gamemaker.GameMakerPlugin.Companion.gson
 import fr.ping.gamemaker.GameMakerPlugin.Config
+import fr.ping.gamemaker.builtin.hook.BuiltinRegistryCreator.triggerRegistry
 import fr.ping.gamemaker.resource.Action
 import fr.ping.gamemaker.resource.Criterion
 import fr.ping.gamemaker.resource.Trigger
-import fr.ping.utils.resources.Profiler
 import fr.ping.utils.resources.ResourceHandle
-import fr.ping.utils.resources.StatusRequest
-import fr.ping.utils.resources.StatusRequestType
+import fr.ping.utils.resources.ResourceManager
 import org.bukkit.Bukkit
 import java.io.File
 import java.util.Collections
@@ -51,10 +49,10 @@ object AddonManager {
     Bukkit.getScheduler().runTaskAsynchronously(GameMakerPlugin.getInstance()) { task ->
       resourceHandlerHooks.forEach { it.loadResources() }
       GameMakerPlugin.getInstance().logger.info("Resources loaded asynchronously.")
-      Profiler.requestStatus(StatusRequest(StatusRequestType.HANDLES)).let {
-        val handleCount = it.handles?.size ?: 0
-        GameMakerPlugin.getInstance().logger.info("Loaded $handleCount handles.")
-      }
+      //Profiler.requestStatus(StatusRequest(StatusRequestType.HANDLES)).let {
+      //  val handleCount = it.handles?.size ?: 0
+      //  GameMakerPlugin.getInstance().logger.info("Loaded $handleCount handles.")
+      //}
       TriggerManager.reloadTriggers()
     }
   }
@@ -99,22 +97,13 @@ object AddonManager {
       if (triggerEventName != null) triggers.remove(triggerEventName)
       else triggers.clear()
       @Suppress("UNCHECKED_CAST")
-      gmk.useRegistry<Trigger>("triggers").listHandles().forEach {
+      triggerRegistry.listHandles().forEach {
         //GameMakerPlugin.getInstance().logger.info("[TriggerManager] Updating trigger: ${it.resourceName}, has data: ${it.resource?.data}")
         if (triggerEventName == null || triggerEventName == it.resource?.trigger)
-          triggers.getOrPut(it.resource?.trigger ?: "dummy") { mutableListOf() }.add(it)
+          triggers.getOrPut(it.resource?.trigger ?: "dummy") { mutableListOf() }
+            .add(it)
       }
       //GameMakerPlugin.getInstance().logger.info("[TriggerManager] Mapped triggers: $triggers")
-    }
-
-    fun reloadTrigger(triggerName: String) {
-      gmk.useRegistry<Trigger>("triggers").getHandle(triggerName)?.let {
-        triggers.getOrPut(it.resource?.trigger ?: "dummy") { mutableListOf()  }.let { triggerList ->
-          triggerList.removeIf { filtered -> filtered.resourceName == it.resourceName }
-          triggerList.add(it)
-        }
-        it.release()
-      }
     }
 
     fun trigger(triggerName: String, context: Map<String, Any?> = mapOf()) {
