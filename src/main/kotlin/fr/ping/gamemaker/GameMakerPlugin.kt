@@ -1,5 +1,6 @@
 package fr.ping.gamemaker
 
+import com.google.gson.Gson
 import fr.ping.gamemaker.addon.AddonManager
 import fr.ping.gamemaker.builtin.BuiltinAddon
 import fr.ping.gamemaker.builtin.events.TriggerEventListener
@@ -73,7 +74,7 @@ class GameMakerPlugin : JavaPlugin() {
     //val gmk by lazy { ResourceManager.useNamespace("gamemaker") }
     val gmkFolder by lazy { getResourceFolder().resolve("gamemaker") }
 
-    val gson = GsonBuilder().setPrettyPrinting().create()
+    val gson : Gson = GsonBuilder().setPrettyPrinting().create()
     private val pathRegex = Regex("([a-zA-Z]*):?([a-zA-Z0-9]*)/?([a-zA-Z0-9|/]*)")
 
     fun getInstance() : GameMakerPlugin {
