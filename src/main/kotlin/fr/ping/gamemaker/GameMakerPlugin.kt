@@ -11,7 +11,9 @@ import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
 import fr.ping.fr.ping.utils.resources.ReadyRegistry
 import fr.ping.gamemaker.builtin.hook.BuiltinRegistryCreator.langRegistry
+import fr.ping.gamemaker.builtin.resource.VectorTypeAdapter
 import org.bukkit.plugin.java.JavaPlugin
+import org.bukkit.util.Vector
 import java.io.File
 
 class GameMakerPlugin : JavaPlugin() {
@@ -24,6 +26,7 @@ class GameMakerPlugin : JavaPlugin() {
     else
       config = gson.fromJson<Config>(File(dataFolder, "config.json").readText(), Config::class.java) ?: config
 
+    ResourceManager.registerTypeAdapter(Vector::class.java, VectorTypeAdapter())
     BuiltinAddon.registerHooks()
 
     System.gc()
