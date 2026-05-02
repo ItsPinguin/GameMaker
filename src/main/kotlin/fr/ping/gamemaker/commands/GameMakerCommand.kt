@@ -27,7 +27,7 @@ object GameMakerCommand : TabExecutor {
       }
       return null
     }
-    return listOf("help", "giveall", "reload", "translate", "give", "menu")
+    return listOf("help", "giveall", "reload", "translate", "give", "menu", "clear_cached_menus")
   }
 
   override fun onCommand(
@@ -60,6 +60,10 @@ object GameMakerCommand : TabExecutor {
         }
         sender.inventory.addItem(ItemManager.buildItem(item))
         sender.sendMessage("§7Gave §f$item")
+      }
+      "clear_cached_menus" -> {
+        MenuManager.menus.clear()
+        sender.sendMessage("§7Cleared all cached menus")
       }
       "menu" -> {
         if (sender !is Player) return true
