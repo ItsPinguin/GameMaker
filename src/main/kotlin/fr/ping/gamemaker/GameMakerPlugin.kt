@@ -16,6 +16,8 @@ import fr.ping.gamemaker.criteria.CriteriaChecker
 import fr.ping.gamemaker.actions.models.Action
 import fr.ping.gamemaker.items.builders.models.ItemBuilder
 import fr.ping.gamemaker.items.templates.models.ItemTemplate
+import fr.ping.gamemaker.listeners.InventoryListener
+import fr.ping.gamemaker.menus.models.MenuTemplate
 import fr.ping.gamemaker.triggers.Trigger
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.util.Vector
@@ -60,6 +62,7 @@ class GameMakerPlugin : JavaPlugin() {
 
   private fun registerEvents() {
     server.pluginManager.registerEvents(TriggerEventListener, this)
+    server.pluginManager.registerEvents(InventoryListener, this)
   }
 
   data class Config(
@@ -74,7 +77,7 @@ class GameMakerPlugin : JavaPlugin() {
   }
 
   companion object {
-    val itemRegistry = ReadyRegistry(ItemTemplate::class.java, "item")
+    val itemTemplateRegistry = ReadyRegistry(ItemTemplate::class.java, "item_template")
     val itemBuilderRegistry = ReadyRegistry(ItemBuilder::class.java, "item_builder")
     val actionRegistry = ReadyRegistry(Action::class.java, "action")
     val actionExecutorRegistry = ReadyRegistry(ActionExecutor::class.java, "action_executor",)
@@ -82,6 +85,7 @@ class GameMakerPlugin : JavaPlugin() {
     val dialogRegistry = ReadyRegistry(Dialog::class.java, "dialog")
     val criterionCheckerRegistry = ReadyRegistry(CriteriaChecker::class.java, "criterion_checker")
     val langRegistry = ReadyRegistry(I18n::class.java, "lang")
+    val menuTemplateRegistry = ReadyRegistry(MenuTemplate::class.java, "menu_template")
 
     val gson : Gson = GsonBuilder().setPrettyPrinting().create()
 

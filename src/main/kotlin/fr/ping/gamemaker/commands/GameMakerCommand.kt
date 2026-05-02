@@ -1,8 +1,10 @@
 package fr.ping.gamemaker.commands
 
-import fr.ping.gamemaker.GameMakerPlugin.Companion.itemRegistry
+import fr.ping.gamemaker.GameMakerPlugin.Companion.itemTemplateRegistry
+import fr.ping.gamemaker.GameMakerPlugin.Companion.menuTemplateRegistry
 import fr.ping.gamemaker.builtin.resource.I18n
 import fr.ping.gamemaker.items.ItemManager
+import fr.ping.gamemaker.menus.MenuManager
 import fr.ping.utils.resources.ResourceManager
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
@@ -20,11 +22,12 @@ object GameMakerCommand : TabExecutor {
   ): List<String?>? {
     if ((args.size) > 1) {
       when (args.getOrNull(0) ?: "") {
-        "give" -> return listOf(*itemRegistry.listIds().toTypedArray())
+        "give" -> return listOf(*itemTemplateRegistry.listIds().toTypedArray())
+        "menu" -> return listOf(*menuTemplateRegistry.listIds().toTypedArray())
       }
       return null
     }
-    return listOf("help", "giveall", "reload", "translate", "give")
+    return listOf("help", "giveall", "reload", "translate", "give", "menu")
   }
 
   override fun onCommand(
@@ -44,10 +47,10 @@ object GameMakerCommand : TabExecutor {
       }
       "giveall" -> {
         if (sender !is Player) return true
-        itemRegistry.listResources().forEach {
+        itemTemplateRegistry.listResources().forEach {
           sender.inventory.addItem(ItemManager.buildItem(it))
         }
-        sender.sendMessage("§7Gave §f${itemRegistry.listResources().size} items")
+        sender.sendMessage("§7Gave §f${itemTemplateRegistry.listResources().size} items")
       }
       "give" -> {
         if (sender !is Player) return true
@@ -57,6 +60,14 @@ object GameMakerCommand : TabExecutor {
         }
         sender.inventory.addItem(ItemManager.buildItem(item))
         sender.sendMessage("§7Gave §f$item")
+      }
+      "menu" -> {
+        if (sender !is Player) return true
+        val menu = args.getOrNull(1) ?: run {
+          sender.sendMessage("§7Usage: §f/gamemaker menu <menu>")
+          return true
+        }
+        MenuManager.open(sender, menu)
       }
       "translate" -> {
         sender.sendMessage(i18n?.resource?.translateAndInsert("some.key.to.something", mapOf("thing" to System.currentTimeMillis().toString())).toString())
