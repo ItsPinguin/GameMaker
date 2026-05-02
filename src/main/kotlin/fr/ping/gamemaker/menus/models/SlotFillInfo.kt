@@ -61,7 +61,7 @@ class SlotFillInfo : Resource() {
           val value = jsonReader.nextString()
           if (value.startsWith("r")) {
             return SlotFillInfo().apply {
-              toSlot = value.replace("r:", "").replace("row ", "").toIntOrNull() ?: 0
+              row = value.replace("r:", "").replace("row ", "").toIntOrNull() ?: 0
               fillType = SlotFillType.ROW
             }
           }
