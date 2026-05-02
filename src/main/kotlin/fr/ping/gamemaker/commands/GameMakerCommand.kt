@@ -1,9 +1,10 @@
 package fr.ping.gamemaker.commands
 
-import fr.ping.gamemaker.addon.AddonManager
-import fr.ping.gamemaker.builtin.hook.BuiltinRegistryCreator.itemRegistry
+import fr.ping.gamemaker.GameMakerPlugin.Companion.itemRegistry
+import fr.ping.gamemaker.addons.AddonManager
 import fr.ping.gamemaker.builtin.resource.I18n
-import fr.ping.gamemaker.resource.ItemTemplate
+import fr.ping.gamemaker.items.ItemManager
+import fr.ping.gamemaker.items.templates.models.ItemTemplate
 import fr.ping.utils.resources.ResourceManager
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
@@ -55,7 +56,7 @@ object GameMakerCommand : TabExecutor {
       "giveall" -> {
         if (sender !is Player) return true
         itemRegistry.listResources().forEach {
-          sender.inventory.addItem(it.buildItem())
+          sender.inventory.addItem(ItemManager.buildItem(it))
           sender.sendMessage("Gave ${it.id}")
         }
       }
@@ -65,7 +66,9 @@ object GameMakerCommand : TabExecutor {
           sender.sendMessage("Usage: /gamemaker give <item>")
           return true
         }
-        ResourceManager[item, ItemTemplate::class.java]?.resource?.buildItem()?.let {
+        ItemManager.buildItem(
+          ResourceManager[item, ItemTemplate::class.java]?.resource
+        ).let {
           sender.inventory.addItem(it)
           sender.sendMessage("Gave $item")
         }

@@ -2,8 +2,8 @@ package fr.ping.gamemaker.builtin.resource.dialog
 
 import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.builtin.resource.dialog.DialogLine.Adapter
-import fr.ping.gamemaker.resource.Action
-import fr.ping.gamemaker.resource.Criterion
+import fr.ping.gamemaker.actions.models.Action
+import fr.ping.gamemaker.criteria.models.Criterion
 import com.google.gson.TypeAdapter
 import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName

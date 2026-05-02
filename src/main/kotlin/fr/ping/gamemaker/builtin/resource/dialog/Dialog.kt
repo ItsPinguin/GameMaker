@@ -1,8 +1,10 @@
 package fr.ping.gamemaker.builtin.resource.dialog
 
-import fr.ping.gamemaker.addon.AddonManager
+import fr.ping.gamemaker.addons.AddonManager
 import fr.ping.utils.resources.Resource
 import com.google.gson.annotations.SerializedName
+import fr.ping.gamemaker.actions.ActionManager
+import fr.ping.gamemaker.criteria.CriteriaManager
 import org.bukkit.entity.Player
 
 data class Dialog(
@@ -37,14 +39,14 @@ data class Dialog(
     val expectedCooldown = line.cooldown ?: cooldown
 
     if (playerCooldown + expectedCooldown * 1000 > System.currentTimeMillis()) return
-    if (!AddonManager.checkCriteria(line.criteria, context)) return
+    if (!CriteriaManager.checkCriteria(line.criteria, context)) return
     line.text?.let {
       if ((line.useChat ?: useChat) != false) player.sendMessage(it)
       if ((line.useTitle ?: useTitle) == true) player.sendTitle("", it, 10, 60, 10)
       if ((line.useActionBar ?: useActionBar) == true) player.sendActionBar(it)
     }
     line.actions?.forEach { action ->
-      AddonManager.executeAction(action, context)
+      ActionManager.executeAction(action, context)
     }
     indexes[playerName] = (index + (line.step ?: 1))
     if (loops)
