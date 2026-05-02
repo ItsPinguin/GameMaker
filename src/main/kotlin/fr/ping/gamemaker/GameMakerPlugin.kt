@@ -1,7 +1,6 @@
 package fr.ping.gamemaker
 
 import com.google.gson.Gson
-import fr.ping.gamemaker.addons.AddonManager
 import fr.ping.gamemaker.listeners.TriggerEventListener
 import fr.ping.gamemaker.items.builders.impl.BuiltinItemBuilder
 import fr.ping.gamemaker.commands.GameMakerCommand
@@ -38,7 +37,6 @@ class GameMakerPlugin : JavaPlugin() {
   }
 
   override fun onEnable() {
-    AddonManager.load()
 
     ResourceManager.addResourcePath(getResourceFolder().path)
     ResourceManager.findSchemeResources(true)
@@ -50,9 +48,6 @@ class GameMakerPlugin : JavaPlugin() {
   }
 
   override fun onDisable() {
-    if (config.save_resources)
-      AddonManager.save()
-    AddonManager.unload()
     ResourceManager.clean()
     langRegistry.listResources().forEach { i18n ->
       i18n.file?.writeText(gson.toJson(i18n))

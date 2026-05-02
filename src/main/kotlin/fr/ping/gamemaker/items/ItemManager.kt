@@ -1,6 +1,8 @@
 package fr.ping.gamemaker.items
 
 import fr.ping.gamemaker.GameMakerPlugin
+import fr.ping.gamemaker.GameMakerPlugin.Companion.itemBuilderRegistry
+import fr.ping.gamemaker.items.builders.impl.BuiltinItemBuilder
 import fr.ping.gamemaker.items.templates.models.ItemTemplate
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -40,5 +42,9 @@ object ItemManager {
     itemStack.itemMeta = itemMeta
 
     return itemStack
+  }
+
+  init {
+    itemBuilderRegistry.registerResource("builtin_builder", BuiltinItemBuilder)
   }
 }

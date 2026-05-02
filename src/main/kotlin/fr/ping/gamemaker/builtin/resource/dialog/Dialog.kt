@@ -1,6 +1,5 @@
 package fr.ping.gamemaker.builtin.resource.dialog
 
-import fr.ping.gamemaker.addons.AddonManager
 import fr.ping.utils.resources.Resource
 import com.google.gson.annotations.SerializedName
 import fr.ping.gamemaker.actions.ActionManager
