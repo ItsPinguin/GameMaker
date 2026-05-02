@@ -9,6 +9,9 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
 object ItemManager {
+  fun buildItem(id: String, context: Map<String, Any?> = mutableMapOf()) =
+    buildItem(GameMakerPlugin.itemRegistry.getResource(id), context)
+
   fun buildItem(template: ItemTemplate?, context: Map<String, Any?> = mutableMapOf()) : ItemStack {
     val itemStack = ItemStack(template?.material ?: Material.AIR)
     if (template == null || itemStack.type == Material.AIR) return itemStack
