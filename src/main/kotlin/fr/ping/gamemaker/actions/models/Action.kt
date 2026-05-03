@@ -14,6 +14,4 @@ class Action: MapResource() {
   override fun toString(): String {
     return "Action(data='$data')"
   }
-
-
 }

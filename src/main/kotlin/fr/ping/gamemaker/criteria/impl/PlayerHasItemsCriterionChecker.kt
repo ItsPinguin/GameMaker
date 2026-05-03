@@ -6,7 +6,7 @@ import fr.ping.gamemaker.criteria.models.Criterion
 import fr.ping.gamemaker.items.ItemManager
 import org.bukkit.entity.Player
 
-object PlayerHasItemCriterionChecker : CriteriaChecker() {
+object PlayerHasItemsCriterionChecker : CriteriaChecker() {
   override fun check(
     criterion: Criterion,
     context: Map<String, Any?>
@@ -44,6 +44,6 @@ object PlayerHasItemCriterionChecker : CriteriaChecker() {
     }
 
     println("playerItems: $playerItems \nrequiredItems: $requiredItems")
-    return playerItems.all { it.value >= requiredItems[it.key]!! }
+    return requiredItems.all { it.value <= (playerItems[it.key] ?: 0) }
   }
 }

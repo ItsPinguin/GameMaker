@@ -1,14 +1,12 @@
 package fr.ping.gamemaker.criteria
 
 import fr.ping.gamemaker.GameMakerPlugin
-import fr.ping.gamemaker.GameMakerPlugin.Companion.actionExecutorRegistry
 import fr.ping.gamemaker.criteria.models.Criterion
 import fr.ping.gamemaker.GameMakerPlugin.Companion.criterionCheckerRegistry
-import fr.ping.gamemaker.actions.impl.MessagePlayer
 import fr.ping.gamemaker.criteria.impl.CooldownCriterionChecker
 import fr.ping.gamemaker.criteria.impl.EntityTagsCriterionChecker
 import fr.ping.gamemaker.criteria.impl.ItemCriterionCheckerHook
-import fr.ping.gamemaker.criteria.impl.PlayerHasItemCriterionChecker
+import fr.ping.gamemaker.criteria.impl.PlayerHasItemsCriterionChecker
 
 object CriteriaManager {
   fun checkCriterion(criterion: Criterion, context: Map<String, Any?>?) : Boolean {
@@ -28,7 +26,7 @@ object CriteriaManager {
     criterionCheckerRegistry.registerResource("entity_tags", EntityTagsCriterionChecker)
     criterionCheckerRegistry.registerResource("item", ItemCriterionCheckerHook)
     criterionCheckerRegistry.registerResource("cooldown", CooldownCriterionChecker)
-    criterionCheckerRegistry.registerResource("player_has_items", PlayerHasItemCriterionChecker)
+    criterionCheckerRegistry.registerResource("player_has_items", PlayerHasItemsCriterionChecker)
     println(criterionCheckerRegistry.listIds())
     println(criterionCheckerRegistry.listResources())
   }

@@ -25,11 +25,12 @@ object GiveItemsAction: ActionExecutor() {
       return
     }
     val criteria = action.data["criteria"] as? List<*> ?: mutableListOf<String>()
+    println("criteria: $criteria")
     val items = action.data["items"] as? List<*> ?: return
 
     val parsedCriteria = criteria.map { ResourceManager.getGson().fromJson(
       ResourceManager.getGson().toJson(it), Criterion::class.java) }
-    if (!CriteriaManager.checkCriteria(parsedCriteria, context)) {
+    if (!CriteriaManager.checkCriteria(parsedCriteria, context) && !(action.data["ignore_criteria"].toString().toBooleanStrictOrNull() ?: true)) {
       player.sendMessage("§cYou didn't meet the criteria to give the item.")
       return
     }

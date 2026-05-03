@@ -7,7 +7,7 @@ import fr.ping.gamemaker.builtin.resource.I18n
 import fr.ping.gamemaker.criteria.impl.CooldownCriterionChecker
 import fr.ping.gamemaker.criteria.impl.EntityTagsCriterionChecker
 import fr.ping.gamemaker.criteria.impl.ItemCriterionCheckerHook
-import fr.ping.gamemaker.criteria.impl.PlayerHasItemCriterionChecker
+import fr.ping.gamemaker.criteria.impl.PlayerHasItemsCriterionChecker
 import fr.ping.gamemaker.items.ItemManager
 import fr.ping.gamemaker.menus.MenuManager
 import fr.ping.utils.resources.ResourceManager
@@ -85,7 +85,7 @@ object GameMakerCommand : TabExecutor {
         criterionCheckerRegistry.registerResource("entity_tags", EntityTagsCriterionChecker)
         criterionCheckerRegistry.registerResource("item", ItemCriterionCheckerHook)
         criterionCheckerRegistry.registerResource("cooldown", CooldownCriterionChecker)
-        criterionCheckerRegistry.registerResource("player_has_items", PlayerHasItemCriterionChecker)
+        criterionCheckerRegistry.registerResource("player_has_items", PlayerHasItemsCriterionChecker)
       }
       else -> {
         sender.sendMessage("reload")

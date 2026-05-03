@@ -7,6 +7,7 @@ import fr.ping.gamemaker.actions.impl.DialogAction
 import fr.ping.gamemaker.actions.impl.GiveItemsAction
 import fr.ping.gamemaker.actions.impl.MessagePlayer
 import fr.ping.gamemaker.actions.impl.TakeItemsAction
+import fr.ping.gamemaker.actions.impl.TradeItemsAction
 
 object ActionManager {
   fun executeAction(action: Action, context: Map<String, Any?> = mapOf()) =
@@ -19,5 +20,6 @@ object ActionManager {
     actionExecutorRegistry.registerResource("give_items", GiveItemsAction)
     actionExecutorRegistry.registerResource("take_items", TakeItemsAction)
     actionExecutorRegistry.registerResource("command", CommandAction)
+    actionExecutorRegistry.registerResource("trade_items", TradeItemsAction)
   }
 }
