@@ -44,6 +44,9 @@ object PlayerHasItemsCriterionChecker : CriteriaChecker() {
     }
 
     println("playerItems: $playerItems \nrequiredItems: $requiredItems")
-    return requiredItems.all { it.value <= (playerItems[it.key] ?: 0) }
+    return requiredItems.all {
+      println("checking: ${playerItems[it.key]} >= ${it.value} -> ${(playerItems[it.key] ?: 0) >= it.value}")
+      (playerItems[it.key] ?: 0) >= it.value
+    }
   }
 }

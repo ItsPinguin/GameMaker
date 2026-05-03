@@ -30,8 +30,10 @@ object GiveItemsAction: ActionExecutor() {
 
     val parsedCriteria = criteria.map { ResourceManager.getGson().fromJson(
       ResourceManager.getGson().toJson(it), Criterion::class.java) }
-    if (!CriteriaManager.checkCriteria(parsedCriteria, context) && !(action.data["ignore_criteria"].toString().toBooleanStrictOrNull() ?: true)) {
-      player.sendMessage("§cYou didn't meet the criteria to give the item.")
+    if (!CriteriaManager.checkCriteria(parsedCriteria, context)) {
+      if (!(action.data["ignore_criteria"].toString().toBooleanStrictOrNull() ?: true)) {
+        player.sendMessage("§cYou didn't meet the criteria to give the item.")
+      }
       return
     }
 
