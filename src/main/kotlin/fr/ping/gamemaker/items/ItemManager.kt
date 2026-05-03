@@ -37,11 +37,15 @@ object ItemManager {
     itemMeta.addItemFlags(*ItemFlag.entries.toTypedArray())
     itemMeta.isUnbreakable = true
 
-    itemMeta.persistentDataContainer.set(NamespacedKey("gamemaker", "item"), PersistentDataType.STRING, template.id)
+    itemMeta.persistentDataContainer.set(NamespacedKey("gamemaker", "id"), PersistentDataType.STRING, template.id)
 
     itemStack.itemMeta = itemMeta
 
     return itemStack
+  }
+
+  fun getItemId(item: ItemStack?) : String? {
+    return item?.itemMeta?.persistentDataContainer?.get(NamespacedKey("gamemaker", "id"), PersistentDataType.STRING)
   }
 
   init {
