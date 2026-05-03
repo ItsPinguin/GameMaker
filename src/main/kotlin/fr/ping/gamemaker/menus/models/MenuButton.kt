@@ -9,7 +9,8 @@ data class MenuButton(
   var item : WrappedResource<ItemTemplate>? = null,
   var slots : List<SlotFillInfo> = listOf(),
   var actions : List<Action> = listOf(),
-  var cancel : Boolean? = null
+  var cancel : Boolean? = null,
+  var context : MutableMap<String, Any?> = mutableMapOf()
 ) : Resource() {
   fun getFilledSlots() : List<Int> {
     return slots.flatMap { it.getSlots() }

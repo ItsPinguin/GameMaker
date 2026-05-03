@@ -1,9 +1,11 @@
 package fr.ping.gamemaker.items.builders.impl
 
 import com.google.gson.annotations.SerializedName
+import com.google.gson.internal.LinkedTreeMap
 import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.builtin.resource.I18n
 import fr.ping.gamemaker.items.builders.models.ItemBuilder
+import fr.ping.gamemaker.menus.models.MenuButton
 import fr.ping.utils.resources.ResourceManager
 import kotlin.collections.get
 
@@ -14,7 +16,7 @@ object BuiltinItemBuilder : ItemBuilder() {
     ResourceManager["item_build/en_US", I18n::class.java]
   }
 
-  override fun buildItemLore(key: String, value: Any?, data: Map<String, Any?>): List<String>? {
+  override fun buildItemLore(key: String, value: Any?, data: Map<String, Any?>, context: Map<String, Any?>): List<String>? {
     when (key) {
       "lore" -> {
         if (value == null || value !is List<*>) return null
@@ -57,6 +59,28 @@ object BuiltinItemBuilder : ItemBuilder() {
         val rarityFormat = Rarities.display(rarity)
         val typeFormat = i18n?.resource?.translate("type.$type.format") ?: "type format {*}"
         return listOf(i18n?.resource?.translateAndInsert("type_format", mapOf("type" to typeFormat, "rarity" to rarityFormat)) ?: "")
+      }
+      "item_trade" -> {
+        val slot = context["slot"] as? MenuButton ?: return listOf()
+        return slot.actions
+          .asSequence()
+          .filter { it.action == "trade_items" }
+          .flatMap { it.data["price"] as? List<*> ?: listOf() }
+          .filter { it != null }
+          .map {
+            if (it is LinkedTreeMap<*, *> || it is Map<*, *>) {
+              "§8- §7" + it["id"].toString().plus(" §8[${it["count"].toString().toDoubleOrNull()?.toInt()?:1}]")
+            } else
+              "§8- §7" + it.toString().plus(" §8[1]")
+          }
+          .filter { it.isNotBlank() && it.isNotEmpty() }
+          .toMutableList()
+          .let {
+            if (it.isNotEmpty())
+              it.plus(" ").plus("§e§lCLICK §7to trade")
+            else
+              it
+          }
       }
     }
     return null

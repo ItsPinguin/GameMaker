@@ -25,10 +25,8 @@ object MenuManager {
   fun click(e: InventoryClickEvent, inventory: Inventory, templateId: String) {
     val template = GameMakerPlugin.menuTemplateRegistry.getResource(templateId) ?: return
     val slot = template.getButton(e.slot)
-    e.isCancelled = slot?.cancel ?: template.cancelByDefault
-    if (slot == null) return
+    e.isCancelled = slot.cancel ?: template.cancelByDefault
     slot.actions.forEach { action ->
-      println("Executing action: ${action.action} for slot ${e.slot}")
       ActionManager.executeAction(action, mapOf(
         "player" to e.whoClicked as Player,
         "inventory" to inventory,
@@ -56,7 +54,11 @@ object MenuManager {
     lastOpened[player.uniqueId] = templateId
 
     template.contents.forEach { slot ->
-      val item = ItemManager.buildItem(slot.item?.get())
+      val item = ItemManager.buildItem(slot.item?.get(), slot.context.apply {
+        put("player", player)
+        put("inventory", inventory)
+        put("slot", slot)
+      })
       slot.getFilledSlots().forEach { index ->
         if (index >= 0 && index < inventory.size) inventory.setItem(index, item)
       }

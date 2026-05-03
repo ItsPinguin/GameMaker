@@ -20,11 +20,11 @@ object ItemManager {
     val itemMeta = itemStack.itemMeta ?: return itemStack
     itemMeta.setDisplayName(template.name)
 
-    val builders = GameMakerPlugin.itemBuilderRegistry.resourceMap.toMutableMap()
+    val builders = itemBuilderRegistry.resourceMap.toMutableMap()
     val lore = mutableListOf<String>()
     GameMakerPlugin.getInstance().config.itemLoreOrder.forEach { propertyName ->
       builders.values.forEach { builder ->
-        lore.addAll(builder.resource?.buildItemLore(propertyName, template.data[propertyName], context) ?: listOf())
+        lore.addAll(builder.resource?.buildItemLore(propertyName, template.data[propertyName], template.data, context) ?: listOf())
       }
     }
     if (lore.size == 1 && lore.firstOrNull() == "")
