@@ -5,7 +5,7 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import org.bukkit.util.Vector
 
-class VectorTypeAdapter : TypeAdapter<Vector>() {
+object VectorTypeAdapter : TypeAdapter<Vector>() {
   override fun write(jsonWriter: JsonWriter?, vector: Vector?) {
     jsonWriter?.beginArray()
     jsonWriter?.value(vector?.x ?: 0.0)
@@ -16,11 +16,12 @@ class VectorTypeAdapter : TypeAdapter<Vector>() {
 
   override fun read(jsonReader: JsonReader?): Vector {
     val vector = Vector()
-    jsonReader?.beginArray()
-    vector.x = jsonReader?.nextDouble() ?: jsonReader?.nextInt()?.toDouble() ?: 0.0
-    vector.y = jsonReader?.nextDouble() ?: jsonReader?.nextInt()?.toDouble() ?: 0.0
-    vector.z = jsonReader?.nextDouble() ?: jsonReader?.nextInt()?.toDouble() ?: 0.0
-    jsonReader?.endArray()
+    if (jsonReader == null) return vector
+    jsonReader.beginArray()
+    vector.x = if (jsonReader.hasNext()) jsonReader.nextDouble() else 0.0
+    vector.y = if (jsonReader.hasNext()) jsonReader.nextDouble() else 0.0
+    vector.z = if (jsonReader.hasNext()) jsonReader.nextDouble() else 0.0
+    jsonReader.endArray()
     return vector
   }
 }

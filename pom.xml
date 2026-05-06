@@ -6,7 +6,7 @@
 
     <groupId>fr.ping</groupId>
     <artifactId>gamemaker</artifactId>
-    <version>2.0</version>
+    <version>26.5.6</version>
     <packaging>jar</packaging>
 
     <name>gamemaker</name>
@@ -101,7 +101,7 @@
         <dependency>
             <groupId>fr.ping</groupId>
             <artifactId>ResourceManager</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>26.5.6</version>
         </dependency>
         <dependency>
             <groupId>de.oliver</groupId>

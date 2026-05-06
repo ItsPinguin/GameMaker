@@ -14,11 +14,13 @@ import fr.ping.gamemaker.builtin.resource.VectorTypeAdapter
 import fr.ping.gamemaker.builtin.resource.dialog.Dialog
 import fr.ping.gamemaker.criteria.CriteriaChecker
 import fr.ping.gamemaker.actions.models.Action
+import fr.ping.gamemaker.builtin.resource.LocationTypeAdapter
 import fr.ping.gamemaker.items.builders.models.ItemBuilder
 import fr.ping.gamemaker.items.templates.models.ItemTemplate
 import fr.ping.gamemaker.listeners.InventoryListener
 import fr.ping.gamemaker.menus.models.MenuTemplate
 import fr.ping.gamemaker.triggers.Trigger
+import org.bukkit.Location
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.util.Vector
 import java.io.File
@@ -33,7 +35,9 @@ class GameMakerPlugin : JavaPlugin() {
     else
       config = gson.fromJson<Config>(File(dataFolder, "config.json").readText(), Config::class.java) ?: config
 
-    ResourceManager.registerTypeAdapter(Vector::class.java, VectorTypeAdapter())
+    ResourceManager.addAllResourcePaths(config.resourcePaths)
+    ResourceManager.registerTypeAdapter(Vector::class.java, VectorTypeAdapter)
+    ResourceManager.registerTypeAdapter(Location::class.java, LocationTypeAdapter)
 
     System.gc()
   }
@@ -66,6 +70,8 @@ class GameMakerPlugin : JavaPlugin() {
   }
 
   data class Config(
+    @SerializedName("resource_paths")
+    var resourcePaths: List<String> = listOf("resources", "plugins/GameMaker/data"),
     var save_resources: Boolean = true,
     var builtins: Builtins = Builtins(),
     @SerializedName("item_lore_order")
