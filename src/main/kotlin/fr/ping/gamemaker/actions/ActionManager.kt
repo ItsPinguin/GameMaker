@@ -2,6 +2,7 @@ package fr.ping.gamemaker.actions
 
 import fr.ping.gamemaker.actions.models.Action
 import fr.ping.gamemaker.GameMakerPlugin.Companion.actionExecutorRegistry
+import fr.ping.gamemaker.actions.impl.ActionListAction
 import fr.ping.gamemaker.actions.impl.CommandAction
 import fr.ping.gamemaker.actions.impl.DialogAction
 import fr.ping.gamemaker.actions.impl.GiveItemsAction
@@ -21,5 +22,6 @@ object ActionManager {
     actionExecutorRegistry.registerResource("take_items", TakeItemsAction)
     actionExecutorRegistry.registerResource("command", CommandAction)
     actionExecutorRegistry.registerResource("trade_items", TradeItemsAction)
+    actionExecutorRegistry.registerResource("action_list", ActionListAction)
   }
 }

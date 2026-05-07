@@ -1,14 +1,14 @@
 package fr.ping.gamemaker.criteria.impl
 
 import fr.ping.gamemaker.GameMakerPlugin
-import fr.ping.gamemaker.criteria.CriteriaChecker
+import fr.ping.gamemaker.criteria.CriterionChecker
 import fr.ping.gamemaker.criteria.models.Criterion
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
-object ItemCriterionCheckerHook: CriteriaChecker() {
+object ItemCriterionCheckerHook: CriterionChecker() {
   override fun check(
     criterion: Criterion,
     context: Map<String, Any?>

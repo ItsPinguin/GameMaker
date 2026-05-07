@@ -1,10 +1,10 @@
 package fr.ping.gamemaker.criteria.impl
 
-import fr.ping.gamemaker.criteria.CriteriaChecker
+import fr.ping.gamemaker.criteria.CriterionChecker
 import fr.ping.gamemaker.criteria.models.Criterion
 import org.bukkit.entity.Player
 
-object CooldownCriterionChecker : CriteriaChecker() {
+object CooldownCriterionChecker : CriterionChecker() {
   val cooldowns = mutableMapOf<String, MutableMap<String, Double>>()
 
   override fun check(

@@ -1,12 +1,12 @@
 package fr.ping.gamemaker.criteria.impl
 
 import fr.ping.gamemaker.GameMakerPlugin
-import fr.ping.gamemaker.criteria.CriteriaChecker
+import fr.ping.gamemaker.criteria.CriterionChecker
 import fr.ping.gamemaker.criteria.models.Criterion
 import fr.ping.gamemaker.items.ItemManager
 import org.bukkit.entity.Player
 
-object PlayerHasItemsCriterionChecker : CriteriaChecker() {
+object PlayerHasItemsCriterionChecker : CriterionChecker() {
   override fun check(
     criterion: Criterion,
     context: Map<String, Any?>

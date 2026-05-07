@@ -12,7 +12,7 @@ import fr.ping.gamemaker.actions.ActionExecutor
 import fr.ping.gamemaker.builtin.resource.I18n
 import fr.ping.gamemaker.builtin.resource.VectorTypeAdapter
 import fr.ping.gamemaker.builtin.resource.dialog.Dialog
-import fr.ping.gamemaker.criteria.CriteriaChecker
+import fr.ping.gamemaker.criteria.CriterionChecker
 import fr.ping.gamemaker.actions.models.Action
 import fr.ping.gamemaker.builtin.resource.LocationTypeAdapter
 import fr.ping.gamemaker.items.builders.models.ItemBuilder
@@ -89,7 +89,7 @@ class GameMakerPlugin : JavaPlugin() {
     val actionExecutorRegistry = ReadyRegistry(ActionExecutor::class.java, "action_executor",)
     val triggerRegistry = ReadyRegistry(Trigger::class.java, "trigger")
     val dialogRegistry = ReadyRegistry(Dialog::class.java, "dialog")
-    val criterionCheckerRegistry = ReadyRegistry(CriteriaChecker::class.java, "criterion_checker")
+    val criterionCheckerRegistry = ReadyRegistry(CriterionChecker::class.java, "criterion_checker")
     val langRegistry = ReadyRegistry(I18n::class.java, "lang")
     val menuTemplateRegistry = ReadyRegistry(MenuTemplate::class.java, "menu_template")
 

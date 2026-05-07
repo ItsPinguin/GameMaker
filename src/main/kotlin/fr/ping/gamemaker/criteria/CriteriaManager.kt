@@ -3,9 +3,12 @@ package fr.ping.gamemaker.criteria
 import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.criteria.models.Criterion
 import fr.ping.gamemaker.GameMakerPlugin.Companion.criterionCheckerRegistry
+import fr.ping.gamemaker.criteria.impl.AllOfCriterionChecker
+import fr.ping.gamemaker.criteria.impl.AnyOfCriterionChecker
 import fr.ping.gamemaker.criteria.impl.CooldownCriterionChecker
 import fr.ping.gamemaker.criteria.impl.EntityTagsCriterionChecker
 import fr.ping.gamemaker.criteria.impl.ItemCriterionCheckerHook
+import fr.ping.gamemaker.criteria.impl.NoneOfCriterionChecker
 import fr.ping.gamemaker.criteria.impl.PlayerHasItemsCriterionChecker
 
 object CriteriaManager {
@@ -23,6 +26,9 @@ object CriteriaManager {
 
   init {
     println(criterionCheckerRegistry.listIds())
+    criterionCheckerRegistry.registerResource("any_of", AnyOfCriterionChecker)
+    criterionCheckerRegistry.registerResource("all_of", AllOfCriterionChecker)
+    criterionCheckerRegistry.registerResource("none_of", NoneOfCriterionChecker)
     criterionCheckerRegistry.registerResource("entity_tags", EntityTagsCriterionChecker)
     criterionCheckerRegistry.registerResource("item", ItemCriterionCheckerHook)
     criterionCheckerRegistry.registerResource("cooldown", CooldownCriterionChecker)

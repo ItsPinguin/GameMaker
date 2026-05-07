@@ -62,7 +62,7 @@ object BuiltinItemBuilder : ItemBuilder() {
       }
       "item_trade" -> {
         val slot = context["slot"] as? MenuButton ?: return listOf()
-        return slot.actions
+        var lore = slot.actions
           .asSequence()
           .filter { it.action == "trade_items" }
           .flatMap { it.data["price"] as? List<*> ?: listOf() }
@@ -77,10 +77,18 @@ object BuiltinItemBuilder : ItemBuilder() {
           .toMutableList()
           .let {
             if (it.isNotEmpty())
-              it.plus(" ").plus("§e§lCLICK §7to trade")
+              it.plus(" ").plus("§e§lCLICK §7to trade").toMutableList().apply {
+                it.add(0, "§7Cost")
+              }.let { list ->
+                println(list)
+                list
+              }
             else
               it
           }
+        if (lore.isEmpty()) return listOf()
+        lore = mutableListOf("§7Cost").apply { addAll(lore) }
+        return lore
       }
     }
     return null
