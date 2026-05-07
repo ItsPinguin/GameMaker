@@ -18,7 +18,7 @@ open class ItemTemplate(
     get() = Material.getMaterial((data["material"] as? String)?.uppercase() ?: "AIR") ?: Material.AIR
     set(value) { data["material"] = value.name.lowercase() }
   var name: String
-    get() = data["name"] as? String ?: "Unnamed item"
+    get() = data["name"] as? String ?: ""
     set(value) { data["name"] = value }
 
   class Adapter : TypeAdapter<ItemTemplate>() {
