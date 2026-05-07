@@ -7,6 +7,7 @@ import fr.ping.gamemaker.actions.impl.CommandAction
 import fr.ping.gamemaker.actions.impl.DialogAction
 import fr.ping.gamemaker.actions.impl.GiveItemsAction
 import fr.ping.gamemaker.actions.impl.MessagePlayer
+import fr.ping.gamemaker.actions.impl.OpenMenuAction
 import fr.ping.gamemaker.actions.impl.TakeItemsAction
 import fr.ping.gamemaker.actions.impl.TradeItemsAction
 
@@ -23,5 +24,6 @@ object ActionManager {
     actionExecutorRegistry.registerResource("command", CommandAction)
     actionExecutorRegistry.registerResource("trade_items", TradeItemsAction)
     actionExecutorRegistry.registerResource("action_list", ActionListAction)
+    actionExecutorRegistry.registerResource("open_menu", OpenMenuAction)
   }
 }
