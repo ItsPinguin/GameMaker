@@ -18,6 +18,7 @@ import fr.ping.gamemaker.builtin.resource.LocationTypeAdapter
 import fr.ping.gamemaker.items.builders.models.ItemBuilder
 import fr.ping.gamemaker.items.templates.models.ItemTemplate
 import fr.ping.gamemaker.listeners.InventoryListener
+import fr.ping.gamemaker.listeners.ItemListener
 import fr.ping.gamemaker.menus.models.MenuTemplate
 import fr.ping.gamemaker.triggers.Trigger
 import org.bukkit.Location
@@ -67,6 +68,7 @@ class GameMakerPlugin : JavaPlugin() {
   private fun registerEvents() {
     server.pluginManager.registerEvents(TriggerEventListener, this)
     server.pluginManager.registerEvents(InventoryListener, this)
+    server.pluginManager.registerEvents(ItemListener, this)
   }
 
   data class Config(
