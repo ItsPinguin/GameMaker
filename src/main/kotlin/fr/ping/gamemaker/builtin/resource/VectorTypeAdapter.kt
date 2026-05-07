@@ -2,6 +2,7 @@ package fr.ping.gamemaker.builtin.resource
 
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
 import org.bukkit.util.Vector
 
@@ -17,6 +18,7 @@ object VectorTypeAdapter : TypeAdapter<Vector>() {
   override fun read(jsonReader: JsonReader?): Vector {
     val vector = Vector()
     if (jsonReader == null) return vector
+    if (jsonReader.peek() != JsonToken.BEGIN_ARRAY) return vector
     jsonReader.beginArray()
     vector.x = if (jsonReader.hasNext()) jsonReader.nextDouble() else 0.0
     vector.y = if (jsonReader.hasNext()) jsonReader.nextDouble() else 0.0
