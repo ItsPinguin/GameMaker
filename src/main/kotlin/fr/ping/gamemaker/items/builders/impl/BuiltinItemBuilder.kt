@@ -79,9 +79,6 @@ object BuiltinItemBuilder : ItemBuilder() {
             if (it.isNotEmpty())
               it.plus(" ").plus("§e§lCLICK §7to trade").toMutableList().apply {
                 it.add(0, "§7Cost")
-              }.let { list ->
-                println(list)
-                list
               }
             else
               it

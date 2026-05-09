@@ -25,7 +25,6 @@ object GiveItemsAction: ActionExecutor() {
       return
     }
     val criteria = action.data["criteria"] as? List<*> ?: mutableListOf<String>()
-    println("criteria: $criteria")
     val items = action.data["items"] as? List<*> ?: return
 
     val parsedCriteria = criteria.map { ResourceManager.getGson().fromJson(
@@ -49,7 +48,6 @@ object GiveItemsAction: ActionExecutor() {
       if (item is Map<*, *>) {
         val itemStack = ItemManager.buildItem(item["id"] as? String ?: return)
         val count = item["count"].toString().toDoubleOrNull()?.toInt() ?: 1
-        println("count: ${item["count"]}, count: $count")
         player.inventory.addItem(itemStack.apply { amount = count })
         itemMap[item["id"] as? String ?: return] = itemMap.getOrDefault(item["id"] as? String ?: return, 0) + count
       }

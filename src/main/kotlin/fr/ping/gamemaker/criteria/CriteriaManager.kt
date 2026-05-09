@@ -16,8 +16,6 @@ object CriteriaManager {
     GameMakerPlugin.getInstance().logger.info("Checking criterion: $criterion, context: $context")
     if (criterion.criterion == "always_true") return true
     if (criterion.criterion == "always_false") return false
-    println(criterionCheckerRegistry.listIds())
-    println(criterionCheckerRegistry.listResources())
     return criterionCheckerRegistry.getResource(criterion.criterion)?.check(criterion, context ?: mutableMapOf()) ?: true
   }
   fun checkCriteria(criteria: List<Criterion>?, context: Map<String, Any?>?) : Boolean {
@@ -25,7 +23,6 @@ object CriteriaManager {
   }
 
   init {
-    println(criterionCheckerRegistry.listIds())
     criterionCheckerRegistry.registerResource("any_of", AnyOfCriterionChecker)
     criterionCheckerRegistry.registerResource("all_of", AllOfCriterionChecker)
     criterionCheckerRegistry.registerResource("none_of", NoneOfCriterionChecker)
@@ -33,7 +30,5 @@ object CriteriaManager {
     criterionCheckerRegistry.registerResource("item", ItemCriterionCheckerHook)
     criterionCheckerRegistry.registerResource("cooldown", CooldownCriterionChecker)
     criterionCheckerRegistry.registerResource("player_has_items", PlayerHasItemsCriterionChecker)
-    println(criterionCheckerRegistry.listIds())
-    println(criterionCheckerRegistry.listResources())
   }
 }

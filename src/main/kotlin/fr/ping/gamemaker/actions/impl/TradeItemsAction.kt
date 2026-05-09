@@ -32,16 +32,6 @@ object TradeItemsAction : ActionExecutor() {
         "player" to player,
       )
     )
-    println("price: $price\nitems: $items\ncriteria: $criteria\nnew criteria: ${
-      criteria.toMutableList().apply { 
-        add(
-          mutableMapOf<String, Any?> (
-            "criterion" to "player_has_items",
-            "items" to price
-          )
-        )
-      }
-    }")
     TakeItemsAction.execute(
       Action().apply {
         this.action = "take_items"
