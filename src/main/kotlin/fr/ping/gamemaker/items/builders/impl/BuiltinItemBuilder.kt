@@ -7,7 +7,6 @@ import fr.ping.gamemaker.builtin.resource.I18n
 import fr.ping.gamemaker.items.builders.models.ItemBuilder
 import fr.ping.gamemaker.menus.models.MenuButton
 import fr.ping.utils.resources.ResourceManager
-import kotlin.collections.get
 
 object BuiltinItemBuilder : ItemBuilder() {
   private val config : Config

@@ -1,12 +1,12 @@
 package fr.ping.gamemaker.builtin.resource
 
-import fr.ping.gamemaker.GameMakerPlugin
-import fr.ping.utils.resources.Resource
 import com.google.gson.TypeAdapter
 import com.google.gson.annotations.JsonAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
+import fr.ping.gamemaker.GameMakerPlugin
+import fr.ping.utils.resources.Resource
 
 @JsonAdapter(I18n.Adapter::class)
 class I18n(

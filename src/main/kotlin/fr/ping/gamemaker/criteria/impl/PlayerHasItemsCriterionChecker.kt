@@ -11,17 +11,14 @@ object PlayerHasItemsCriterionChecker : CriterionChecker() {
     criterion: Criterion,
     context: Map<String, Any?>
   ): Boolean {
-    GameMakerPlugin.getInstance().logger.info("PlayerHasItemCriterionChecker: received criterion: $criterion, context: $context")
-    if (criterion.criterion != "player_has_items") {
-      GameMakerPlugin.getInstance().logger.info("PlayerHasItemCriterionChecker: criterion not player_has_items, returning true")
+    if (criterion.criterion != "player_has_items")
       return true
-    }
     val player = context["player"] as? Player ?: let {
-      GameMakerPlugin.getInstance().logger.info("PlayerHasItemCriterionChecker: no player in context, returning false")
+      GameMakerPlugin.getInstance().logger.warning("[Criteria] Useless criterion: player_has_items, no player in context: $context.")
       return false
     }
     val items = criterion.data["items"] as? List<*> ?: let {
-      GameMakerPlugin.getInstance().logger.info("PlayerHasItemCriterionChecker: no items in criterion, returning true")
+      GameMakerPlugin.getInstance().logger.warning("[Criteria] Useless criterion: player_has_items, no items in data")
       return true
     }
 

@@ -1,6 +1,5 @@
 package fr.ping.gamemaker.criteria.impl
 
-import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.criteria.CriterionChecker
 import fr.ping.gamemaker.criteria.models.Criterion
 import org.bukkit.NamespacedKey
@@ -17,7 +16,6 @@ object ItemCriterionCheckerHook: CriterionChecker() {
     val item = (context["item"] as? ItemStack) ?: (context["player"] as? Player)?.inventory?.itemInMainHand ?: return false
     val expectedItem = criterion.data["item"] as? String ?: return false
     val itemId = item.itemMeta.persistentDataContainer.get(NamespacedKey("gamemaker", "item"), PersistentDataType.STRING) ?: return false
-    GameMakerPlugin.getInstance().logger.info("ItemCriterionCheckerHook: received item: $item, expected item: $expectedItem, itemId: $itemId")
     return expectedItem == itemId
   }
 }

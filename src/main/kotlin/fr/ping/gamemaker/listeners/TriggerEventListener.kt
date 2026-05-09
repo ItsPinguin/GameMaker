@@ -15,7 +15,6 @@ object TriggerEventListener : Listener {
 
   @EventHandler
   fun interactEntity(e: PlayerInteractEntityEvent) {
-    //GameMakerPlugin.getInstance().logger.info("[Trigger] Entity clicked. Was interaction: ${e.rightClicked is Interaction}, was of type ${e.rightClicked.javaClass.simpleName}")
     if (e.rightClicked is Interaction)
       TriggerManager.trigger("interaction", mapOf(
         "player" to e.player,

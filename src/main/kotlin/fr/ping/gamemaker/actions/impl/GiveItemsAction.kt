@@ -1,13 +1,11 @@
 package fr.ping.gamemaker.actions.impl
 
-import com.google.gson.JsonObject
 import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.actions.ActionExecutor
 import fr.ping.gamemaker.actions.models.Action
 import fr.ping.gamemaker.criteria.CriteriaManager
 import fr.ping.gamemaker.criteria.models.Criterion
 import fr.ping.gamemaker.items.ItemManager
-import fr.ping.gamemaker.items.templates.models.ItemTemplate
 import fr.ping.utils.resources.ResourceManager
 import org.bukkit.Sound
 import org.bukkit.entity.Player
@@ -21,7 +19,7 @@ object GiveItemsAction: ActionExecutor() {
   ) {
     if (action.action != "give_items") return
     val player = context["player"] as? Player ?: let {
-      GameMakerPlugin.getInstance().logger.info("GiveItemsAction: no player in context, context: $context")
+      GameMakerPlugin.getInstance().logger.warning("[Criteria] Useless criterion: player_has_items, no player in context: $context.")
       return
     }
     val criteria = action.data["criteria"] as? List<*> ?: mutableListOf<String>()

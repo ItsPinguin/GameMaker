@@ -1,15 +1,8 @@
 package fr.ping.gamemaker.actions
 
-import fr.ping.gamemaker.actions.models.Action
 import fr.ping.gamemaker.GameMakerPlugin.Companion.actionExecutorRegistry
-import fr.ping.gamemaker.actions.impl.ActionListAction
-import fr.ping.gamemaker.actions.impl.CommandAction
-import fr.ping.gamemaker.actions.impl.DialogAction
-import fr.ping.gamemaker.actions.impl.GiveItemsAction
-import fr.ping.gamemaker.actions.impl.MessagePlayer
-import fr.ping.gamemaker.actions.impl.OpenMenuAction
-import fr.ping.gamemaker.actions.impl.TakeItemsAction
-import fr.ping.gamemaker.actions.impl.TradeItemsAction
+import fr.ping.gamemaker.actions.impl.*
+import fr.ping.gamemaker.actions.models.Action
 
 object ActionManager {
   fun executeAction(action: Action, context: Map<String, Any?> = mapOf()) =

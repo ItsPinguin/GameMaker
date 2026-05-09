@@ -2,7 +2,6 @@ package fr.ping.gamemaker.actions.impl
 
 import fr.ping.gamemaker.actions.ActionExecutor
 import fr.ping.gamemaker.actions.models.Action
-import fr.ping.gamemaker.criteria.models.Criterion
 import org.bukkit.entity.Player
 
 object TradeItemsAction : ActionExecutor() {

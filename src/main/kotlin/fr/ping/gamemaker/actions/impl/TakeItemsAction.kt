@@ -9,7 +9,6 @@ import fr.ping.gamemaker.items.ItemManager
 import fr.ping.utils.resources.ResourceManager
 import org.bukkit.Sound
 import org.bukkit.entity.Player
-import kotlin.collections.mutableListOf
 
 object TakeItemsAction : ActionExecutor() {
   override fun execute(
@@ -18,7 +17,7 @@ object TakeItemsAction : ActionExecutor() {
   ) {
     if (action.action != "take_items") return
     val player = context["player"] as? Player ?: let {
-      GameMakerPlugin.getInstance().logger.info("TakeItemsAction: no player in context, context: $context")
+      GameMakerPlugin.getInstance().logger.warning("[Criteria] Useless criterion: player_has_items, no player in context: $context.")
       return
     }
     val criteria = action.data["criteria"] as? List<*> ?: mutableListOf<String>()

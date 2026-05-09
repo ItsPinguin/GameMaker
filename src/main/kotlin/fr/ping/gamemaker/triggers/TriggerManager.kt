@@ -4,7 +4,6 @@ import fr.ping.gamemaker.GameMakerPlugin.Companion.triggerRegistry
 import fr.ping.gamemaker.actions.ActionManager
 import fr.ping.gamemaker.criteria.CriteriaManager
 import fr.ping.utils.resources.ResourceHandle
-import kotlin.collections.forEach
 
 object TriggerManager {
   val triggers = mutableMapOf<String, MutableList<ResourceHandle<Trigger>>>()
