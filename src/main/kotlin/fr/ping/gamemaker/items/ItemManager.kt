@@ -2,6 +2,7 @@ package fr.ping.gamemaker.items
 
 import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.GameMakerPlugin.Companion.itemBuilderRegistry
+import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.builders.impl.BuiltinItemBuilder
 import fr.ping.gamemaker.items.templates.models.ItemTemplate
 import org.bukkit.Material
@@ -19,7 +20,7 @@ object ItemManager {
     val itemStack = ItemStack(material)
     if (template == null || itemStack.type == Material.AIR) return itemStack
     val itemMeta = itemStack.itemMeta ?: return itemStack
-    itemMeta.setDisplayName(template.name)
+    itemMeta.setDisplayName(if (template.name.startsWith("$")) I18nManager["item_template.${template.id}.name"] else template.name)
 
     val unorderedKeys = template.data.keys.filter { it !in GameMakerPlugin.getInstance().config.itemLoreOrder }
     val builders = itemBuilderRegistry.resourceMap.toMutableMap()
