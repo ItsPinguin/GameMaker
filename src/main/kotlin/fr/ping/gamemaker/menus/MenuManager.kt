@@ -54,13 +54,16 @@ object MenuManager {
     lastOpened[player.uniqueId] = templateId
 
     template.contents.forEach { slot ->
-      val item = ItemManager.buildItem(slot.item?.get(), slot.context.apply {
-        put("player", player)
-        put("inventory", inventory)
-        put("slot", slot)
-      })
       slot.getFilledSlots().forEach { index ->
-        if (index >= 0 && index < inventory.size) inventory.setItem(index, item)
+        if (index >= 0 && index < inventory.size) inventory.setItem(
+          index,
+          ItemManager.buildItem(slot.item?.get(), slot.context.apply {
+            put("player", player)
+            put("inventory", inventory)
+            put("slots", slot)
+            put("slot", index)
+          })
+        )
       }
     }
   }
