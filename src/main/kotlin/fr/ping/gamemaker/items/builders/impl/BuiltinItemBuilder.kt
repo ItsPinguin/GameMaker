@@ -49,6 +49,7 @@ object BuiltinItemBuilder : ItemBuilder() {
         val rarity = data["rarity"] as? String ?: "common"
         val rarityFormat = Rarities.display(rarity)
         val typeFormat = I18nManager["type.$type.format"]
+        if (value == null || data["rarity"] == null) return null
         return listOf(I18nManager["type_format", typeFormat, rarityFormat])
       }
       "item_trade" -> {
