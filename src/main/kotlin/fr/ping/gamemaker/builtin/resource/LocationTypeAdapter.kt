@@ -11,7 +11,7 @@ object LocationTypeAdapter : TypeAdapter<Location>() {
   override fun write(jsonWriter: JsonWriter?, location: Location?) {
     if (jsonWriter == null || location == null) return
     jsonWriter.beginArray()
-    jsonWriter.value(location.world.name)
+    if (location.world != null) jsonWriter.value(location.world.name)
     jsonWriter.value(location.x)
     jsonWriter.value(location.y)
     jsonWriter.value(location.z)
