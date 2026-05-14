@@ -15,16 +15,23 @@ object ItemManager {
     buildItem(GameMakerPlugin.itemTemplateRegistry.getResource(id), context)
 
   fun buildItem(template: ItemTemplate?, context: Map<String, Any?> = mutableMapOf()) : ItemStack {
-    val itemStack = ItemStack(template?.material ?: Material.AIR)
+    val material = itemBuilderRegistry.listResources().map { it.buildItemMaterial(template?.data ?: mapOf(), context) }.firstOrNull { it != null } ?: return ItemStack(Material.AIR)
+    val itemStack = ItemStack(material)
     if (template == null || itemStack.type == Material.AIR) return itemStack
     val itemMeta = itemStack.itemMeta ?: return itemStack
     itemMeta.setDisplayName(template.name)
 
+    val unorderedKeys = template.data.keys.filter { it !in GameMakerPlugin.getInstance().config.itemLoreOrder }
     val builders = itemBuilderRegistry.resourceMap.toMutableMap()
     val lore = mutableListOf<String>()
     GameMakerPlugin.getInstance().config.itemLoreOrder.forEach { propertyName ->
       builders.values.forEach { builder ->
         lore.addAll(builder.resource?.buildItemLore(propertyName, template.data[propertyName], template.data, context) ?: listOf())
+      }
+    }
+    unorderedKeys.forEach {
+      builders.values.forEach { builder ->
+        lore.addAll(builder.resource?.buildItemLore(it, template.data[it], template.data, context, false) ?: listOf())
       }
     }
     if (lore.size == 1 && lore.firstOrNull() == "")

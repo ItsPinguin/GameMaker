@@ -12,6 +12,7 @@ import fr.ping.gamemaker.builtin.resource.VectorTypeAdapter
 import fr.ping.gamemaker.builtin.resource.dialog.Dialog
 import fr.ping.gamemaker.commands.GameMakerCommand
 import fr.ping.gamemaker.criteria.CriterionChecker
+import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.builders.impl.BuiltinItemBuilder
 import fr.ping.gamemaker.items.builders.models.ItemBuilder
 import fr.ping.gamemaker.items.templates.models.ItemTemplate
@@ -48,6 +49,7 @@ class GameMakerPlugin : JavaPlugin() {
     ResourceManager.addResourcePath(getResourceFolder().path)
     ResourceManager.findSchemeResources(true)
     ResourceManager.loadAllResources(true, true)
+    I18nManager.compileLoadedI18n()
 
     registerCommands()
     registerEvents()
@@ -56,9 +58,9 @@ class GameMakerPlugin : JavaPlugin() {
 
   override fun onDisable() {
     ResourceManager.clean()
-    langRegistry.listResources().forEach { i18n ->
-      i18n.file?.writeText(gson.toJson(i18n))
-    }
+    //langRegistry.listResources().forEach { i18n ->
+    //  i18n.file?.writeText(gson.toJson(i18n))
+    //}
   }
 
   private fun registerCommands() {

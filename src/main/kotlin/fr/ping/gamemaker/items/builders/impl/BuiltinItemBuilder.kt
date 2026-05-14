@@ -4,9 +4,11 @@ import com.google.gson.annotations.SerializedName
 import com.google.gson.internal.LinkedTreeMap
 import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.builtin.resource.I18n
+import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.builders.models.ItemBuilder
 import fr.ping.gamemaker.menus.models.MenuButton
 import fr.ping.utils.resources.ResourceManager
+import org.bukkit.Material
 
 object BuiltinItemBuilder : ItemBuilder() {
   private val config : Config
@@ -15,12 +17,12 @@ object BuiltinItemBuilder : ItemBuilder() {
     ResourceManager["item_build/en_US", I18n::class.java]
   }
 
-  override fun buildItemLore(key: String, value: Any?, data: Map<String, Any?>, context: Map<String, Any?>): List<String>? {
+  override fun buildItemLore(key: String, value: Any?, data: Map<String, Any?>, context: Map<String, Any?>, isKeyInConfig : Boolean): List<String>? {
     when (key) {
       "lore" -> {
         if (value == null || value !is List<*>) return null
         @Suppress("UNCHECKED_CAST")
-        return value.map { if (it.toString().startsWith($$"$t")) i18n?.resource?.translateAndInsert("lore_line", mapOf("lore" to it.toString().removePrefix($$"$t"))).toString() else it.toString() }.let {
+        return value.map { if (it.toString().startsWith("$")) I18nManager["ENGLISH", it.toString().removePrefix("$")] else it.toString() }.let {
           if (config.insertSpaceAfter.getOrPut(key) { true }) it + listOf("") else it
         }
       }
@@ -28,11 +30,7 @@ object BuiltinItemBuilder : ItemBuilder() {
         if (value == null || value !is Map<*, *>) return null
         val attributesLore = mutableListOf<String>()
         value.entries.forEach {
-          attributesLore.add(("§7" + i18n?.resource?.translateAndInsert("lore.attribute", mapOf(
-            "attribute" to (i18n?.resource?.translate("attribute." + it.key) ?: ""),
-            "value" to (value[it.key] as Double)
-              .let { attributeValue -> if (config.roundedAttributes.contains(it.key)) attributeValue.toInt() else attributeValue }
-          ))))
+          attributesLore.add(I18nManager["lore.attribute", it.key, value[it.key]])
         }
         if (config.insertSpaceAfter.getOrPut(key) { true }) attributesLore.add("")
         return attributesLore
@@ -41,13 +39,7 @@ object BuiltinItemBuilder : ItemBuilder() {
         if (value == null || value !is Map<*, *>) return null
         val enchantsLore = mutableListOf<String>()
         value.entries.forEach {
-          enchantsLore.add(i18n?.resource?.translateAndInsert(
-            "lore.enchant",
-            mapOf(
-              "enchant" to i18n?.resource?.translate("enchant." + it.key),
-              "level" to i18n?.resource?.translate("enchant_level." + (it.value as? Double)?.toInt().toString())
-            )
-          ) ?: "")
+          enchantsLore.add(I18nManager["lore.enchant_level", it.key, value[it.key]])
         }
         if (config.insertSpaceAfter.getOrPut(key) {true}) enchantsLore.add("")
         return enchantsLore
@@ -56,8 +48,8 @@ object BuiltinItemBuilder : ItemBuilder() {
         val type = value as? String ?: "item"
         val rarity = data["rarity"] as? String ?: "common"
         val rarityFormat = Rarities.display(rarity)
-        val typeFormat = i18n?.resource?.translate("type.$type.format") ?: "type format {*}"
-        return listOf(i18n?.resource?.translateAndInsert("type_format", mapOf("type" to typeFormat, "rarity" to rarityFormat)) ?: "")
+        val typeFormat = I18nManager["type.$type.format"]
+        return listOf(I18nManager["type_format", typeFormat, rarityFormat])
       }
       "item_trade" -> {
         val slot = context["slot"] as? MenuButton ?: return listOf()
@@ -90,6 +82,10 @@ object BuiltinItemBuilder : ItemBuilder() {
     return null
   }
 
+  override fun buildItemMaterial(data: Map<String, Any?>, context: Map<String, Any?>): Material? {
+    return (data["material"] as? String)?.let {  Material.getMaterial(it) }
+  }
+
   data class Config(
     var lore: Boolean = true,
     var attributes: Boolean = true,
@@ -107,16 +103,9 @@ object BuiltinItemBuilder : ItemBuilder() {
   )
 
   object Rarities {
-    fun getPrefix(rarity: String) = i18n?.resource?.translate("rarity.$rarity.prefix") ?: "§c"
-
-    fun getSuffix(rarity: String) = i18n?.resource?.translate("rarity.$rarity.suffix") ?: "§c♥"
-
-    fun getName(rarity: String) = i18n?.resource?.translate("rarity.$rarity.name") ?: "Rarity"
-
-    fun display(rarity: String) = i18n?.resource?.translateAndInsert("rarities.format", mapOf(
-      "rarity" to getName(rarity),
-      "prefix" to getPrefix(rarity),
-      "suffix" to getSuffix(rarity)
-    ))
+    fun getPrefix(rarity: String) = I18nManager["rarity.$rarity.prefix"]
+    fun getSuffix(rarity: String) = I18nManager["rarity.$rarity.suffix"]
+    fun getName(rarity: String) = I18nManager["rarity.$rarity.name"]
+    fun display(rarity: String) = I18nManager["rarities.format", getName(rarity), getPrefix(rarity), getSuffix(rarity)]
   }
 }

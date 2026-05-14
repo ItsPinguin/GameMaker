@@ -3,6 +3,7 @@ package fr.ping.gamemaker.commands
 import fr.ping.gamemaker.GameMakerPlugin.Companion.itemTemplateRegistry
 import fr.ping.gamemaker.GameMakerPlugin.Companion.menuTemplateRegistry
 import fr.ping.gamemaker.builtin.resource.I18n
+import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.ItemManager
 import fr.ping.gamemaker.menus.MenuManager
 import fr.ping.utils.resources.ResourceManager
@@ -41,6 +42,7 @@ object GameMakerCommand : TabExecutor {
         sender.sendMessage("§fReloading...")
         measureTime {
           ResourceManager.loadAllResources(true, true)
+          I18nManager.compileLoadedI18n()
         }.let {
           sender.sendMessage("§7Done reloading. Took §f${it.inWholeMilliseconds} ms")
         }
@@ -74,7 +76,7 @@ object GameMakerCommand : TabExecutor {
         MenuManager.open(sender, menu)
       }
       "translate" -> {
-        sender.sendMessage(i18n?.resource?.translateAndInsert("some.key.to.something", mapOf("thing" to System.currentTimeMillis().toString())).toString())
+        sender.sendMessage(I18nManager["ENGLISH", "some.key.to.something", System.currentTimeMillis(), sender.name])
       }
       else -> {
         sender.sendMessage("reload")
