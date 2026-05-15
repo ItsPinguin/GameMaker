@@ -20,7 +20,7 @@ object ItemManager {
     val itemStack = ItemStack(material)
     if (template == null || itemStack.type == Material.AIR) return itemStack
     val itemMeta = itemStack.itemMeta ?: return itemStack
-    itemMeta.setDisplayName(if (template.name.startsWith("$")) I18nManager["item_template.${template.id}.name"] else template.name)
+    itemMeta.setDisplayName(if (template.name.startsWith("$")) I18nManager[template.name.removePrefix("$")] else template.name)
 
     val unorderedKeys = template.data.keys.filter { it !in GameMakerPlugin.getInstance().config.itemLoreOrder }
     val builders = itemBuilderRegistry.resourceMap.toMutableMap()
