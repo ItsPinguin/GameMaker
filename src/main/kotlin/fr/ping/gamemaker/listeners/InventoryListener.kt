@@ -9,7 +9,10 @@ import org.bukkit.event.inventory.InventoryClickEvent
 object InventoryListener : Listener {
   @EventHandler
   fun click(e: InventoryClickEvent) {
-    val templateId = MenuManager.findTemplateId(e.inventory, e.whoClicked as Player) ?: return
-    MenuManager.click(e, e.inventory, templateId)
+    val menuInstance = MenuManager.findMenuInstance(e.inventory, e.whoClicked as Player) ?: let {
+      println("No menu instance found for inventory ${e.inventory} and player ${e.whoClicked.name}")
+      return
+    }
+    MenuManager.click(e, menuInstance)
   }
 }

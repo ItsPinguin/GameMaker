@@ -18,5 +18,6 @@ object ActionManager {
     actionExecutorRegistry.registerResource("trade_items", TradeItemsAction)
     actionExecutorRegistry.registerResource("action_list", ActionListAction)
     actionExecutorRegistry.registerResource("open_menu", OpenMenuAction)
+    actionExecutorRegistry.registerResource("change_page", ChangePageActionExecutor)
   }
 }

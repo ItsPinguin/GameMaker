@@ -19,6 +19,8 @@ import fr.ping.gamemaker.items.templates.models.ItemTemplate
 import fr.ping.gamemaker.listeners.InventoryListener
 import fr.ping.gamemaker.listeners.ItemListener
 import fr.ping.gamemaker.listeners.TriggerEventListener
+import fr.ping.gamemaker.menus.ItemListProvider
+import fr.ping.gamemaker.menus.TestListProvider
 import fr.ping.gamemaker.menus.models.MenuTemplate
 import fr.ping.gamemaker.triggers.Trigger
 import fr.ping.utils.resources.ResourceManager
@@ -50,6 +52,8 @@ class GameMakerPlugin : JavaPlugin() {
     ResourceManager.findSchemeResources(true)
     ResourceManager.loadAllResources(true, true)
     I18nManager.compileLoadedI18n()
+
+    itemListProviderRegistry.registerResource("levels", TestListProvider())
 
     registerCommands()
     registerEvents()
@@ -96,6 +100,7 @@ class GameMakerPlugin : JavaPlugin() {
     val criterionCheckerRegistry = ReadyRegistry(CriterionChecker::class.java, "criterion_checker")
     val langRegistry = ReadyRegistry(I18n::class.java, "lang")
     val menuTemplateRegistry = ReadyRegistry(MenuTemplate::class.java, "menu_template")
+    val itemListProviderRegistry = ReadyRegistry(ItemListProvider::class.java, "item_list_provider")
 
     val gson : Gson = GsonBuilder().setPrettyPrinting().create()
 

@@ -1,0 +1,36 @@
+{
+  "type": "menu_template",
+  "id": "levels",
+  "title": "Browse Levels",
+  "inventory_type": "CHEST",
+  "rows": 6,
+  "contents": [
+    {
+      "item": "empty_slot",
+      "slots": ["row 1", "row 6"]
+    },
+    {
+      "item": "empty_slot",
+      "slots": ["9 to 42"],
+      "actions": [
+        {
+          "action": "join_level"
+        }
+      ],
+      "list": "levels"
+    },
+    {
+      "item": "empty_slot",
+      "page_offset": "1",
+      "list": "levels"
+    },
+    {
+      "item": "empty_slot",
+      "page_offset": "-1",
+      "list": "levels"
+    }
+  ],
+  "declared_lists": [
+    "levels"
+  ]
+}
