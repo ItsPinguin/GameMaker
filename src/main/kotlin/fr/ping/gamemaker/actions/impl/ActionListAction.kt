@@ -1,5 +1,6 @@
 package fr.ping.gamemaker.actions.impl
 
+import fr.ping.gamemaker.actions.ActionContext
 import fr.ping.gamemaker.actions.ActionExecutor
 import fr.ping.gamemaker.actions.ActionManager
 import fr.ping.gamemaker.actions.models.Action
@@ -10,9 +11,8 @@ import fr.ping.utils.resources.ResourceManager
 object ActionListAction : ActionExecutor() {
   override fun execute(
     action: Action,
-    context: Map<String, Any?>
+    context: ActionContext
   ) {
-    if (action.action != "action_list") return
     val actions : List<Action> =
       if ((action.data["actions"] as? List<*>)?.all { it is Action } == false)
         ResourceManager.parseAny<List<Action>>(action.data["actions"]) ?: listOf()
@@ -25,7 +25,7 @@ object ActionListAction : ActionExecutor() {
       else
         action.data["criteria"] as List<Criterion>
 
-    if (!CriteriaManager.checkCriteria(criteria, context)) return
+    if (!CriteriaManager.checkCriteria(criteria, context.metadata)) return
     actions.forEach { ActionManager.executeAction(it, context) }
   }
 }

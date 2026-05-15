@@ -1,6 +1,7 @@
 package fr.ping.gamemaker.menus
 
 import fr.ping.gamemaker.GameMakerPlugin
+import fr.ping.gamemaker.actions.ActionContext
 import fr.ping.gamemaker.actions.ActionManager
 import fr.ping.gamemaker.items.ItemManager
 import fr.ping.gamemaker.menus.models.MenuInstance
@@ -36,17 +37,15 @@ object MenuManager {
     val slot = template.getButton(e.slot)
     e.isCancelled = slot.cancel ?: template.cancelByDefault
     slot.actions.forEach { action ->
-      ActionManager.executeAction(action, mapOf(
-        "player" to e.whoClicked as Player,
-        "inventory" to menuInstance.inventory,
-        "slot" to e.slot,
-        "action" to action,
-        "menu_instance" to menuInstance
+      ActionManager.executeAction(action, ActionContext.MenuClickActionContext(
+        e.whoClicked as Player,
+        menuInstance,
+        e
       ))
     }
   }
 
-  fun open(player: Player, templateId: String) {
+  fun open(player: Player, templateId: String, data: Map<String, Any?> = mapOf()) {
     val templateHandle = GameMakerPlugin.menuTemplateRegistry.getResourceHandle(templateId) ?: return
     val template = templateHandle.resource ?: return
     if (template.isStatic && menus.getOrPut(player.uniqueId) { mutableMapOf() }[templateId] != null) {
@@ -63,13 +62,14 @@ object MenuManager {
     val menuInstance = menus.getOrPut(player.uniqueId) { mutableMapOf() }.getOrPut(templateId) { MenuInstance(templateHandle, inventory) }
     menuInstance.inventory = inventory
     menuInstance.template = templateHandle
+    menuInstance.data = data
     player.openInventory(inventory)
     lastOpened[player.uniqueId] = templateId
 
-    renderMenu(player, menuInstance)
+    renderMenu(player, menuInstance, data)
   }
 
-  fun renderMenu(player: Player, menuInstance: MenuInstance) {
+  fun renderMenu(player: Player, menuInstance: MenuInstance, context: Map<String, Any?> = mapOf()) {
     val template = menuInstance.template.resource ?: return
     val inventory = menuInstance.inventory ?: return
     template.contents.forEach { slot ->

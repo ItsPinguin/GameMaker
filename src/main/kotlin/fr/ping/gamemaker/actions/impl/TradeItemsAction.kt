@@ -1,5 +1,6 @@
 package fr.ping.gamemaker.actions.impl
 
+import fr.ping.gamemaker.actions.ActionContext
 import fr.ping.gamemaker.actions.ActionExecutor
 import fr.ping.gamemaker.actions.models.Action
 import org.bukkit.entity.Player
@@ -7,10 +8,9 @@ import org.bukkit.entity.Player
 object TradeItemsAction : ActionExecutor() {
   override fun execute(
     action: Action,
-    context: Map<String, Any?>
+    context: ActionContext
   ) {
-    if (action.action != "trade_items") return
-    val player = context["player"] as? Player ?: return
+    if (context !is ActionContext.PlayerActionContext) return
     val items = action.data["items"] as? List<*> ?: listOf<Any?>()
     val price = action.data["price"] as? List<*> ?: listOf<Any?>()
     val criteria = action.data["criteria"] as? List<*> ?: listOf<Any?>()
@@ -27,9 +27,7 @@ object TradeItemsAction : ActionExecutor() {
           )
         }
       },
-      mutableMapOf(
-        "player" to player,
-      )
+      ActionContext.PlayerActionContext(context.player)
     )
     TakeItemsAction.execute(
       Action().apply {
@@ -37,9 +35,7 @@ object TradeItemsAction : ActionExecutor() {
         data["items"] = price
         data["criteria"] = criteria
       },
-      mutableMapOf(
-        "player" to player,
-      )
+      ActionContext.PlayerActionContext(context.player)
     )
 
   }

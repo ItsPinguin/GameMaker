@@ -1,21 +1,18 @@
 package fr.ping.gamemaker.actions.impl
 
+import fr.ping.gamemaker.actions.ActionContext
 import fr.ping.gamemaker.actions.ActionExecutor
 import fr.ping.gamemaker.actions.models.Action
 import fr.ping.gamemaker.menus.MenuManager
-import fr.ping.gamemaker.menus.models.MenuInstance
-import org.bukkit.entity.Player
 
 object ChangePageActionExecutor : ActionExecutor() {
   override fun execute(
     action: Action,
-    context: Map<String, Any?>
+    context: ActionContext
   ) {
-    if (action.action != "change_page") return
-    val player = context["player"] as? Player ?: return
-    val menuInstance = context["menu_instance"] as? MenuInstance ?: return
+    if (context !is ActionContext.MenuClickActionContext) return
     val list = action.data["list"] as? String ?: return
     val pageOffset = action.data["page_offset"].toString().toDoubleOrNull()?.toInt() ?: return
-    MenuManager.changePage(player, menuInstance, list, pageOffset)
+    MenuManager.changePage(context.player, context.menu, list, pageOffset)
   }
 }

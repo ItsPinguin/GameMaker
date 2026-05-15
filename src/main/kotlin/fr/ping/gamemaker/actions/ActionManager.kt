@@ -5,9 +5,8 @@ import fr.ping.gamemaker.actions.impl.*
 import fr.ping.gamemaker.actions.models.Action
 
 object ActionManager {
-  fun executeAction(action: Action, context: Map<String, Any?> = mapOf()) =
-    actionExecutorRegistry.listResources()
-      .forEach { executor -> executor.execute(action, context) }
+  fun executeAction(action: Action, context: ActionContext) =
+    actionExecutorRegistry.getResource(action.action)?.execute(action, context)
 
   init {
     actionExecutorRegistry.registerResource("message_player", MessagePlayer)

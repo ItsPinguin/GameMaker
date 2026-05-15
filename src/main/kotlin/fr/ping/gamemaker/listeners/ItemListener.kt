@@ -1,6 +1,7 @@
 package fr.ping.gamemaker.listeners
 
 import fr.ping.gamemaker.GameMakerPlugin
+import fr.ping.gamemaker.actions.ActionContext
 import fr.ping.gamemaker.actions.ActionManager
 import fr.ping.gamemaker.actions.models.Action
 import fr.ping.gamemaker.items.ItemManager
@@ -16,7 +17,11 @@ object ItemListener : Listener {
     val itemTemplate = GameMakerPlugin.itemTemplateRegistry.getResource(item) ?: return
     val actions : List<Action> = ResourceManager.parseAny<List<Action>>(itemTemplate.data["actions"] ?: return) ?: return
     actions.forEach {
-      ActionManager.executeAction(it, mapOf("player" to e.player))
+      ActionManager.executeAction(it, ActionContext.ItemInteractActionContext(
+        e.player,
+        itemTemplate,
+        e
+      ))
     }
   }
 }

@@ -24,7 +24,7 @@ object TriggerManager {
       val passes = CriteriaManager.checkCriteria(trigger.criteria, context)
       if (passes) {
         trigger.actions?.forEach { action ->
-          ActionManager.executeAction(action, context)
+          //ActionManager.executeAction(action, context)
         }
       }
     } }

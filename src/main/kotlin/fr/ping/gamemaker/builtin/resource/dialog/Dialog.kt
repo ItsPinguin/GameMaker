@@ -1,6 +1,7 @@
 package fr.ping.gamemaker.builtin.resource.dialog
 
 import com.google.gson.annotations.SerializedName
+import fr.ping.gamemaker.actions.ActionContext
 import fr.ping.gamemaker.actions.ActionManager
 import fr.ping.gamemaker.criteria.CriteriaManager
 import fr.ping.utils.resources.Resource
@@ -45,7 +46,7 @@ data class Dialog(
       if ((line.useActionBar ?: useActionBar) == true) player.sendActionBar(it)
     }
     line.actions?.forEach { action ->
-      ActionManager.executeAction(action, context)
+      ActionManager.executeAction(action, ActionContext.GenericActionContext(context))
     }
     indexes[playerName] = (index + (line.step ?: 1))
     if (loops)
