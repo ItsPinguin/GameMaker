@@ -1,12 +1,14 @@
-package fr.ping.gamemaker.menus
+package fr.ping.gamemaker.items.builders.models
 
+import fr.ping.gamemaker.items.ItemBuilderContext
 import fr.ping.gamemaker.menus.models.PageState
 import fr.ping.utils.resources.Resource
 import org.bukkit.Material
+import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
 
-open class ItemListProvider : Resource() {
-  open fun getItem(index: Int, context : Map<String, Any?>) : ItemStack? = null
+open class ItemListBuilder : Resource() {
+  open fun getItem(index: Int, context : ItemBuilderContext) : ItemStack? = null
 
   open fun getListSize() : Int = 0
 
@@ -20,5 +22,9 @@ open class ItemListProvider : Resource() {
     itemMeta.setItemName("§aTurn Page")
     itemStack.itemMeta = itemMeta
     return itemStack
+  }
+
+  open fun onClick(index: Int, event: InventoryClickEvent) {
+    println("Clicked on $index, actual slot is ${event.slot}")
   }
 }

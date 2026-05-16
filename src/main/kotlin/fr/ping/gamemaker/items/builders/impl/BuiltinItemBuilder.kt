@@ -5,6 +5,7 @@ import com.google.gson.internal.LinkedTreeMap
 import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.builtin.resource.I18n
 import fr.ping.gamemaker.i18n.I18nManager
+import fr.ping.gamemaker.items.ItemBuilderContext
 import fr.ping.gamemaker.items.builders.models.ItemBuilder
 import fr.ping.gamemaker.menus.models.MenuButton
 import fr.ping.utils.resources.ResourceManager
@@ -17,7 +18,13 @@ object BuiltinItemBuilder : ItemBuilder() {
     ResourceManager["item_build/en_US", I18n::class.java]
   }
 
-  override fun buildItemLore(key: String, value: Any?, data: Map<String, Any?>, context: Map<String, Any?>, isKeyInConfig : Boolean): List<String>? {
+  override fun buildItemLore(
+    key: String,
+    value: Any?,
+    data: Map<String, Any?>,
+    context: ItemBuilderContext,
+    isKeyInConfig : Boolean
+  ): List<String>? {
     when (key) {
       "lore" -> {
         if (value == null || value !is List<*>) return null
@@ -53,37 +60,38 @@ object BuiltinItemBuilder : ItemBuilder() {
         return listOf(I18nManager["type_format", typeFormat, rarityFormat])
       }
       "item_trade" -> {
-        val slot = context["slot"] as? MenuButton ?: return listOf()
-        var lore = slot.actions
-          .asSequence()
-          .filter { it.action == "trade_items" }
-          .flatMap { it.data["price"] as? List<*> ?: listOf() }
-          .filter { it != null }
-          .map {
-            if (it is LinkedTreeMap<*, *> || it is Map<*, *>) {
-              "§8- §7" + it["id"].toString().plus(" §8[${it["count"].toString().toDoubleOrNull()?.toInt()?:1}]")
-            } else
-              "§8- §7" + it.toString().plus(" §8[1]")
-          }
-          .filter { it.isNotBlank() && it.isNotEmpty() }
-          .toMutableList()
-          .let {
-            if (it.isNotEmpty())
-              it.plus(" ").plus("§e§lCLICK §7to trade").toMutableList().apply {
-                it.add(0, "§7Cost")
-              }
-            else
-              it
-          }
-        if (lore.isEmpty()) return listOf()
-        lore = mutableListOf("§7Cost").apply { addAll(lore) }
-        return lore
+        //val slot = context["slot"] as? MenuButton ?: return listOf()
+        //var lore = slot.actions
+        //  .asSequence()
+        //  .filter { it.action == "trade_items" }
+        //  .flatMap { it.data["price"] as? List<*> ?: listOf() }
+        //  .filter { it != null }
+        //  .map {
+        //    if (it is LinkedTreeMap<*, *> || it is Map<*, *>) {
+        //      "§8- §7" + it["id"].toString().plus(" §8[${it["count"].toString().toDoubleOrNull()?.toInt()?:1}]")
+        //    } else
+        //      "§8- §7" + it.toString().plus(" §8[1]")
+        //  }
+        //  .filter { it.isNotBlank() && it.isNotEmpty() }
+        //  .toMutableList()
+        //  .let {
+        //    if (it.isNotEmpty())
+        //      it.plus(" ").plus("§e§lCLICK §7to trade").toMutableList().apply {
+        //        it.add(0, "§7Cost")
+        //      }
+        //    else
+        //      it
+        //  }
+        //if (lore.isEmpty()) return listOf()
+        //lore = mutableListOf("§7Cost").apply { addAll(lore) }
+        //return lore
+        return null
       }
     }
     return null
   }
 
-  override fun buildItemMaterial(data: Map<String, Any?>, context: Map<String, Any?>): Material? {
+  override fun buildItemMaterial(data: Map<String, Any?>, context: ItemBuilderContext): Material? {
     return (data["material"] as? String)?.let {  Material.getMaterial(it) }
   }
 

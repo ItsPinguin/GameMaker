@@ -3,6 +3,7 @@ package fr.ping.gamemaker.menus
 import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.actions.ActionContext
 import fr.ping.gamemaker.actions.ActionManager
+import fr.ping.gamemaker.items.ItemBuilderContext
 import fr.ping.gamemaker.items.ItemManager
 import fr.ping.gamemaker.menus.models.MenuInstance
 import fr.ping.gamemaker.menus.models.PageState
@@ -43,6 +44,15 @@ object MenuManager {
         e
       ))
     }
+    if (slot.list != null && slot.pageOffset == null) {
+      val builder = GameMakerPlugin.itemListBuilderRegistry.getResource(slot.list) ?: return
+      val pageState = menuInstance.pageStates.getOrPut(slot.list!!) { PageState(0, 0) }
+      val slots = slot.getFilledSlots()
+      val index = slots.indexOf(e.slot)
+      builder.onClick(
+        index + pageState.getOffset(),
+        e)
+    }
   }
 
   fun open(player: Player, templateId: String, data: Map<String, Any?> = mapOf()) {
@@ -74,7 +84,7 @@ object MenuManager {
     val inventory = menuInstance.inventory ?: return
     template.contents.forEach { slot ->
       val filledSlots = slot.getFilledSlots()
-      val listProvider = GameMakerPlugin.itemListProviderRegistry.getResource(slot.list)
+      val listProvider = GameMakerPlugin.itemListBuilderRegistry.getResource(slot.list)
       if (slot.list != null && slot.pageOffset == null) {
         menuInstance.pageStates.getOrPut(slot.list!!) { PageState(0, 0) }.apply {
           pageSize = filledSlots.size
@@ -83,42 +93,29 @@ object MenuManager {
         }
       }
       filledSlots.forEachIndexed { index, slotIndex ->
-        if (slotIndex >= 0 && slotIndex < inventory.size) {
-          if (slot.list == null) {
-            inventory.setItem(
-              slotIndex,
-              ItemManager.buildItem(slot.item?.get(), slot.context.apply {
-                put("player", player)
-                put("menu_instance", menuInstance)
-                put("slots", slot)
-                put("slot", slotIndex)
-              })
-            )
+        if (slotIndex !in 0..inventory.size) return@forEachIndexed
+        val context = ItemBuilderContext.MenuSlotItemBuilderContext(
+          actualSlot = slotIndex,
+          index = index,
+          menuInstance = menuInstance,
+          menuButton = slot,
+          player = player,
+        )
+        if (slot.list == null) {
+          inventory.setItem(
+            slotIndex,
+            ItemManager.buildItem(slot.item?.get(),
+              context)
+          )
+        } else {
+          if (slot.pageOffset != null) {
+            inventory.setItem(slotIndex, listProvider
+              ?.getPageTurnItem(slot.pageOffset!!, menuInstance.pageStates[slot.list!!]!!)
+              ?: ItemManager.buildItem(slot.item?.get(), context))
           } else {
-            if (slot.pageOffset != null) {
-              inventory.setItem(slotIndex, listProvider
-                ?.getPageTurnItem(slot.pageOffset!!, menuInstance.pageStates[slot.list!!]!!)
-                ?: ItemManager.buildItem(slot.item?.get(), slot.context.apply {
-                  put("player", player)
-                  put("menu_instance", menuInstance)
-                  put("slots", slot)
-                  put("slot", slotIndex)
-                }))
-            } else {
-              val listIndex = index + menuInstance.pageStates[slot.list!!]!!.getOffset()
-              inventory.setItem(slotIndex,
-                listProvider?.getItem(listIndex, slot.context.apply {
-                  put("player", player)
-                  put("menu_instance", menuInstance)
-                  put("slots", slot)
-                  put("index", index)
-                }) ?: ItemManager.buildItem(slot.item?.get(), slot.context.apply {
-                  put("player", player)
-                  put("menu_instance", menuInstance)
-                  put("slots", slot)
-                  put("index", index)
-                }))
-            }
+            val listIndex = index + menuInstance.pageStates[slot.list!!]!!.getOffset()
+            inventory.setItem(slotIndex,
+              listProvider?.getItem(listIndex, context) ?: ItemManager.buildItem(slot.item?.get(), context))
           }
         }
       }

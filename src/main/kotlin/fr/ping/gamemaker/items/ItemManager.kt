@@ -12,10 +12,10 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
 object ItemManager {
-  fun buildItem(id: String, context: Map<String, Any?> = mutableMapOf()) =
+  fun buildItem(id: String, context: ItemBuilderContext = ItemBuilderContext.GenericItemBuilderContext()) =
     buildItem(GameMakerPlugin.itemTemplateRegistry.getResource(id), context)
 
-  fun buildItem(template: ItemTemplate?, context: Map<String, Any?> = mutableMapOf()) : ItemStack {
+  fun buildItem(template: ItemTemplate?, context: ItemBuilderContext = ItemBuilderContext.GenericItemBuilderContext()) : ItemStack {
     val material = itemBuilderRegistry.listResources().map { it.buildItemMaterial(template?.data ?: mapOf(), context) }.firstOrNull { it != null } ?: return ItemStack(Material.AIR)
     val itemStack = ItemStack(material)
     if (template == null || itemStack.type == Material.AIR) return itemStack
