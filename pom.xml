@@ -6,7 +6,7 @@
 
   <groupId>fr.ping</groupId>
   <artifactId>gamemaker</artifactId>
-  <version>26.5.6</version>
+  <version>26.5.17</version>
   <packaging>jar</packaging>
 
   <name>gamemaker</name>
