@@ -122,7 +122,7 @@
     <dependency>
       <groupId>fr.ping</groupId>
       <artifactId>ResourceManager</artifactId>
-      <version>26.5.6</version>
+      <version>26.5.17</version>
     </dependency>
     <dependency>
       <groupId>de.oliver</groupId>

@@ -4,6 +4,7 @@ import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.GameMakerPlugin.Companion.itemBuilderRegistry
 import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.builders.impl.BuiltinItemBuilder
+import fr.ping.gamemaker.items.builders.impl.BuiltinItemTemplateItemListBuilder
 import fr.ping.gamemaker.items.templates.models.ItemTemplate
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -58,5 +59,6 @@ object ItemManager {
 
   init {
     itemBuilderRegistry.registerResource("builtin_builder", BuiltinItemBuilder)
+    GameMakerPlugin.itemListBuilderRegistry.registerResource("item_templates", BuiltinItemTemplateItemListBuilder)
   }
 }

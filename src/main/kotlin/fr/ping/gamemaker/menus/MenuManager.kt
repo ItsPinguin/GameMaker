@@ -51,7 +51,8 @@ object MenuManager {
       val index = slots.indexOf(e.slot)
       builder.onClick(
         index + pageState.getOffset(),
-        e)
+        e, menuInstance
+      )
     }
   }
 
@@ -89,7 +90,13 @@ object MenuManager {
         menuInstance.pageStates.getOrPut(slot.list!!) { PageState(0, 0) }.apply {
           pageSize = filledSlots.size
           println("Page size: $pageSize")
-          total = listProvider!!.getListSize()
+          total = listProvider!!.getListSize(ItemBuilderContext.MenuSlotItemBuilderContext(
+            actualSlot = 0,
+            index = 0,
+            menuInstance = menuInstance,
+            menuButton = slot,
+            player = player,
+          ))
         }
       }
       filledSlots.forEachIndexed { index, slotIndex ->
