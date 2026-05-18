@@ -3,7 +3,7 @@ package fr.ping.gamemaker
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
-import fr.ping.fr.ping.utils.resources.ReadyRegistry
+import fr.ping.fr.ping.utils.resources.registry.ReadyRegistry
 import fr.ping.gamemaker.actions.ActionExecutor
 import fr.ping.gamemaker.actions.models.Action
 import fr.ping.gamemaker.builtin.resource.I18n
@@ -80,7 +80,7 @@ class GameMakerPlugin : JavaPlugin() {
   data class Config(
     @SerializedName("resource_paths")
     var resourcePaths: List<String> = listOf("resources", "plugins/GameMaker/data"),
-    var save_resources: Boolean = true,
+    var saveResources: Boolean = true,
     var builtins: Builtins = Builtins(),
     @SerializedName("item_lore_order")
     var itemLoreOrder: List<String> = listOf("attributes", "lore", "enchants")
