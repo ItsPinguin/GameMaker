@@ -1,5 +1,6 @@
 package fr.ping.gamemaker.editor.impl
 
+import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.ItemBuilderContext
 import fr.ping.gamemaker.items.builders.models.ItemListBuilder
 import fr.ping.gamemaker.items.templates.models.ItemTemplate
@@ -22,10 +23,12 @@ object ResourceItemListBuilder : ItemListBuilder() {
     val itemStack = ItemStack(
       when (resource) {
         is ItemTemplate -> resource.material
-        is MapResource -> try {
-          Material.valueOf(resource.data["material"] as String)
-        } catch (_ : Exception) { Material.GRAY_DYE }
-        else -> Material.GRAY_DYE
+        else -> try {
+          println(I18nManager["editor.icons.${context.menuInstance.data["registry"]}.${resource.id}"])
+          Material.valueOf(I18nManager["editor.icons.${context.menuInstance.data["registry"]}.${resource.id}"])
+        } catch (_ : Exception) {
+          Material.GRAY_DYE
+        }
       }
     )
     val itemMeta = itemStack.itemMeta ?: return itemStack

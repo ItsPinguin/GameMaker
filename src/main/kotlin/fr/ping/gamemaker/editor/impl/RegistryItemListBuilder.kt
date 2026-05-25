@@ -3,6 +3,7 @@ package fr.ping.gamemaker.editor.impl
 import fr.ping.gamemaker.actions.ActionContext
 import fr.ping.gamemaker.actions.impl.OpenMenuAction
 import fr.ping.gamemaker.actions.models.Action
+import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.ItemBuilderContext
 import fr.ping.gamemaker.items.builders.models.ItemListBuilder
 import fr.ping.gamemaker.menus.models.MenuInstance
@@ -22,7 +23,10 @@ object RegistryItemListBuilder : ItemListBuilder() {
     if (index !in 0 until ResourceManager.getRegistryMap().size) return null
     val registryPair = ResourceManager.getRegistryMap().entries.toList()[index]
     val registry = registryPair.value
-    val itemStack = ItemStack(Material.CHEST)
+    val itemStack = ItemStack(try {
+      Material.valueOf(I18nManager["editor.registry_icons.${registryPair.key}"])
+    } catch (_ : Exception) {
+      Material.CHEST })
     val itemMeta = itemStack.itemMeta ?: return itemStack
 
     itemMeta.setItemName("§a" + registry.type.simpleName)
