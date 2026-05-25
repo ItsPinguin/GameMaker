@@ -100,7 +100,7 @@ object MenuManager {
         }
       }
       filledSlots.forEachIndexed { index, slotIndex ->
-        if (slotIndex !in 0..inventory.size) return@forEachIndexed
+        if (slotIndex !in 0 until inventory.size) return@forEachIndexed
         val context = ItemBuilderContext.MenuSlotItemBuilderContext(
           actualSlot = slotIndex,
           index = index,
