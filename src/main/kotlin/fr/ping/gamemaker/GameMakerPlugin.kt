@@ -12,6 +12,8 @@ import fr.ping.gamemaker.utils.VectorTypeAdapter
 import fr.ping.gamemaker.dialog.Dialog
 import fr.ping.gamemaker.commands.GameMakerCommand
 import fr.ping.gamemaker.criteria.CriterionChecker
+import fr.ping.gamemaker.editor.impl.RegistryItemListBuilder
+import fr.ping.gamemaker.editor.impl.ResourceItemListBuilder
 import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.builders.impl.BuiltinItemBuilder
 import fr.ping.gamemaker.items.builders.models.ItemBuilder
@@ -54,6 +56,8 @@ class GameMakerPlugin : JavaPlugin() {
     I18nManager.compileLoadedI18n()
 
     itemListBuilderRegistry.registerResource("levels", TestListProvider())
+    itemListBuilderRegistry.registerResource("editor/registries", RegistryItemListBuilder)
+    itemListBuilderRegistry.registerResource("editor/resource", ResourceItemListBuilder)
 
     registerCommands()
     registerEvents()
