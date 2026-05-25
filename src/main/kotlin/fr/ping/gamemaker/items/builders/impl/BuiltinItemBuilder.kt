@@ -1,13 +1,11 @@
 package fr.ping.gamemaker.items.builders.impl
 
 import com.google.gson.annotations.SerializedName
-import com.google.gson.internal.LinkedTreeMap
 import fr.ping.gamemaker.GameMakerPlugin
-import fr.ping.gamemaker.builtin.resource.I18n
+import fr.ping.gamemaker.i18n.I18n
 import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.ItemBuilderContext
 import fr.ping.gamemaker.items.builders.models.ItemBuilder
-import fr.ping.gamemaker.menus.models.MenuButton
 import fr.ping.utils.resources.ResourceManager
 import org.bukkit.Material
 

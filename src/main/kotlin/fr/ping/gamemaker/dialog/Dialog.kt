@@ -1,4 +1,4 @@
-package fr.ping.gamemaker.builtin.resource.dialog
+package fr.ping.gamemaker.dialog
 
 import com.google.gson.annotations.SerializedName
 import fr.ping.gamemaker.actions.ActionContext

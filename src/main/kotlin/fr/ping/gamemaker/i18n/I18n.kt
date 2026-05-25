@@ -1,4 +1,4 @@
-package fr.ping.gamemaker.builtin.resource
+package fr.ping.gamemaker.i18n
 
 import fr.ping.utils.resources.Resource
 

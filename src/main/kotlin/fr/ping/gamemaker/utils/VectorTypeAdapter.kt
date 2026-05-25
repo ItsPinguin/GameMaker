@@ -1,4 +1,4 @@
-package fr.ping.gamemaker.builtin.resource
+package fr.ping.gamemaker.utils
 
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader

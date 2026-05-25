@@ -3,7 +3,7 @@ package fr.ping.gamemaker.actions.impl
 import fr.ping.gamemaker.actions.ActionContext
 import fr.ping.gamemaker.actions.ActionExecutor
 import fr.ping.gamemaker.actions.models.Action
-import fr.ping.gamemaker.builtin.resource.dialog.Dialog
+import fr.ping.gamemaker.dialog.Dialog
 import fr.ping.utils.resources.ResourceManager
 
 object DialogAction : ActionExecutor() {

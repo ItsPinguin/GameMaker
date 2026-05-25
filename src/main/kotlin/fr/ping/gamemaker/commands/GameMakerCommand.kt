@@ -2,7 +2,7 @@ package fr.ping.gamemaker.commands
 
 import fr.ping.gamemaker.GameMakerPlugin.Companion.itemTemplateRegistry
 import fr.ping.gamemaker.GameMakerPlugin.Companion.menuTemplateRegistry
-import fr.ping.gamemaker.builtin.resource.I18n
+import fr.ping.gamemaker.i18n.I18n
 import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.ItemManager
 import fr.ping.gamemaker.menus.MenuManager

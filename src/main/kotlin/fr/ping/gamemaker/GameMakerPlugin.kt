@@ -6,10 +6,10 @@ import com.google.gson.annotations.SerializedName
 import fr.ping.fr.ping.utils.resources.registry.ReadyRegistry
 import fr.ping.gamemaker.actions.ActionExecutor
 import fr.ping.gamemaker.actions.models.Action
-import fr.ping.gamemaker.builtin.resource.I18n
-import fr.ping.gamemaker.builtin.resource.LocationTypeAdapter
-import fr.ping.gamemaker.builtin.resource.VectorTypeAdapter
-import fr.ping.gamemaker.builtin.resource.dialog.Dialog
+import fr.ping.gamemaker.i18n.I18n
+import fr.ping.gamemaker.utils.LocationTypeAdapter
+import fr.ping.gamemaker.utils.VectorTypeAdapter
+import fr.ping.gamemaker.dialog.Dialog
 import fr.ping.gamemaker.commands.GameMakerCommand
 import fr.ping.gamemaker.criteria.CriterionChecker
 import fr.ping.gamemaker.i18n.I18nManager

@@ -1,4 +1,4 @@
-package fr.ping.gamemaker.builtin.resource.dialog
+package fr.ping.gamemaker.dialog
 
 import com.google.gson.TypeAdapter
 import com.google.gson.annotations.JsonAdapter
@@ -8,8 +8,9 @@ import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
 import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.actions.models.Action
-import fr.ping.gamemaker.builtin.resource.dialog.DialogLine.Adapter
+import fr.ping.gamemaker.dialog.DialogLine.Adapter
 import fr.ping.gamemaker.criteria.models.Criterion
+import kotlin.collections.get
 
 @JsonAdapter(Adapter::class)
 data class DialogLine(
@@ -43,7 +44,7 @@ data class DialogLine(
       if (data.size == 1 && data.containsKey("text"))
         out?.value(value.text)
       else
-        out?.jsonValue(GameMakerPlugin.Companion.gson.toJson(data))
+        out?.jsonValue(GameMakerPlugin.gson.toJson(data))
     }
 
     override fun read(`in`: JsonReader?): DialogLine? {
@@ -53,7 +54,7 @@ data class DialogLine(
           return DialogLine(text = `in`.nextString())
         }
         JsonToken.BEGIN_OBJECT -> {
-          val data = GameMakerPlugin.Companion.gson.fromJson<Map<*, *>>(`in`, Map::class.java)
+          val data = GameMakerPlugin.gson.fromJson<Map<*, *>>(`in`, Map::class.java)
           return DialogLine(
             text = data["text"] as? String ?: "",
             actions = (data["actions"] as? List<*>)?.map { Action().apply { this.data =
