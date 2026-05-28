@@ -6,7 +6,7 @@
 
   <groupId>fr.ping</groupId>
   <artifactId>gamemaker</artifactId>
-  <version>26.5.17</version>
+  <version>26.5.28</version>
   <packaging>jar</packaging>
 
   <name>gamemaker</name>
@@ -122,7 +122,7 @@
     <dependency>
       <groupId>fr.ping</groupId>
       <artifactId>ResourceManager</artifactId>
-      <version>26.5.17</version>
+      <version>26.5.28</version>
     </dependency>
     <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
