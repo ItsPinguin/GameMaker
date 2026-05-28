@@ -36,7 +36,8 @@ object I18nManager {
       current = current.getOrPut(i) { mutableMapOf<String, Any?>() } as? MutableMap<String, Any?>
         ?: throw IllegalStateException("Invalid path: $key. Referred to non-map at $i")
     }
-    return current.getOrPut(path.last()) { key }.toString()
+    return current.getOrPut(path.last()) { key }
+      .let { any -> if (any is Collection<*>) any.joinToString("\n") { it.toString() } else any.toString() }
   }
 
   private fun translateAndInsert(translations : MutableMap<String, Any?>, key: String, vararg args: Any?) : String {
