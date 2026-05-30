@@ -24,9 +24,12 @@ import fr.ping.gamemaker.listeners.TriggerEventListener
 import fr.ping.gamemaker.items.builders.models.ItemListBuilder
 import fr.ping.gamemaker.menus.TestListProvider
 import fr.ping.gamemaker.menus.models.MenuTemplate
+import fr.ping.gamemaker.notifications.impl.NotifyActionExecutor
 import fr.ping.gamemaker.triggers.Trigger
+import fr.ping.gamemaker.utils.SoundTypeAdapter
 import fr.ping.utils.resources.ResourceManager
 import org.bukkit.Location
+import org.bukkit.Sound
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.util.Vector
 import java.io.File
@@ -44,6 +47,7 @@ class GameMakerPlugin : JavaPlugin() {
     ResourceManager.addAllResourcePaths(config.resourcePaths)
     ResourceManager.registerTypeAdapter(Vector::class.java, VectorTypeAdapter)
     ResourceManager.registerTypeAdapter(Location::class.java, LocationTypeAdapter)
+    ResourceManager.registerTypeAdapter(Sound::class.java, SoundTypeAdapter)
 
     System.gc()
   }
@@ -114,6 +118,10 @@ class GameMakerPlugin : JavaPlugin() {
 
     fun getResourceFolder() : File {
       return getInstance().dataFolder.resolve("data")
+    }
+
+    init {
+      actionExecutorRegistry.registerResource("notify", NotifyActionExecutor())
     }
   }
 }
