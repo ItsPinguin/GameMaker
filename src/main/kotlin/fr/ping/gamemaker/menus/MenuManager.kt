@@ -9,6 +9,7 @@ import fr.ping.gamemaker.menus.models.MenuInstance
 import fr.ping.gamemaker.menus.models.PageState
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
+import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryType
@@ -64,11 +65,13 @@ object MenuManager {
       player.openInventory(menuInstance.inventory!!)
       lastOpened[player.uniqueId] = templateId
     }
+    val title = Component.text(template.overlayChar ?: "").font(NamespacedKey.fromString(template.overlayFont ?: "minecraft:default"))
+      .append(Component.text(template.title).font(NamespacedKey.fromString("minecraft:default")))
     val inventory =
       if (template.inventoryType == InventoryType.CHEST)
-      Bukkit.createInventory(null, template.rows * 9, Component.text(template.title))
+      Bukkit.createInventory(null, template.rows * 9, title)
     else
-      Bukkit.createInventory(null, template.inventoryType, Component.text(template.title))
+      Bukkit.createInventory(null, template.inventoryType, title)
 
     val menuInstance = menus.getOrPut(player.uniqueId) { mutableMapOf() }.getOrPut(templateId) { MenuInstance(templateHandle, inventory) }
     menuInstance.inventory = inventory
