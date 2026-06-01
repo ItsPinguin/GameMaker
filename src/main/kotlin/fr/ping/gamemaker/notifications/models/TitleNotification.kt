@@ -9,8 +9,10 @@ data class TitleNotification(
   var subtitle: String? = null,
   @SerializedName("action_bar", alternate = ["actionbar", "actionBar"])
   var actionBar: String? = null,
+  @SerializedName("fade_in", alternate = ["fadeIn", "fadein"])
   var fadeIn: Int = 0,
   var stay: Int = 0,
+  @SerializedName("fade_out", alternate = ["fadeOut", "fadeout"])
   var fadeOut: Int = 0,
 ) : Notification() {
   override fun notify(player: Player) {
