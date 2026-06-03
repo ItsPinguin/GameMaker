@@ -10,7 +10,8 @@
     "Multiple",
     "Lines"
   ],
-  "actions": []
+  "actions": [],
+  "skull_texture": "kgshdkhgfhksdgfhkgsdhkgfshjgdjfhgsjhdgfhsgdhjsdg"
 }
 ```
 

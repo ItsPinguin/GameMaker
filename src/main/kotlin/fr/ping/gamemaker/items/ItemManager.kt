@@ -1,16 +1,22 @@
 package fr.ping.gamemaker.items
 
+import com.destroystokyo.paper.profile.PlayerProfile
+import com.destroystokyo.paper.profile.ProfileProperty
 import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.GameMakerPlugin.Companion.itemBuilderRegistry
 import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.builders.impl.BuiltinItemBuilder
 import fr.ping.gamemaker.items.builders.impl.BuiltinItemTemplateItemListBuilder
 import fr.ping.gamemaker.items.templates.models.ItemTemplate
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.persistence.PersistentDataType
+import org.bukkit.profile.PlayerTextures
+import java.util.UUID
 
 object ItemManager {
   fun buildItem(id: String, context: ItemBuilderContext = ItemBuilderContext.GenericItemBuilderContext()) =
@@ -45,6 +51,13 @@ object ItemManager {
     itemMeta.lore = lore
     itemMeta.addItemFlags(*ItemFlag.entries.toTypedArray())
     itemMeta.isUnbreakable = true
+    if (material == Material.PLAYER_HEAD && template.data["skull_texture"] != null) {
+      val skullMeta = itemMeta as SkullMeta
+      val base64Texture = template.data["skull_texture"] as? String ?: ""
+      skullMeta.playerProfile = Bukkit.getServer().createProfile(UUID.randomUUID()).apply {
+        setProperty(ProfileProperty("textures", base64Texture, null))
+      }
+    }
 
     itemMeta.persistentDataContainer.set(NamespacedKey("gamemaker", "id"), PersistentDataType.STRING, template.id)
 
