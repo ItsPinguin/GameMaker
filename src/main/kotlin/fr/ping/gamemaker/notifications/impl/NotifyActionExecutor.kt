@@ -5,6 +5,7 @@ import fr.ping.gamemaker.actions.ActionExecutor
 import fr.ping.gamemaker.actions.models.Action
 import fr.ping.gamemaker.notifications.models.ComposedNotification
 import fr.ping.utils.resources.ResourceManager
+import fr.ping.utils.resources.WrappedResource
 
 class NotifyActionExecutor : ActionExecutor() {
   override fun execute(
@@ -12,7 +13,7 @@ class NotifyActionExecutor : ActionExecutor() {
     context: ActionContext
   ) {
     if (context !is ActionContext.PlayerActionContext) return
-    val notification = ResourceManager.parseAny<ComposedNotification>(action.data) ?: return
-    notification.notify(context.player)
+    val notification = ResourceManager.parseAny<WrappedResource<ComposedNotification>>(action.data["notification"]) ?: return
+    notification.get()?.notify(context.player)
   }
 }
