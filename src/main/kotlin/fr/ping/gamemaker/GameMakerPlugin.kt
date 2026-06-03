@@ -25,6 +25,7 @@ import fr.ping.gamemaker.items.builders.models.ItemListBuilder
 import fr.ping.gamemaker.menus.TestListProvider
 import fr.ping.gamemaker.menus.models.MenuTemplate
 import fr.ping.gamemaker.notifications.impl.NotifyActionExecutor
+import fr.ping.gamemaker.notifications.models.ComposedNotification
 import fr.ping.gamemaker.triggers.Trigger
 import fr.ping.gamemaker.utils.SoundTypeAdapter
 import fr.ping.utils.resources.ResourceManager
@@ -109,6 +110,7 @@ class GameMakerPlugin : JavaPlugin() {
     val langRegistry = ReadyRegistry(I18n::class.java, "lang")
     val menuTemplateRegistry = ReadyRegistry(MenuTemplate::class.java, "menu_template")
     val itemListBuilderRegistry = ReadyRegistry(ItemListBuilder::class.java, "item_list_provider")
+    val notificationRegistry = ReadyRegistry(ComposedNotification::class.java, "notification")
 
     val gson : Gson = GsonBuilder().setPrettyPrinting().create()
 
