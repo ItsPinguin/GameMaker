@@ -2,15 +2,17 @@ package fr.ping.gamemaker.notifications.models
 
 import fr.ping.gamemaker.GameMakerPlugin
 import org.bukkit.Bukkit
+import org.bukkit.Particle
 import org.bukkit.entity.Player
 
 data class ComposedNotification (
   var sounds : List<SoundNotification> = listOf(),
   var messages : List<MessageNotification> = listOf(),
   var titles : List<TitleNotification> = listOf(),
+  var particles : List<ParticleNotification> = listOf(),
 ) : Notification() {
   override fun notify(player: Player) {
-    val notifications = listOf(sounds, messages, titles).flatten()
+    val notifications = listOf(sounds, messages, titles, particles).flatten()
     notifications.forEach { notifyWithDelay(player, it) }
   }
 
