@@ -26,7 +26,7 @@ object SoundTypeAdapter : TypeAdapter<Sound> () {
 
     val rawValue = reader.nextString()
 
-    val key = NamespacedKey.fromString(rawValue.lowercase().replace("minecraft:", "").replace("_", "."))
+    val key = NamespacedKey.fromString(rawValue.replace("minecraft:", ""))
     if (key != null) {
       val registeredSound = Registry.SOUNDS.get(key)
       Registry.MATERIAL
