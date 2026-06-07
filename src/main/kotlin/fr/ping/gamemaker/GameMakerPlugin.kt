@@ -27,10 +27,14 @@ import fr.ping.gamemaker.menus.models.MenuTemplate
 import fr.ping.gamemaker.notifications.impl.NotifyActionExecutor
 import fr.ping.gamemaker.notifications.models.ComposedNotification
 import fr.ping.gamemaker.triggers.Trigger
+import fr.ping.gamemaker.utils.InventoryTypeTypeAdapter
+import fr.ping.gamemaker.utils.MaterialTypeAdapter
 import fr.ping.gamemaker.utils.SoundTypeAdapter
 import fr.ping.utils.resources.ResourceManager
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.Sound
+import org.bukkit.event.inventory.InventoryType
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.util.Vector
 import java.io.File
@@ -49,6 +53,8 @@ class GameMakerPlugin : JavaPlugin() {
     ResourceManager.registerTypeAdapter(Vector::class.java, VectorTypeAdapter)
     ResourceManager.registerTypeAdapter(Location::class.java, LocationTypeAdapter)
     ResourceManager.registerTypeAdapter(Sound::class.java, SoundTypeAdapter)
+    ResourceManager.registerTypeAdapter(Material::class.java, MaterialTypeAdapter)
+    ResourceManager.registerTypeAdapter(InventoryType::class.java, InventoryTypeTypeAdapter)
 
     System.gc()
   }
