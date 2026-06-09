@@ -46,18 +46,37 @@ object I18nManager {
     }
   }
 
-  private fun translate(translations : MutableMap<String, Any?>, key: String) : Component {
+  private fun translate(translations: MutableMap<String, Any?>, key: String): Component {
     val path = key.lowercase().split(".")
-    var current = translations
-    for (i in path.subList(0, path.lastIndex)) {
-      current = current.getOrPut(i) { mutableMapOf<String, Any?>() } as? MutableMap<String, Any?>
-        ?: throw IllegalStateException("Invalid path: $key. Referred to non-map at $i")
+    var current: Any? = translations
+
+    for (part in path) {
+      if (current !is Map<*, *>) {
+        return Component.text(key)
+      }
+      current = current[part]
+      if (current == null) {
+        return Component.text(key)
+      }
     }
-    val componentValue = current.getOrPut(path.last()) { key }
-    if (componentValue is Component) return componentValue
-    val component = ResourceManager.parseAny<Component>(componentValue) ?: Component.text(componentValue.toString())
-    if (component != Component.empty()) current[path.last()] = component
+
+    if (current is Component) return current
+
+    val component = ResourceManager.parseAny<Component>(current) ?: Component.text(current.toString())
+
+    if (component != Component.empty()) {
+      saveComponentBackToMap(translations, path, component)
+    }
+
     return component
+  }
+
+  private fun saveComponentBackToMap(translations: MutableMap<String, Any?>, path: List<String>, component: Component) {
+    var current = translations
+    for (i in 0 until path.lastIndex) {
+      current = current[path[i]] as? MutableMap<String, Any?> ?: return
+    }
+    current[path.last()] = component
   }
 
   private fun translateAndInsert(translations: MutableMap<String, Any?>, key: String, vararg args: Any?): Component {

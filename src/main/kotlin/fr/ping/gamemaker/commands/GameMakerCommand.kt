@@ -76,7 +76,8 @@ object GameMakerCommand : TabExecutor {
         MenuManager.open(sender, menu)
       }
       "translate" -> {
-        sender.sendMessage(I18nManager["ENGLISH", "some.key.to.something", System.currentTimeMillis(), sender.name])
+        val key = args.getOrNull(1) ?: "some.key.to.something"
+        sender.sendMessage(I18nManager["ENGLISH", key, System.currentTimeMillis(), sender.name])
       }
       else -> {
         sender.sendMessage("reload")

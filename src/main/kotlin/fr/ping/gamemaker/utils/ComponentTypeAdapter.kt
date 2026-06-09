@@ -10,6 +10,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.JoinConfiguration
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 
 object ComponentTypeAdapter : TypeAdapter<Component>() {
   override fun write(writer: JsonWriter?, component: Component?) {
@@ -44,7 +45,30 @@ object ComponentTypeAdapter : TypeAdapter<Component>() {
     if (token == JsonToken.STRING) {
       val inputString = reader.nextString()
       return try {
-        MiniMessage.miniMessage().deserialize(inputString)
+        return MiniMessage.miniMessage().deserialize(inputString
+          .replace("§4", "<dark_red>", true)
+          .replace("§c", "<red>", true)
+          .replace("§6", "<gold>", true)
+          .replace("§e", "<yellow>", true)
+          .replace("§2", "<dark_green>", true)
+          .replace("§a", "<green>", true)
+          .replace("§b", "<aqua>", true)
+          .replace("§3", "<dark_aqua>", true)
+          .replace("§1", "<dark_blue>", true)
+          .replace("§9", "<blue>", true)
+          .replace("§d", "<light_purple>", true)
+          .replace("§5", "<dark_purple>", true)
+          .replace("§f", "<white>", true)
+          .replace("§7", "<gray>", true)
+          .replace("§8", "<dark_gray>", true)
+          .replace("§0", "<black>", true)
+          .replace("§k", "<obfuscated>", true)
+          .replace("§l", "<bold>", true)
+          .replace("§m", "<strikethrough>", true)
+          .replace("§n", "<underline>", true)
+          .replace("§o", "<italic>", true)
+          .replace("§r", "<reset>", true)
+        )
       } catch (_: Exception) {
         Component.empty()
       }
