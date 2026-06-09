@@ -27,7 +27,7 @@ object BuiltinItemBuilder : ItemBuilder() {
       "lore" -> {
         if (value == null || value !is List<*>) return null
         @Suppress("UNCHECKED_CAST")
-        return value.map { if (it.toString().startsWith("$")) I18nManager["ENGLISH", it.toString().removePrefix("$")] else it.toString() }.let {
+        return value.map { if (it.toString().startsWith("$")) I18nManager["ENGLISH", it.toString().removePrefix("$")].toString() else it.toString() }.let {
           if (config.insertSpaceAfter.getOrPut(key) { true }) it + listOf("") else it
         }
       }
@@ -35,7 +35,7 @@ object BuiltinItemBuilder : ItemBuilder() {
         if (value == null || value !is Map<*, *>) return null
         val attributesLore = mutableListOf<String>()
         value.entries.forEach {
-          attributesLore.add(I18nManager["lore.attribute", it.key, value[it.key]])
+          attributesLore.add(I18nManager["lore.attribute", it.key, value[it.key]].toString())
         }
         if (config.insertSpaceAfter.getOrPut(key) { true }) attributesLore.add("")
         return attributesLore
@@ -44,7 +44,7 @@ object BuiltinItemBuilder : ItemBuilder() {
         if (value == null || value !is Map<*, *>) return null
         val enchantsLore = mutableListOf<String>()
         value.entries.forEach {
-          enchantsLore.add(I18nManager["lore.enchant_level", it.key, value[it.key]])
+          enchantsLore.add(I18nManager["lore.enchant_level", it.key, value[it.key]].toString())
         }
         if (config.insertSpaceAfter.getOrPut(key) {true}) enchantsLore.add("")
         return enchantsLore
@@ -55,7 +55,7 @@ object BuiltinItemBuilder : ItemBuilder() {
         val rarityFormat = Rarities.display(rarity)
         val typeFormat = I18nManager["type.$type.format"]
         if (value == null || data["rarity"] == null) return null
-        return listOf(I18nManager["type_format", typeFormat, rarityFormat])
+        return listOf(I18nManager["type_format", typeFormat, rarityFormat].toString())
       }
       "item_trade" -> {
         //val slot = context["slot"] as? MenuButton ?: return listOf()

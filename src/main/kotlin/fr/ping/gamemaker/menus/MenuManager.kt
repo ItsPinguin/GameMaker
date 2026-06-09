@@ -3,6 +3,7 @@ package fr.ping.gamemaker.menus
 import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.actions.ActionContext
 import fr.ping.gamemaker.actions.ActionManager
+import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.ItemBuilderContext
 import fr.ping.gamemaker.items.ItemManager
 import fr.ping.gamemaker.menus.models.MenuInstance
@@ -66,7 +67,7 @@ object MenuManager {
       lastOpened[player.uniqueId] = templateId
     }
     val title = Component.text(template.overlayChar ?: "").font(NamespacedKey.fromString(template.overlayFont ?: "minecraft:default"))
-      .append(Component.text(template.title).font(NamespacedKey.fromString("minecraft:default")))
+      .append(I18nManager.translateIfIndicator(template.title, "$", System.currentTimeMillis()))
     val inventory =
       if (template.inventoryType == InventoryType.CHEST)
       Bukkit.createInventory(null, template.rows * 9, title)

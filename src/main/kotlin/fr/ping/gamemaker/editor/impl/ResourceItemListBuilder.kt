@@ -25,7 +25,7 @@ object ResourceItemListBuilder : ItemListBuilder() {
         is ItemTemplate -> resource.material
         else -> try {
           println(I18nManager["editor.icons.${context.menuInstance.data["registry"]}.${resource.id}"])
-          Material.valueOf(I18nManager["editor.icons.${context.menuInstance.data["registry"]}.${resource.id}"])
+          Material.valueOf(I18nManager["editor.icons.${context.menuInstance.data["registry"]}.${resource.id}"].toString())
         } catch (_ : Exception) {
           Material.GRAY_DYE
         }

@@ -24,7 +24,7 @@ object RegistryItemListBuilder : ItemListBuilder() {
     val registryPair = ResourceManager.getRegistryMap().entries.toList()[index]
     val registry = registryPair.value
     val itemStack = ItemStack(try {
-      Material.valueOf(I18nManager["editor.registry_icons.${registryPair.key}"])
+      Material.valueOf(I18nManager["editor.registry_icons.${registryPair.key}"].toString())
     } catch (_ : Exception) {
       Material.CHEST })
     val itemMeta = itemStack.itemMeta ?: return itemStack

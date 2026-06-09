@@ -28,7 +28,7 @@ object GameMakerCommand : TabExecutor {
       }
       return null
     }
-    return listOf("help", "giveall", "reload", "translate", "give", "menu", "clear_cached_menus", "reload_checkers")
+    return listOf("help", "giveall", "reload", "translate", "give", "menu", "clear_cached_menus")
   }
 
   override fun onCommand(

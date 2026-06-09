@@ -2,10 +2,11 @@ package fr.ping.gamemaker.menus.models
 
 import com.google.gson.annotations.SerializedName
 import fr.ping.utils.resources.Resource
+import net.kyori.adventure.text.Component
 import org.bukkit.event.inventory.InventoryType
 
 data class MenuTemplate(
-  var title : String = "",
+  var title : Component = Component.text(""),
   @SerializedName("inventory_type")
   var inventoryType : InventoryType = InventoryType.CHEST,
   var rows : Int = 3,
