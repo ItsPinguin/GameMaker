@@ -7,7 +7,9 @@ import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.ItemBuilderContext
 import fr.ping.gamemaker.items.builders.models.ItemBuilder
 import fr.ping.utils.resources.ResourceManager
+import net.kyori.adventure.text.Component
 import org.bukkit.Material
+import org.bukkit.inventory.meta.ItemMeta
 
 object BuiltinItemBuilder : ItemBuilder() {
   private val config : Config
@@ -22,31 +24,31 @@ object BuiltinItemBuilder : ItemBuilder() {
     data: Map<String, Any?>,
     context: ItemBuilderContext,
     isKeyInConfig : Boolean
-  ): List<String>? {
+  ): List<Component>? {
     when (key) {
       "lore" -> {
         if (value == null || value !is List<*>) return null
         @Suppress("UNCHECKED_CAST")
-        return value.map { if (it.toString().startsWith("$")) I18nManager["ENGLISH", it.toString().removePrefix("$")].toString() else it.toString() }.let {
-          if (config.insertSpaceAfter.getOrPut(key) { true }) it + listOf("") else it
+        return value.map { if (it.toString().startsWith("$")) I18nManager["ENGLISH", it.toString().removePrefix("$")] else Component.text(it.toString()) }.let {
+          if (config.insertSpaceAfter.getOrPut(key) { true }) it + listOf(Component.empty()) else it
         }
       }
       "attributes" -> {
         if (value == null || value !is Map<*, *>) return null
-        val attributesLore = mutableListOf<String>()
+        val attributesLore = mutableListOf<Component>()
         value.entries.forEach {
-          attributesLore.add(I18nManager["lore.attribute", it.key, value[it.key]].toString())
+          attributesLore.add(I18nManager["lore.attribute", it.key, value[it.key]])
         }
-        if (config.insertSpaceAfter.getOrPut(key) { true }) attributesLore.add("")
+        if (config.insertSpaceAfter.getOrPut(key) { true }) attributesLore.add(Component.empty())
         return attributesLore
       }
       "enchants" -> {
         if (value == null || value !is Map<*, *>) return null
-        val enchantsLore = mutableListOf<String>()
+        val enchantsLore = mutableListOf<Component>()
         value.entries.forEach {
-          enchantsLore.add(I18nManager["lore.enchant_level", it.key, value[it.key]].toString())
+          enchantsLore.add(I18nManager["lore.enchant_level", it.key, value[it.key]])
         }
-        if (config.insertSpaceAfter.getOrPut(key) {true}) enchantsLore.add("")
+        if (config.insertSpaceAfter.getOrPut(key) {true}) enchantsLore.add(Component.empty())
         return enchantsLore
       }
       "type" -> {
@@ -55,7 +57,7 @@ object BuiltinItemBuilder : ItemBuilder() {
         val rarityFormat = Rarities.display(rarity)
         val typeFormat = I18nManager["type.$type.format"]
         if (value == null || data["rarity"] == null) return null
-        return listOf(I18nManager["type_format", typeFormat, rarityFormat].toString())
+        return listOf(I18nManager["type_format", typeFormat, rarityFormat])
       }
       "item_trade" -> {
         //val slot = context["slot"] as? MenuButton ?: return listOf()
@@ -91,6 +93,14 @@ object BuiltinItemBuilder : ItemBuilder() {
 
   override fun buildItemMaterial(data: Map<String, Any?>, context: ItemBuilderContext): Material? {
     return (data["material"] as? String)?.let {  Material.getMaterial(it) }
+  }
+
+  override fun buildItemMeta(
+    itemMeta: ItemMeta,
+    data: Map<String, Any?>,
+    context: ItemBuilderContext
+  ): ItemMeta {
+    return itemMeta
   }
 
   data class Config(

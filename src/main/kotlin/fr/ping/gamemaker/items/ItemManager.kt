@@ -8,6 +8,7 @@ import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.builders.impl.BuiltinItemBuilder
 import fr.ping.gamemaker.items.builders.impl.BuiltinItemTemplateItemListBuilder
 import fr.ping.gamemaker.items.templates.models.ItemTemplate
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -31,7 +32,7 @@ object ItemManager {
 
     val unorderedKeys = template.data.keys.filter { it !in GameMakerPlugin.getInstance().config.itemLoreOrder }
     val builders = itemBuilderRegistry.resourceMap.toMutableMap()
-    val lore = mutableListOf<String>()
+    val lore = mutableListOf<Component>()
     GameMakerPlugin.getInstance().config.itemLoreOrder.forEach { propertyName ->
       builders.values.forEach { builder ->
         lore.addAll(builder.resource?.buildItemLore(propertyName, template.data[propertyName], template.data, context) ?: listOf())
@@ -42,13 +43,13 @@ object ItemManager {
         lore.addAll(builder.resource?.buildItemLore(it, template.data[it], template.data, context, false) ?: listOf())
       }
     }
-    if (lore.size == 1 && lore.firstOrNull() == "")
+    if (lore.size == 1 && lore.firstOrNull()?.equals(Component.empty()) ?: false)
       lore.clear()
     else
-      while (lore.lastOrNull() == "") {
+      while (lore.lastOrNull()?.equals(Component.empty()) ?: false) {
         lore.removeAt(lore.lastIndex)
       }
-    itemMeta.lore = lore
+    itemMeta.lore(lore)
     itemMeta.addItemFlags(*ItemFlag.entries.toTypedArray())
     itemMeta.isUnbreakable = true
     if (material == Material.PLAYER_HEAD && template.data["skull_texture"] != null) {
