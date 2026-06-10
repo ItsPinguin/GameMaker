@@ -59,7 +59,8 @@ object ItemManager {
       }
     }
 
-    itemMeta.persistentDataContainer.set(NamespacedKey("gamemaker", "id"), PersistentDataType.STRING, template.id)
+    itemMeta.persistentDataContainer.set(NamespacedKey("gamemaker", "id"), PersistentDataType.STRING,
+      template.data["id"] as? String ?: template.id)
 
     itemStack.itemMeta = itemMeta
 
