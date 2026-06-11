@@ -14,6 +14,7 @@ import fr.ping.gamemaker.commands.GameMakerCommand
 import fr.ping.gamemaker.criteria.CriterionChecker
 import fr.ping.gamemaker.editor.impl.RegistryItemListBuilder
 import fr.ping.gamemaker.editor.impl.ResourceItemListBuilder
+import fr.ping.gamemaker.i18n.I18nConfig
 import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.builders.impl.BuiltinItemBuilder
 import fr.ping.gamemaker.items.builders.models.ItemBuilder
@@ -101,7 +102,9 @@ class GameMakerPlugin : JavaPlugin() {
     var saveResources: Boolean = true,
     var builtins: Builtins = Builtins(),
     @SerializedName("item_lore_order")
-    var itemLoreOrder: List<String> = listOf("attributes", "lore", "enchants")
+    var itemLoreOrder: List<String> = listOf("attributes", "lore", "enchants"),
+    @SerializedName("lang_config")
+    var langConfig : I18nConfig = I18nConfig()
   ) {
     data class Builtins(
       var itemBuilder : BuiltinItemBuilder.Config = BuiltinItemBuilder.Config()

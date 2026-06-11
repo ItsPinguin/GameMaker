@@ -6,25 +6,40 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextReplacementConfig
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.entity.Player
+import java.util.Locale
+import java.util.UUID
 import java.util.regex.Pattern
 import kotlin.toString
 
 object I18nManager {
   val languages : MutableMap<String, MutableMap<String, Any?>> = mutableMapOf()
-  var defaultLanguage : String = "ENGLISH"
-  val languageFallbacks : MutableMap<String, String> = mutableMapOf(
-    "FRENCH" to "ENGLISH",
-  )
+  var config = I18nConfig()
 
-  operator fun get(key: String, vararg args: Any?) : Component = get(defaultLanguage, key, *args)
+  val playerLanguages : MutableMap<UUID, String> = mutableMapOf()
+
+  operator fun get(key: String, vararg args: Any?) : Component = get(config.defaultLanguage, key, *args)
 
   operator fun get(locale: String, key: String, vararg args: Any?) : Component {
-    val translations = languages[locale] ?: languages[languageFallbacks[locale]] ?: languages[defaultLanguage] ?: return Component.text(key)
+    val translations = languages[locale] ?: languages[config.languageFallbacks[locale]] ?: languages[config.defaultLanguage] ?: return Component.text(key)
     return translateAndInsert(translations, key, *args)
   }
 
   operator fun get(player: Player, key: String, vararg args: Any?) : Component =
     get(player.locale, key, *args)
+
+  fun getString(locale : String, key : String, vararg args : Any?) : String {
+    val translations = languages[locale] ?: languages[config.languageFallbacks[locale]] ?: languages[config.defaultLanguage] ?: return key
+    val path = key.lowercase().split(".")
+    var current: Any? = translations
+
+    for (part in path) {
+      if (current !is Map<*, *>) {
+        return current.toString()
+      }
+      current = current[part]
+    }
+    return current.toString()
+  }
 
   fun translateIfIndicator(key : String, indicator : String = "$", vararg args : Any?) : Component = translateIfIndicator(Component.text(key), indicator, *args)
 
@@ -34,7 +49,7 @@ object I18nManager {
     if (!plainText.startsWith(indicator)) return component
 
     val translationKey = plainText.substring(indicator.length)
-    val languageMap = languages[defaultLanguage] ?: return component
+    val languageMap = languages[config.defaultLanguage] ?: return component
 
     return translateAndInsert(languageMap, translationKey, *args)
   }
@@ -47,6 +62,7 @@ object I18nManager {
   }
 
   private fun translate(translations: MutableMap<String, Any?>, key: String): Component {
+    if (translations.containsKey("_cache.$key")) return translations["_cache.$key"] as Component
     val path = key.lowercase().split(".")
     var current: Any? = translations
 
@@ -59,24 +75,10 @@ object I18nManager {
         return Component.text(key)
       }
     }
-
-    if (current is Component) return current
-
     val component = ResourceManager.parseAny<Component>(current) ?: Component.text(current.toString())
 
-    if (component != Component.empty()) {
-      saveComponentBackToMap(translations, path, component)
-    }
-
+    translations["_cache.$key"] = component
     return component
-  }
-
-  private fun saveComponentBackToMap(translations: MutableMap<String, Any?>, path: List<String>, component: Component) {
-    var current = translations
-    for (i in 0 until path.lastIndex) {
-      current = current[path[i]] as? MutableMap<String, Any?> ?: return
-    }
-    current[path.last()] = component
   }
 
   private fun translateAndInsert(translations: MutableMap<String, Any?>, key: String, vararg args: Any?): Component {

@@ -15,6 +15,7 @@ import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
+import org.bukkit.inventory.meta.components.CustomModelDataComponent
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.profile.PlayerTextures
 import java.util.UUID
@@ -51,6 +52,10 @@ object ItemManager {
       }
     itemMeta.lore(lore)
     itemMeta.addItemFlags(*ItemFlag.entries.toTypedArray())
+    (template.data["item_model"] as? String?)?.split(":")?.let { itemMeta.itemModel =
+      if (it.size == 1) NamespacedKey("minecraft", it[0])
+      else NamespacedKey(it[0], it[1])
+    }
     itemMeta.isUnbreakable = true
     if (material == Material.PLAYER_HEAD && template.data["skull_texture"] != null) {
       val skullMeta = itemMeta as SkullMeta
