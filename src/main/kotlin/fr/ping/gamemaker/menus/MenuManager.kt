@@ -66,8 +66,7 @@ object MenuManager {
       player.openInventory(menuInstance.inventory!!)
       lastOpened[player.uniqueId] = templateId
     }
-    val title = Component.text(template.overlayChar ?: "").font(NamespacedKey.fromString(template.overlayFont ?: "minecraft:default"))
-      .append(I18nManager.translateIfIndicator(template.title, "$", System.currentTimeMillis()))
+    val title = I18nManager.translateIfIndicator(template.title, "$", System.currentTimeMillis())
     val inventory =
       if (template.inventoryType == InventoryType.CHEST)
       Bukkit.createInventory(null, template.rows * 9, title)

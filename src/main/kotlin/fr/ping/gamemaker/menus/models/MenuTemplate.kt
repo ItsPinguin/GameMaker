@@ -14,11 +14,7 @@ data class MenuTemplate(
   @SerializedName("is_static")
   var isStatic : Boolean = true,
   @SerializedName("cancel_by_default")
-  var cancelByDefault : Boolean = true,
-  @SerializedName("overlay_font", alternate = ["overlayFont"])
-  var overlayFont : String? = null,
-  @SerializedName("overlay_char", alternate = ["overlayChar"])
-  var overlayChar : String? = null
+  var cancelByDefault : Boolean = true
 ) : Resource(){
   fun getButton(index: Int) = contents.filter { it.getFilledSlots().contains(index) }.let { buttons ->
     buttons.firstOrNull { it.actions.isNotEmpty() } ?: buttons.firstOrNull() ?: MenuButton()
