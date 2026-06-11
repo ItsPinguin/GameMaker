@@ -6,7 +6,7 @@ import net.kyori.adventure.text.Component
 import org.bukkit.event.inventory.InventoryType
 
 data class MenuTemplate(
-  var title : Component = Component.text(""),
+  var title : String = "",
   @SerializedName("inventory_type")
   var inventoryType : InventoryType = InventoryType.CHEST,
   var rows : Int = 3,

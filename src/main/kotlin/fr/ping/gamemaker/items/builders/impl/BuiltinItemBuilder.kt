@@ -6,11 +6,9 @@ import fr.ping.gamemaker.i18n.I18n
 import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.ItemBuilderContext
 import fr.ping.gamemaker.items.builders.models.ItemBuilder
-import fr.ping.gamemaker.utils.ComponentTypeAdapter
+import fr.ping.gamemaker.utils.adapter.ComponentTypeAdapter
 import fr.ping.utils.resources.ResourceManager
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.TextDecoration
-import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Material
 import org.bukkit.inventory.meta.ItemMeta
 

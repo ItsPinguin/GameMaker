@@ -7,8 +7,8 @@ import fr.ping.fr.ping.utils.resources.registry.ReadyRegistry
 import fr.ping.gamemaker.actions.ActionExecutor
 import fr.ping.gamemaker.actions.models.Action
 import fr.ping.gamemaker.i18n.I18n
-import fr.ping.gamemaker.utils.LocationTypeAdapter
-import fr.ping.gamemaker.utils.VectorTypeAdapter
+import fr.ping.gamemaker.utils.adapter.LocationTypeAdapter
+import fr.ping.gamemaker.utils.adapter.VectorTypeAdapter
 import fr.ping.gamemaker.dialog.Dialog
 import fr.ping.gamemaker.commands.GameMakerCommand
 import fr.ping.gamemaker.criteria.CriterionChecker
@@ -28,10 +28,10 @@ import fr.ping.gamemaker.menus.models.MenuTemplate
 import fr.ping.gamemaker.notifications.impl.NotifyActionExecutor
 import fr.ping.gamemaker.notifications.models.ComposedNotification
 import fr.ping.gamemaker.triggers.Trigger
-import fr.ping.gamemaker.utils.ComponentTypeAdapter
-import fr.ping.gamemaker.utils.InventoryTypeTypeAdapter
-import fr.ping.gamemaker.utils.MaterialTypeAdapter
-import fr.ping.gamemaker.utils.SoundTypeAdapter
+import fr.ping.gamemaker.utils.adapter.ComponentTypeAdapter
+import fr.ping.gamemaker.utils.adapter.InventoryTypeTypeAdapter
+import fr.ping.gamemaker.utils.adapter.MaterialTypeAdapter
+import fr.ping.gamemaker.utils.adapter.SoundTypeAdapter
 import fr.ping.utils.resources.ResourceManager
 import net.kyori.adventure.text.Component
 import org.bukkit.Location

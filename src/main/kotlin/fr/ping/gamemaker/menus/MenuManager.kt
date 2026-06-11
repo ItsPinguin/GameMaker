@@ -66,7 +66,9 @@ object MenuManager {
       player.openInventory(menuInstance.inventory!!)
       lastOpened[player.uniqueId] = templateId
     }
-    val title = I18nManager.translateIfIndicator(template.title, "$", System.currentTimeMillis())
+    val title = I18nManager.getComponentIfIndicator(
+      I18nManager.playerLanguages[player.uniqueId] ?: I18nManager.config.defaultLanguage,
+      template.title, System.currentTimeMillis())
     val inventory =
       if (template.inventoryType == InventoryType.CHEST)
       Bukkit.createInventory(null, template.rows * 9, title)
