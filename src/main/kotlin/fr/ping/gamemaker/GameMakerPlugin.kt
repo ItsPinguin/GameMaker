@@ -46,11 +46,7 @@ class GameMakerPlugin : JavaPlugin() {
   var config: Config = Config()
 
   override fun onLoad() {
-    dataFolder.mkdirs()
-    if (!File(dataFolder, "config.json").exists())
-      File(dataFolder, "config.json").writeText(gson.toJson(config))
-    else
-      config = gson.fromJson<Config>(File(dataFolder, "config.json").readText(), Config::class.java) ?: config
+
 
     ResourceManager.addAllResourcePaths(config.resourcePaths)
     ResourceManager.registerTypeAdapter(Vector::class.java, VectorTypeAdapter)
@@ -109,6 +105,13 @@ class GameMakerPlugin : JavaPlugin() {
     data class Builtins(
       var itemBuilder : BuiltinItemBuilder.Config = BuiltinItemBuilder.Config()
     )
+
+    fun load() {
+      getInstance().dataFolder.mkdirs()
+      if (File(getInstance().dataFolder, "config.json").exists())
+        getInstance().config = gson.fromJson(File(getInstance().dataFolder, "config.json").readText(), Config::class.java) ?: getInstance().config
+      File(getInstance().dataFolder, "config.json").writeText(gson.toJson(getInstance().config))
+    }
   }
 
   companion object {
