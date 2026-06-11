@@ -15,7 +15,8 @@ import kotlin.toString
 
 object I18nManager {
   val languages : MutableMap<String, MutableMap<String, Any?>> = mutableMapOf()
-  var config = I18nConfig()
+  val config
+    get() = GameMakerPlugin.getInstance().config.langConfig
 
   val playerLanguages : MutableMap<UUID, String> = mutableMapOf()
 

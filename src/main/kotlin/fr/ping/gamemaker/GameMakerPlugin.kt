@@ -46,7 +46,7 @@ class GameMakerPlugin : JavaPlugin() {
   var config: Config = Config()
 
   override fun onLoad() {
-
+    config.load()
 
     ResourceManager.addAllResourcePaths(config.resourcePaths)
     ResourceManager.registerTypeAdapter(Vector::class.java, VectorTypeAdapter)
