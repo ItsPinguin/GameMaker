@@ -1,4 +1,4 @@
-package fr.ping.gamemaker.utils
+package fr.ping.gamemaker.utils.adapter
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
@@ -10,7 +10,6 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.JoinConfiguration
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 
 object ComponentTypeAdapter : TypeAdapter<Component>() {
   override fun write(writer: JsonWriter?, component: Component?) {

@@ -1,4 +1,4 @@
-package fr.ping.gamemaker.utils
+package fr.ping.gamemaker.utils.adapter
 
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
@@ -8,7 +8,7 @@ import org.bukkit.NamespacedKey
 import org.bukkit.Registry
 import org.bukkit.Sound
 
-object SoundTypeAdapter : TypeAdapter<Sound> () {
+object SoundTypeAdapter : TypeAdapter<Sound>() {
   override fun write(writer: JsonWriter, sound: Sound?) {
     if (sound == null) {
       writer.nullValue()
