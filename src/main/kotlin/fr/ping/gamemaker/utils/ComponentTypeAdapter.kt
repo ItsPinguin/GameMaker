@@ -45,30 +45,7 @@ object ComponentTypeAdapter : TypeAdapter<Component>() {
     if (token == JsonToken.STRING) {
       val inputString = reader.nextString()
       return try {
-        return MiniMessage.miniMessage().deserialize(inputString
-          .replace("§4", "<dark_red>", true)
-          .replace("§c", "<red>", true)
-          .replace("§6", "<gold>", true)
-          .replace("§e", "<yellow>", true)
-          .replace("§2", "<dark_green>", true)
-          .replace("§a", "<green>", true)
-          .replace("§b", "<aqua>", true)
-          .replace("§3", "<dark_aqua>", true)
-          .replace("§1", "<dark_blue>", true)
-          .replace("§9", "<blue>", true)
-          .replace("§d", "<light_purple>", true)
-          .replace("§5", "<dark_purple>", true)
-          .replace("§f", "<white>", true)
-          .replace("§7", "<gray>", true)
-          .replace("§8", "<dark_gray>", true)
-          .replace("§0", "<black>", true)
-          .replace("§k", "<obfuscated>", true)
-          .replace("§l", "<bold>", true)
-          .replace("§m", "<strikethrough>", true)
-          .replace("§n", "<underline>", true)
-          .replace("§o", "<italic>", true)
-          .replace("§r", "<reset>", true)
-        )
+        return parseComponent(inputString)
       } catch (_: Exception) {
         Component.empty()
       }
@@ -81,5 +58,32 @@ object ComponentTypeAdapter : TypeAdapter<Component>() {
 
     reader.skipValue()
     return Component.empty()
+  }
+
+  fun parseComponent(input: String): Component {
+    return MiniMessage.miniMessage().deserialize(input
+      .replace("§4", "<reset><!italic><dark_red>", true)
+      .replace("§c", "<reset><!italic><red>", true)
+      .replace("§6", "<reset><!italic><gold>", true)
+      .replace("§e", "<reset><!italic><yellow>", true)
+      .replace("§2", "<reset><!italic><dark_green>", true)
+      .replace("§a", "<reset><!italic><green>", true)
+      .replace("§b", "<reset><!italic><aqua>", true)
+      .replace("§3", "<reset><!italic><dark_aqua>", true)
+      .replace("§1", "<reset><!italic><dark_blue>", true)
+      .replace("§9", "<reset><!italic><blue>", true)
+      .replace("§d", "<reset><!italic><light_purple>", true)
+      .replace("§5", "<reset><!italic><dark_purple>", true)
+      .replace("§f", "<reset><!italic><white>", true)
+      .replace("§7", "<reset><!italic><gray>", true)
+      .replace("§8", "<reset><!italic><dark_gray>", true)
+      .replace("§0", "<reset><!italic><black>", true)
+      .replace("§k", "<obfuscated>", true)
+      .replace("§l", "<bold>", true)
+      .replace("§m", "<strikethrough>", true)
+      .replace("§n", "<underline>", true)
+      .replace("§o", "<italic>", true)
+      .replace("§r", "<reset><!italic>", true)
+    )
   }
 }

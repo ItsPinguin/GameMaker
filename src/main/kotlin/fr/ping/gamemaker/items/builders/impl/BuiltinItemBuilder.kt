@@ -6,8 +6,11 @@ import fr.ping.gamemaker.i18n.I18n
 import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.ItemBuilderContext
 import fr.ping.gamemaker.items.builders.models.ItemBuilder
+import fr.ping.gamemaker.utils.ComponentTypeAdapter
 import fr.ping.utils.resources.ResourceManager
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.TextDecoration
+import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Material
 import org.bukkit.inventory.meta.ItemMeta
 
@@ -29,7 +32,10 @@ object BuiltinItemBuilder : ItemBuilder() {
       "lore" -> {
         if (value == null || value !is List<*>) return null
         @Suppress("UNCHECKED_CAST")
-        return value.map { if (it.toString().startsWith("$")) I18nManager["ENGLISH", it.toString().removePrefix("$")] else Component.text(it.toString()) }.let {
+        return value.map {
+          if (it.toString().startsWith("$")) I18nManager["ENGLISH", it.toString().removePrefix("$")]
+          else Component.empty().append(ComponentTypeAdapter.parseComponent("<reset><!italic>$it"))
+        }.let {
           if (config.insertSpaceAfter.getOrPut(key) { true }) it + listOf(Component.empty()) else it
         }
       }
