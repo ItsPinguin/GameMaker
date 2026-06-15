@@ -14,7 +14,9 @@ data class MenuButton(
   var context : MutableMap<String, Any?> = mutableMapOf(),
   var list : String? = null,
   @SerializedName("page_offset")
-  var pageOffset : Int? = null
+  var pageOffset : Int? = null,
+  @SerializedName("update_later")
+  var updateLater : List<Long> = listOf()
 ) : Resource() {
   fun getFilledSlots() : List<Int> {
     return slots.flatMap { it.getSlots() }
