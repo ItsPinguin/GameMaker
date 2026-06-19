@@ -23,8 +23,6 @@
   "title": "Menu Title",
   "inventory_type": "INVENTORY_TYPE",
   "rows": 6,
-  "overlay_font": "namespace:custom_font",
-  "overlay_char": "\u1234",
   "contents": [
     {
       "item": "inline or reference",
@@ -71,6 +69,8 @@
 ```json
 {
   "action": "your_action_id",
+  "interaction_triggers": ["left_clic_block", "right_click_air", "..."],
+  "inventory_triggers": ["right", "shift_left", "swap_offhand", "..."],
   "parameter1": "value1",
   "parameter2": "value2"
 }
