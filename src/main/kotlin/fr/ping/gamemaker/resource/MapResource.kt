@@ -46,7 +46,7 @@ open class MapResource(
             mutableListOf(it.value).apply { addAll(it.alternate) }
           } ?: listOf()
           val value = names.firstNotNullOfOrNull { mapResource.data[it] } ?: mapResource.data[field.name] ?: return@forEach
-          field.set(mapResource, ResourceManager.parseAny(value, field.type))
+          field.set(mapResource, ResourceManager.parseAny(value, field.genericType))
         }
         return mapResource
       }
