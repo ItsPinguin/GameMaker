@@ -6,33 +6,33 @@ import com.google.gson.annotations.SerializedName
 import fr.ping.fr.ping.utils.resources.registry.ReadyRegistry
 import fr.ping.gamemaker.actions.ActionExecutor
 import fr.ping.gamemaker.actions.models.Action
-import fr.ping.gamemaker.i18n.I18n
-import fr.ping.gamemaker.utils.adapter.LocationTypeAdapter
-import fr.ping.gamemaker.utils.adapter.VectorTypeAdapter
-import fr.ping.gamemaker.dialog.Dialog
 import fr.ping.gamemaker.commands.GameMakerCommand
+import fr.ping.gamemaker.commands.ModernGameMakerCommand
 import fr.ping.gamemaker.criteria.CriterionChecker
+import fr.ping.gamemaker.dialog.Dialog
 import fr.ping.gamemaker.editor.impl.RegistryItemListBuilder
 import fr.ping.gamemaker.editor.impl.ResourceItemListBuilder
+import fr.ping.gamemaker.i18n.I18n
 import fr.ping.gamemaker.i18n.I18nConfig
 import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.builders.impl.BuiltinItemBuilder
 import fr.ping.gamemaker.items.builders.models.ItemBuilder
+import fr.ping.gamemaker.items.builders.models.ItemListBuilder
 import fr.ping.gamemaker.items.templates.models.ItemTemplate
 import fr.ping.gamemaker.listeners.InventoryListener
 import fr.ping.gamemaker.listeners.ItemListener
 import fr.ping.gamemaker.listeners.TriggerEventListener
-import fr.ping.gamemaker.items.builders.models.ItemListBuilder
 import fr.ping.gamemaker.menus.TestListProvider
 import fr.ping.gamemaker.menus.models.MenuTemplate
 import fr.ping.gamemaker.notifications.impl.NotifyActionExecutor
 import fr.ping.gamemaker.notifications.models.ComposedNotification
 import fr.ping.gamemaker.triggers.Trigger
-import fr.ping.gamemaker.utils.adapter.ComponentTypeAdapter
-import fr.ping.gamemaker.utils.adapter.InventoryTypeTypeAdapter
-import fr.ping.gamemaker.utils.adapter.MaterialTypeAdapter
-import fr.ping.gamemaker.utils.adapter.SoundTypeAdapter
+import fr.ping.gamemaker.utils.adapter.*
 import fr.ping.utils.resources.ResourceManager
+import io.papermc.paper.command.brigadier.Commands
+import io.papermc.paper.plugin.lifecycle.event.handler.LifecycleEventHandler
+import io.papermc.paper.plugin.lifecycle.event.registrar.ReloadableRegistrarEvent
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents
 import net.kyori.adventure.text.Component
 import org.bukkit.Location
 import org.bukkit.Material
@@ -73,6 +73,8 @@ class GameMakerPlugin : JavaPlugin() {
     registerCommands()
     registerEvents()
     System.gc()
+
+    ModernGameMakerCommand.register()
   }
 
   override fun onDisable() {
@@ -118,7 +120,7 @@ class GameMakerPlugin : JavaPlugin() {
     val itemTemplateRegistry = ReadyRegistry(ItemTemplate::class.java, "item_template")
     val itemBuilderRegistry = ReadyRegistry(ItemBuilder::class.java, "item_builder")
     val actionRegistry = ReadyRegistry(Action::class.java, "action")
-    val actionExecutorRegistry = ReadyRegistry(ActionExecutor::class.java, "action_executor",)
+    val actionExecutorRegistry = ReadyRegistry(ActionExecutor::class.java, "action_executor")
     val triggerRegistry = ReadyRegistry(Trigger::class.java, "trigger")
     val dialogRegistry = ReadyRegistry(Dialog::class.java, "dialog")
     val criterionCheckerRegistry = ReadyRegistry(CriterionChecker::class.java, "criterion_checker")
