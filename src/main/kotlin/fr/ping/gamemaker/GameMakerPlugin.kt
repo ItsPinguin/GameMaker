@@ -55,6 +55,7 @@ class GameMakerPlugin : JavaPlugin() {
     ResourceManager.registerTypeAdapter(Material::class.java, MaterialTypeAdapter)
     ResourceManager.registerTypeAdapter(InventoryType::class.java, InventoryTypeTypeAdapter)
     ResourceManager.registerTypeAdapter(Component::class.java, ComponentTypeAdapter)
+    ResourceManager.registerTypeAdapter(org.bukkit.event.block.Action::class.java, EnumTypeAdapter(org.bukkit.event.block.Action::class.java))
 
     System.gc()
   }

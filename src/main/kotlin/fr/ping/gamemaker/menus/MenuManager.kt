@@ -13,6 +13,7 @@ import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
+import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryType
 import org.bukkit.inventory.Inventory
@@ -42,6 +43,8 @@ object MenuManager {
     val slot = template.getButton(e.slot)
     e.isCancelled = slot.cancel ?: template.cancelByDefault
     slot.actions.forEach { action ->
+      val triggers : List<ClickType> = action.inventoryTriggers ?: listOf(e.click)
+      if (!triggers.contains(e.click)) return@forEach
       ActionManager.executeAction(action, ActionContext.MenuClickActionContext(
         e.whoClicked as Player,
         menuInstance,

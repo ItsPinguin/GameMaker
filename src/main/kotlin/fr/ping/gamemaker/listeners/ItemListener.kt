@@ -16,8 +16,10 @@ object ItemListener : Listener {
     val item = ItemManager.getItemId(e.item ?: return)
     val itemTemplate = GameMakerPlugin.itemTemplateRegistry.getResource(item) ?: return
     val actions : List<Action> = ResourceManager.parseAny<List<Action>>(itemTemplate.data["actions"] ?: return) ?: return
-    actions.forEach {
-      ActionManager.executeAction(it, ActionContext.ItemInteractActionContext(
+    actions.forEach { action ->
+      val triggers : List<org.bukkit.event.block.Action> = action.interactionTriggers ?: listOf(e.action)
+      if (!triggers.contains(e.action)) return@forEach
+      ActionManager.executeAction(action, ActionContext.ItemInteractActionContext(
         e.player,
         itemTemplate,
         e
