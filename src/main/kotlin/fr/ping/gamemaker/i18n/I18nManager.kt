@@ -8,7 +8,6 @@ import net.kyori.adventure.text.TextReplacementConfig
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.entity.Player
 import org.jetbrains.annotations.ApiStatus
-import java.util.Locale
 import java.util.UUID
 import java.util.regex.Pattern
 import kotlin.toString
@@ -27,7 +26,10 @@ object I18nManager {
   }
 
   operator fun get(player: Player, key: String, vararg args: Any?) : Component =
-    get(I18nManager.playerLanguages[player.uniqueId] ?: config.defaultLanguage, key, *args)
+    get(playerLanguages[player.uniqueId] ?: config.defaultLanguage, key, *args)
+
+  operator fun get(uuid: UUID, key: String, vararg args: Any?) : Component =
+    get(playerLanguages[uuid] ?: config.defaultLanguage, key, *args)
 
   fun getString(locale : String, key : String, vararg args : Any?) : String {
     val value = getAnyOrFallback(locale, key).toString()
