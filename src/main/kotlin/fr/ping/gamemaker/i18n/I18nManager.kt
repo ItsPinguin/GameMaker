@@ -36,6 +36,8 @@ object I18nManager {
     return if (args.isEmpty()) value else insertIntoString(value, *args)
   }
 
+  fun getString(key : String, vararg args : Any?) : String = getString(config.defaultLanguage, key, *args)
+
   fun getStringIfIndicator(locale: String, key: String, vararg args : Any?) : String {
     return if (!key.startsWith("$")) key
     else getString(locale, key.substring(1), *args)
