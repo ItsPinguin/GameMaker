@@ -46,7 +46,7 @@ object RegistryItemListBuilder : ItemListBuilder() {
       Action().apply {
         this.data = mutableMapOf(
           "registry" to registryPair.key,
-          "menu" to "editor/resource"
+          "menu" to "editor.resource"
         )
       },
       ActionContext.MenuClickActionContext(
