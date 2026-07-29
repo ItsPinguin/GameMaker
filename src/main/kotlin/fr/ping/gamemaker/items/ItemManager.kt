@@ -1,10 +1,10 @@
 package fr.ping.gamemaker.items
 
-import com.destroystokyo.paper.profile.PlayerProfile
-import com.destroystokyo.paper.profile.ProfileProperty
+import com.google.gson.Gson
 import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.GameMakerPlugin.Companion.itemBuilderRegistry
 import fr.ping.gamemaker.i18n.I18nManager
+import fr.ping.gamemaker.i18n.I18nManager.config
 import fr.ping.gamemaker.items.builders.impl.BuiltinItemBuilder
 import fr.ping.gamemaker.items.builders.impl.BuiltinItemTemplateItemListBuilder
 import fr.ping.gamemaker.items.templates.models.ItemTemplate
@@ -14,25 +14,26 @@ import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.SkullMeta
-import org.bukkit.inventory.meta.components.CustomModelDataComponent
 import org.bukkit.persistence.PersistentDataType
-import org.bukkit.profile.PlayerTextures
-import java.util.UUID
 
 object ItemManager {
   fun buildItem(id: String, context: ItemBuilderContext = ItemBuilderContext.GenericItemBuilderContext()) =
     buildItem(GameMakerPlugin.itemTemplateRegistry.getResource(id), context)
 
   fun buildItem(template: ItemTemplate?, context: ItemBuilderContext = ItemBuilderContext.GenericItemBuilderContext()) : ItemStack {
-    val material = itemBuilderRegistry.listResources().map { it.buildItemMaterial(template?.data ?: mapOf(), context) }.firstOrNull { it != null } ?: return ItemStack(Material.AIR)
-    val itemStack = ItemStack(material)
-    if (template == null || itemStack.type == Material.AIR) return itemStack
-    itemStack.amount = template.data["amount"]?.toString()?.toDoubleOrNull()?.toInt() ?: 1
-    val itemMeta = itemStack.itemMeta ?: return itemStack
-    itemMeta.displayName(I18nManager.translateIfIndicator(template.name))
+    if (template == null) return ItemStack(Material.AIR)
+    val componentString = template.components.asMap()
+      .map { "${it.key}=${Gson().toJson(it.value)}" }
+      .joinToString(",")
+    val itemStack = Bukkit.getItemFactory().createItemStack("${template.material.lowercase()}[${componentString}]")
 
-    val unorderedKeys = template.data.keys.filter { it !in GameMakerPlugin.getInstance().config.itemLoreOrder }
+    itemStack.amount = template.amount
+    if (itemStack.type == Material.AIR) return itemStack
+    val itemMeta = itemStack.itemMeta ?: return itemStack
+    itemMeta.displayName(I18nManager.getComponentIfIndicator(config.defaultLanguage, template.customData["name"].let { if (it != null) it.asString else "" }))
+
+
+    val unorderedKeys = template.customData.asMap().keys.filter { it !in GameMakerPlugin.getInstance().config.itemLoreOrder }
     val builders = itemBuilderRegistry.resourceMap.toMutableMap()
     val lore = mutableListOf<Component>()
     GameMakerPlugin.getInstance().config.itemLoreOrder.forEach { propertyName ->
@@ -52,19 +53,6 @@ object ItemManager {
         lore.removeAt(lore.lastIndex)
       }
     itemMeta.lore(lore)
-    itemMeta.addItemFlags(*ItemFlag.entries.toTypedArray())
-    (template.data["item_model"] as? String?)?.split(":")?.let { itemMeta.itemModel =
-      if (it.size == 1) NamespacedKey("minecraft", it[0])
-      else NamespacedKey(it[0], it[1])
-    }
-    itemMeta.isUnbreakable = true
-    if (material == Material.PLAYER_HEAD && template.data["skull_texture"] != null) {
-      val skullMeta = itemMeta as SkullMeta
-      val base64Texture = template.data["skull_texture"] as? String ?: ""
-      skullMeta.playerProfile = Bukkit.getServer().createProfile(UUID.randomUUID()).apply {
-        setProperty(ProfileProperty("textures", base64Texture, null))
-      }
-    }
 
     itemMeta.persistentDataContainer.set(NamespacedKey("gamemaker", "id"), PersistentDataType.STRING,
       template.data["id"] as? String ?: template.id)

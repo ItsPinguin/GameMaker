@@ -22,7 +22,7 @@ object ResourceItemListBuilder : ItemListBuilder() {
     val resource = registry.listResources().getOrNull(index) ?: return null
     val itemStack = ItemStack(
       when (resource) {
-        is ItemTemplate -> resource.material
+        is ItemTemplate -> Material.valueOf(resource.material)
         else -> try {
           println(I18nManager["editor.icons.${context.menuInstance.data["registry"]}.${resource.id}"])
           Material.valueOf(I18nManager.getString("editor.icons.${context.menuInstance.data["registry"]}.${resource.id}"))

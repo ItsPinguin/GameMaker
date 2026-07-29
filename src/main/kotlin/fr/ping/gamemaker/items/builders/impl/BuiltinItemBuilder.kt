@@ -1,5 +1,6 @@
 package fr.ping.gamemaker.items.builders.impl
 
+import com.google.gson.JsonArray
 import com.google.gson.annotations.SerializedName
 import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.i18n.I18n
@@ -28,11 +29,11 @@ object BuiltinItemBuilder : ItemBuilder() {
   ): List<Component>? {
     when (key) {
       "lore" -> {
-        if (value == null || value !is List<*>) return null
+        if (value == null || value !is JsonArray) return null
         @Suppress("UNCHECKED_CAST")
         return value.map {
-          if (it.toString().startsWith("$")) I18nManager["ENGLISH", it.toString().removePrefix("$")]
-          else Component.empty().append(ComponentTypeAdapter.parseComponent("<reset><!italic>$it"))
+          if (it.asString.startsWith("$")) I18nManager["ENGLISH", it.asString.removePrefix("$")]
+          else Component.empty().append(ComponentTypeAdapter.parseComponent("<reset><!italic>${it.asString}"))
         }.let {
           if (config.insertSpaceAfter.getOrPut(key) { true }) it + listOf(Component.empty()) else it
         }
