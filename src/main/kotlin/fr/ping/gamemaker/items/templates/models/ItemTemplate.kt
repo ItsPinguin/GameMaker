@@ -17,6 +17,8 @@ open class ItemTemplate(
   var amount : Int = 1,
   @SerializedName("custom_data", alternate = ["data", "customData"])
   val customData : JsonObject = JsonObject(),
+  @SerializedName("removed_components", alternate = ["removedComponent", "removedComponents"])
+  val removedComponents : MutableList<String> = mutableListOf()
 ) : Resource() {
   val data : Map<String, JsonElement>
     get() = customData.asMap()

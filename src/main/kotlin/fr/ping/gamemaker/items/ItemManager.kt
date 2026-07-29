@@ -24,9 +24,13 @@ object ItemManager {
     if (template == null) return ItemStack(Material.AIR)
     val componentString = template.components.asMap()
       .map { "${it.key}=${Gson().toJson(it.value)}" }
+      .toMutableList().apply {
+        addAll(
+          template.removedComponents.map { "!$it" }
+        )
+      }
       .joinToString(",")
     val itemStack = Bukkit.getItemFactory().createItemStack("${template.material.lowercase()}[${componentString}]")
-
     itemStack.amount = template.amount
     if (itemStack.type == Material.AIR) return itemStack
     val itemMeta = itemStack.itemMeta ?: return itemStack
