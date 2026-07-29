@@ -61,12 +61,22 @@ object ItemManager {
     itemMeta.lore(lore)
 
     itemMeta.persistentDataContainer.set(NamespacedKey("gamemaker", "id"), PersistentDataType.STRING,
-      template.data["id"] as? String ?: template.id)
+      template.id)
 
     itemStack.itemMeta = itemMeta
 
     return itemStack
   }
+
+  fun buildItem(item: ItemStack, context: ItemBuilderContext = ItemBuilderContext.GenericItemBuilderContext()) : ItemStack {
+    return getItemId(item)?.let { buildItem(it, context) } ?: ItemStack(Material.AIR)
+  }
+
+  operator fun get(item: ItemStack, context: ItemBuilderContext = ItemBuilderContext.GenericItemBuilderContext()) = buildItem(item, context)
+
+  operator fun get(id: String, context: ItemBuilderContext = ItemBuilderContext.GenericItemBuilderContext()) = buildItem(id, context)
+
+  operator fun get(template: ItemTemplate, context: ItemBuilderContext = ItemBuilderContext.GenericItemBuilderContext()) = buildItem(template, context)
 
   fun getItemId(item: ItemStack?) : String? {
     return item?.itemMeta?.persistentDataContainer?.get(NamespacedKey("gamemaker", "id"), PersistentDataType.STRING)
