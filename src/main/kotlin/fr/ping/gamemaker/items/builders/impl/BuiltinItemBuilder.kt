@@ -1,16 +1,20 @@
 package fr.ping.gamemaker.items.builders.impl
 
 import com.google.gson.JsonArray
+import com.google.gson.JsonElement
 import com.google.gson.annotations.SerializedName
 import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.i18n.I18n
 import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.ItemBuilderContext
 import fr.ping.gamemaker.items.builders.models.ItemBuilder
+import fr.ping.gamemaker.items.templates.models.ItemTemplate
 import fr.ping.gamemaker.utils.adapter.ComponentTypeAdapter
 import fr.ping.utils.resources.ResourceManager
 import net.kyori.adventure.text.Component
 import org.bukkit.Material
+import org.bukkit.inventory.ItemFlag
+import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 
 object BuiltinItemBuilder : ItemBuilder() {
@@ -21,11 +25,12 @@ object BuiltinItemBuilder : ItemBuilder() {
   }
 
   override fun buildItemLore(
+    template: ItemTemplate,
+    itemStack: ItemStack,
     key: String,
-    value: Any?,
-    data: Map<String, Any?>,
-    context: ItemBuilderContext,
-    isKeyInConfig : Boolean
+    value: JsonElement?,
+    isKeyInConfig: Boolean,
+    context: ItemBuilderContext
   ): List<Component>? {
     when (key) {
       "lore" -> {
@@ -58,10 +63,10 @@ object BuiltinItemBuilder : ItemBuilder() {
       }
       "type" -> {
         val type = value as? String ?: "item"
-        val rarity = data["rarity"] as? String ?: "common"
+        val rarity = template.data["rarity"] as? String ?: "common"
         val rarityFormat = Rarities.display(rarity)
         val typeFormat = I18nManager["type.$type.format"]
-        if (value == null || data["rarity"] == null) return null
+        if (value == null || template.data["rarity"] == null) return null
         return listOf(I18nManager["type_format", typeFormat, rarityFormat])
       }
       "item_trade" -> {
@@ -96,15 +101,17 @@ object BuiltinItemBuilder : ItemBuilder() {
     return null
   }
 
-  override fun buildItemMaterial(data: Map<String, Any?>, context: ItemBuilderContext): Material? {
-    return (data["material"] as? String)?.let {  Material.getMaterial(it) }
-  }
-
   override fun buildItemMeta(
+    template: ItemTemplate,
+    itemStack: ItemStack,
     itemMeta: ItemMeta,
-    data: Map<String, Any?>,
     context: ItemBuilderContext
   ): ItemMeta {
+    if (template.customData["hide_flags"]?.asBoolean ?: false)
+      itemMeta.itemFlags.addAll(ItemFlag.entries)
+    if (template.customData["name"] != null)
+      itemMeta.displayName(I18nManager.getComponentIfIndicator(I18nManager.config.defaultLanguage, template.customData["name"].asString))
+
     return itemMeta
   }
 

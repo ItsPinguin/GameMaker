@@ -33,21 +33,23 @@ object ItemManager {
     val itemStack = Bukkit.getItemFactory().createItemStack("${template.material.lowercase()}[${componentString}]")
     itemStack.amount = template.amount
     if (itemStack.type == Material.AIR) return itemStack
-    val itemMeta = itemStack.itemMeta ?: return itemStack
-    itemMeta.displayName(I18nManager.getComponentIfIndicator(config.defaultLanguage, template.customData["name"].let { if (it != null) it.asString else "" }))
+    var itemMeta = itemStack.itemMeta ?: return itemStack
 
+    itemBuilderRegistry.listResources().forEach { builder ->
+      itemMeta = builder.buildItemMeta(template, itemStack, itemMeta, context)
+    }
 
     val unorderedKeys = template.customData.asMap().keys.filter { it !in GameMakerPlugin.getInstance().config.itemLoreOrder }
     val builders = itemBuilderRegistry.resourceMap.toMutableMap()
     val lore = mutableListOf<Component>()
     GameMakerPlugin.getInstance().config.itemLoreOrder.forEach { propertyName ->
       builders.values.forEach { builder ->
-        lore.addAll(builder.resource?.buildItemLore(propertyName, template.data[propertyName], template.data, context) ?: listOf())
+        lore.addAll(builder.resource?.buildItemLore(template, itemStack, propertyName, template.data[propertyName], true, context) ?: listOf())
       }
     }
     unorderedKeys.forEach {
       builders.values.forEach { builder ->
-        lore.addAll(builder.resource?.buildItemLore(it, template.data[it], template.data, context, false) ?: listOf())
+        lore.addAll(builder.resource?.buildItemLore(template, itemStack, it, template.data[it], false, context) ?: listOf())
       }
     }
     if (lore.size == 1 && lore.firstOrNull()?.equals(Component.empty()) ?: false)
