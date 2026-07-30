@@ -37,7 +37,7 @@ open class MapResource(
       `in` ?: return clazz.newInstance()
       if (`in`.peek() == JsonToken.BEGIN_OBJECT) {
         val mapResource = clazz.newInstance()
-        mapResource.data = GameMakerPlugin.gson.fromJson(`in`, MutableMap::class.java)
+        mapResource.data = GameMakerPlugin.gson.fromJson(`in`, JsonObject::class.java)
         mapResource.id = mapResource.data["id"] as? String ?: mapResource.id
         mapResource.type = mapResource.data["type"] as? String ?: mapResource.type
         clazz.declaredFields.forEach { field ->
