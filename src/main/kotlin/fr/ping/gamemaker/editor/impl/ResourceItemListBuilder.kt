@@ -4,8 +4,8 @@ import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.ItemBuilderContext
 import fr.ping.gamemaker.items.builders.models.ItemListBuilder
 import fr.ping.gamemaker.items.templates.models.ItemTemplate
-import fr.ping.gamemaker.resource.MapResource
 import fr.ping.utils.resources.ResourceManager
+import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
@@ -24,7 +24,6 @@ object ResourceItemListBuilder : ItemListBuilder() {
       when (resource) {
         is ItemTemplate -> Material.valueOf(resource.material)
         else -> try {
-          println(I18nManager["editor.icons.${context.menuInstance.data["registry"]}.${resource.id}"])
           Material.valueOf(I18nManager.getString("editor.icons.${context.menuInstance.data["registry"]}.${resource.id}"))
         } catch (_ : Exception) {
           Material.GRAY_DYE
@@ -35,11 +34,11 @@ object ResourceItemListBuilder : ItemListBuilder() {
 
 
 
-    itemMeta.setItemName("§a" + resource.id)
-    itemMeta.lore = listOf(
-      "§7Id: §f${resource.id}",
-      "§7File: §f${resource.file}"
-    )
+    itemMeta.itemName(Component.text("§a" + resource.id))
+    itemMeta.lore(listOf(
+      Component.text("§7Id: §f${resource.id}"),
+      Component.text("§7File: §f${resource.file}")
+      ))
 
     itemStack.itemMeta = itemMeta
     return itemStack

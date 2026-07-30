@@ -109,7 +109,6 @@ object MenuManager {
     if (button.list != null && button.pageOffset == null) {
       menuInstance.pageStates.getOrPut(button.list!!) { PageState(0, 0) }.apply {
         pageSize = filledSlots.size
-        println("Page size: $pageSize")
         total = listProvider!!.getListSize(ItemBuilderContext.MenuSlotItemBuilderContext(
           actualSlot = 0,
           index = 0,
@@ -149,17 +148,12 @@ object MenuManager {
   }
 
   fun changePage(player: Player, menuInstance : MenuInstance, list : String, offset : Int) {
-    println("Changing page")
     menuInstance.pageStates.getOrPut(list) { PageState(0, 0) }.apply {
-      if (getOffset() + offset*pageSize !in 0..total) let {
-        println("Out of bounds")
+      if (getOffset() + offset*pageSize !in 0..total)
         return
-      }
-      println("Changing page to ${page + offset}")
       page += offset
     }
     renderMenu(player, menuInstance)
     player.updateInventory()
-    println("DONE")
   }
 }

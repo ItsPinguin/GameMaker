@@ -63,6 +63,5 @@ open class ItemListBuilder : Resource() {
    *                     the inventory object, and pagination states.
    */
   open fun onClick(index: Int, event: InventoryClickEvent, menuInstance: MenuInstance) {
-    println("Clicked on $index, actual slot is ${event.slot}")
   }
 }
