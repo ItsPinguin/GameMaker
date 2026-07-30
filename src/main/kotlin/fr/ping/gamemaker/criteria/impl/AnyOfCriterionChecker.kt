@@ -10,13 +10,8 @@ object AnyOfCriterionChecker : CriterionChecker() {
     criterion: Criterion,
     context: Map<String, Any?>
   ): Boolean {
-    if (criterion.criterion != "any_of") return true
-    val criteria : List<Criterion> =
-      if ((criterion.data["criteria"] as? List<*>)?.all { it is Map<*, *> } == false)
-        ResourceManager.parseAny<List<Criterion>>(criterion.data["criteria"]) ?: listOf()
-      else
-        criterion.data["criteria"] as List<Criterion>
-
-    return criteria.any { CriteriaManager.checkCriterion(it, context) }
+    return criterion.criterion != "any_of" ||
+        (ResourceManager.parseAny<List<Criterion>>(criterion.data["criteria"]) ?: listOf())
+          .any { CriteriaManager.checkCriterion(it, context) }
   }
 }

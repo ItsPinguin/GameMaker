@@ -1,5 +1,6 @@
 package fr.ping.gamemaker.resource
 
+import com.google.gson.JsonObject
 import com.google.gson.TypeAdapter
 import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName
@@ -12,11 +13,10 @@ import fr.ping.utils.resources.ResourceManager
 
 @JsonAdapter(MapResource.Adapter::class)
 open class MapResource(
-  var data: MutableMap<String, Any?> = mutableMapOf<String, Any?>()
+  var data: JsonObject = JsonObject(),
 ): Resource() {
 
   override fun clean() {
-    data.clear()
   }
 
   class Adapter : GeneralAdapter<MapResource>(MapResource::class.java)
@@ -28,7 +28,7 @@ open class MapResource(
           mutableListOf(it.value).apply { addAll(it.alternate) }
         }
         val chosenName = names?.firstOrNull { value?.data[it] != null } ?: names?.firstOrNull() ?: field.name
-        value?.data[chosenName] = field.get(value)
+        value?.data?.add(chosenName, ResourceManager.getGson().toJsonTree(field.get(value)))
       }
       out?.jsonValue(GameMakerPlugin.gson.toJson(value?.data))
     }

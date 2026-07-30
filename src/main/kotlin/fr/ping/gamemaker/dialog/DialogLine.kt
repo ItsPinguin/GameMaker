@@ -1,5 +1,6 @@
 package fr.ping.gamemaker.dialog
 
+import com.google.gson.JsonObject
 import com.google.gson.TypeAdapter
 import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName
@@ -10,6 +11,7 @@ import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.actions.models.Action
 import fr.ping.gamemaker.criteria.models.Criterion
 import fr.ping.gamemaker.dialog.DialogLine.Adapter
+import fr.ping.utils.resources.ResourceManager
 
 @JsonAdapter(Adapter::class)
 data class DialogLine(
@@ -53,19 +55,15 @@ data class DialogLine(
           return DialogLine(text = `in`.nextString())
         }
         JsonToken.BEGIN_OBJECT -> {
-          val data = GameMakerPlugin.gson.fromJson<Map<*, *>>(`in`, Map::class.java)
+          val data = GameMakerPlugin.gson.fromJson<JsonObject>(`in`, JsonObject::class.java)
           return DialogLine(
-            text = data["text"] as? String ?: "",
-            actions = (data["actions"] as? List<*>)?.map { Action().apply { this.data =
-              it as Map<*, *> as MutableMap<String, Any?>
-            } } ?: listOf(),
-            criteria = (data["criteria"] as? List<*>)?.map { Criterion().apply {
-              this.data = it as Map<*, *> as MutableMap<String, Any?>
-            } } ?: listOf(),
-            cooldown = data["cooldown"] as? Double,
-            step = data["step"] as? Int,
-            useTitle = data["should_use_title"] as? Boolean,
-            useActionBar = data["should_use_action_bar"] as? Boolean
+            text = data["text"]?.asString ?: "",
+            actions = ResourceManager.parseJson<List<Action>>(data["actions"]),
+            criteria = ResourceManager.parseJson<List<Criterion>>(data["criteria"]),
+            cooldown = data["cooldown"]?.asDouble ?: 0.0,
+            step = data["step"]?.asInt ?: 1,
+            useTitle = data["should_use_title"]?.asBoolean ?: false,
+            useActionBar = data["should_use_action_bar"]?.asBoolean ?: false
           )
         }
         else -> return DialogLine()

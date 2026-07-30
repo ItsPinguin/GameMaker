@@ -10,14 +10,9 @@ object NoneOfCriterionChecker : CriterionChecker() {
     criterion: Criterion,
     context: Map<String, Any?>
   ): Boolean {
-    if (criterion.criterion != "all_of") return true
-    val criteria : List<Criterion> =
-      if ((criterion.data["criteria"] as? List<*>)?.all { it is Map<*, *> } == false)
-        ResourceManager.parseAny<List<Criterion>>(criterion.data["criteria"]) ?: listOf()
-      else
-        criterion.data["criteria"] as List<Criterion>
-
-    return criteria.none { CriteriaManager.checkCriterion(it, context) }
+    return criterion.criterion != "none_of" ||
+        (ResourceManager.parseAny<List<Criterion>>(criterion.data["criteria"]) ?: listOf())
+          .none { CriteriaManager.checkCriterion(it, context) }
   }
 
 }

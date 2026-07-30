@@ -4,7 +4,8 @@ import fr.ping.gamemaker.criteria.CriterionChecker
 import fr.ping.gamemaker.criteria.models.Criterion
 import org.bukkit.entity.Entity
 
-object EntityTagsCriterionChecker : CriterionChecker(){
+object
+EntityTagsCriterionChecker : CriterionChecker(){
   override fun check(
     criterion: Criterion,
     context: Map<String, Any?>

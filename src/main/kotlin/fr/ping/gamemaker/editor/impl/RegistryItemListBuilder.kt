@@ -1,5 +1,6 @@
 package fr.ping.gamemaker.editor.impl
 
+import com.google.gson.JsonObject
 import fr.ping.gamemaker.actions.ActionContext
 import fr.ping.gamemaker.actions.impl.OpenMenuAction
 import fr.ping.gamemaker.actions.models.Action
@@ -45,10 +46,10 @@ object RegistryItemListBuilder : ItemListBuilder() {
     val registryPair = ResourceManager.getRegistryMap().entries.toList().getOrNull(index) ?: return
     OpenMenuAction.execute(
       Action().apply {
-        this.data = mutableMapOf(
-          "registry" to registryPair.key,
-          "menu" to "editor.resource"
-        )
+        this.data = JsonObject().apply {
+          addProperty("registry", registryPair.key)
+          addProperty("menu", "editor.resource")
+        }
       },
       ActionContext.MenuClickActionContext(
         event.whoClicked as Player,

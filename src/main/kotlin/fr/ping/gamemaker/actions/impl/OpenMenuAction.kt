@@ -11,7 +11,7 @@ object OpenMenuAction : ActionExecutor() {
     context: ActionContext
   ) {
     if (context !is ActionContext.PlayerActionContext) return
-    val menu = action.data["menu"] as? String ?: return
-    MenuManager.open(context.player, menu, action.data)
+    val menu = action.data["menu"]?.asString ?: return
+    MenuManager.open(context.player, menu, action.data.asMap())
   }
 }

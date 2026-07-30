@@ -7,7 +7,7 @@ import fr.ping.gamemaker.resource.MapResource
 class Criterion : MapResource() {
   var criterion: String
     get() = data["criterion"] as? String ?: "no_criterion"
-    set(value) { data["criterion"] = value }
+    set(value) { data.addProperty("criterion", value) }
 
   class Adapter : GeneralAdapter<Criterion>(Criterion::class.java)
 

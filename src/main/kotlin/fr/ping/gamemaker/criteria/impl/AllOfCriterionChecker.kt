@@ -10,13 +10,8 @@ object AllOfCriterionChecker : CriterionChecker() {
     criterion: Criterion,
     context: Map<String, Any?>
   ): Boolean {
-    if (criterion.criterion != "all_of") return true
-    val criteria : List<Criterion> =
-      if ((criterion.data["criteria"] as? List<*>)?.all { it is Map<*, *> } == false)
-        ResourceManager.parseAny<List<Criterion>>(criterion.data["criteria"]) ?: listOf()
-      else
-        criterion.data["criteria"] as List<Criterion>
-
-    return CriteriaManager.checkCriteria(criteria, context)
+    return criterion.criterion != "all_of" || CriteriaManager.checkCriteria(
+      ResourceManager.parseAny<List<Criterion>>(criterion.data["criteria"]) ?: listOf(),
+      context)
   }
 }
