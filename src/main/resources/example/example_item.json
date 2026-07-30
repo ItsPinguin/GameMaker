@@ -1,0 +1,35 @@
+{
+  "type": "item_template",
+  "id": "example_item",
+  "material": "diamond_sword",
+  "components": {
+    "enchantements": {
+      "sharpness": 5
+    },
+    "rarity": "epic",
+    "custom_data": {
+      "PublicBukkitValues": {
+        "your_plugin:key": "value"
+      }
+    },
+    "max_stack_size": 2,
+    "unbreakable": true
+  },
+  "removed_components": [
+    "attribute_modifiers"
+  ],
+  "custom_data": {
+    "name": "Example Item",
+    "lore": [
+      "Multiple",
+      "Lines"
+    ],
+    "actions": [
+      {
+        "action": "open_menu",
+        "menu": "example_menu"
+      }
+    ]
+  },
+  "amount": 2
+}

@@ -1,0 +1,30 @@
+{
+  "type": "menu_template",
+  "id": "test",
+  "title": "Example Menu",
+  "contents": [
+    {
+      "item": {
+        "material": "stone",
+        "amount": 3
+      },
+      "slots": [
+        "fill"
+      ]
+    },
+    {
+      "item": "example_item",
+      "slots": [
+        "row 0",
+        "r:1",
+        20, 21, 22
+      ],
+      "actions": [
+        {
+          "action": "message_player",
+          "message": "Hello World !"
+        }
+      ]
+    }
+  ]
+}

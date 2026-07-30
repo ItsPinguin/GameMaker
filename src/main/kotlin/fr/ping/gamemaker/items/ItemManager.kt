@@ -36,10 +36,10 @@ object ItemManager {
       itemMeta = builder.buildItemMeta(template, itemStack, itemMeta, context)
     }
 
-    val unorderedKeys = template.customData.asMap().keys.filter { it !in GameMakerPlugin.getInstance().config.itemLoreOrder }
+    val unorderedKeys = template.customData.asMap().keys.filter { it !in GameMakerPlugin.getInstance().config.getStringList("item-template.lore-order") }
     val builders = itemBuilderRegistry.resourceMap.toMutableMap()
     val lore = mutableListOf<Component>()
-    GameMakerPlugin.getInstance().config.itemLoreOrder.forEach { propertyName ->
+    GameMakerPlugin.getInstance().config.getStringList("item-template.lore-order").forEach { propertyName ->
       builders.values.forEach { builder ->
         lore.addAll(builder.resource?.buildItemLore(template, itemStack, propertyName, template.data[propertyName], true, context) ?: listOf())
       }

@@ -2,23 +2,22 @@ package fr.ping.gamemaker.items.builders.impl
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import com.google.gson.annotations.SerializedName
+import com.google.gson.JsonObject
 import fr.ping.gamemaker.GameMakerPlugin
-import fr.ping.gamemaker.i18n.I18n
 import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.ItemBuilderContext
 import fr.ping.gamemaker.items.builders.models.ItemBuilder
 import fr.ping.gamemaker.items.templates.models.ItemTemplate
 import fr.ping.gamemaker.utils.adapter.ComponentTypeAdapter
-import fr.ping.utils.resources.ResourceManager
 import net.kyori.adventure.text.Component
+import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 
 object BuiltinItemBuilder : ItemBuilder() {
-  private val config : Config
-    get() = GameMakerPlugin.getInstance().config.builtins.itemBuilder
+  private val config : ConfigurationSection?
+    get() = GameMakerPlugin.getInstance().config.getConfigurationSection("item-template.builtin")
 
   override fun buildItemLore(
     template: ItemTemplate,
@@ -28,38 +27,37 @@ object BuiltinItemBuilder : ItemBuilder() {
     isKeyInConfig: Boolean,
     context: ItemBuilderContext
   ): List<Component>? {
+    val lore = mutableListOf<Component>()
     when (key) {
       "lore" -> {
+        if (config?.getBoolean("enable-lore", true) != true) return null
         if (value == null || value !is JsonArray) return null
-        @Suppress("UNCHECKED_CAST")
-        return value.map {
-          if (it.asString.startsWith("$")) I18nManager["ENGLISH", it.asString.removePrefix("$")]
+        lore.addAll(value.map {
+          if (it.asString.startsWith("$")) I18nManager[I18nManager.defaultLanguage, it.asString.removePrefix("$")]
           else Component.empty().append(ComponentTypeAdapter.parseComponent("<reset><!italic>${it.asString}"))
-        }.let {
-          if (config.insertSpaceAfter.getOrPut(key) { true }) it + listOf(Component.empty()) else it
-        }
+        })
       }
       "attributes" -> {
-        if (value == null || value !is Map<*, *>) return null
-        val attributesLore = mutableListOf<Component>()
-        value.entries.forEach {
-          attributesLore.add(I18nManager["lore.attribute", it.key, value[it.key]])
-        }
-        if (config.insertSpaceAfter.getOrPut(key) { true }) attributesLore.add(Component.empty())
-        return attributesLore
+        if (config?.getBoolean("enable-attributes", true) != true) return null
+        if (value == null || value !is JsonObject) return null
+        lore.addAll(value.asMap().entries.map {
+          I18nManager["lore.attribute", it.key, value[it.key]]
+        })
       }
       "enchants" -> {
-        if (value == null || value !is Map<*, *>) return null
-        val enchantsLore = mutableListOf<Component>()
-        value.entries.forEach {
-          enchantsLore.add(I18nManager["lore.enchant_level", it.key, value[it.key]])
-        }
-        if (config.insertSpaceAfter.getOrPut(key) {true}) enchantsLore.add(Component.empty())
-        return enchantsLore
+        if (config?.getBoolean("enable-enchants", true) != true) return null
+        if (value == null || value !is JsonObject) return null
+        lore.addAll(value.asMap().map {
+          Component.text(
+            I18nManager.getString("lore.enchant.${it.key}") +
+                I18nManager.getString("lore.enchant_separator") +
+                I18nManager.getString("lore.enchant_level", value[it.key])
+          )
+        })
       }
       "type" -> {
-        val type = value as? String ?: "item"
-        val rarity = template.data["rarity"] as? String ?: "common"
+        val type = value?.asString ?: "item"
+        val rarity = template.data["rarity"]?.asString ?: "common"
         val rarityFormat = Rarities.display(rarity)
         val typeFormat = I18nManager["type.$type.format"]
         if (value == null || template.data["rarity"] == null) return null
@@ -94,7 +92,8 @@ object BuiltinItemBuilder : ItemBuilder() {
         return null
       }
     }
-    return null
+    if (config?.getStringList("item-template.builtin.insert-space-after")?.contains(key) ?: false) lore.add(Component.empty())
+    return lore
   }
 
   override fun buildItemMeta(
@@ -106,26 +105,10 @@ object BuiltinItemBuilder : ItemBuilder() {
     if (template.customData["hide_flags"]?.asBoolean ?: false)
       itemMeta.itemFlags.addAll(ItemFlag.entries)
     if (template.customData["name"] != null)
-      itemMeta.displayName(I18nManager.getComponentIfIndicator(I18nManager.config.defaultLanguage, template.customData["name"].asString))
+      itemMeta.displayName(I18nManager.getComponentIfIndicator(I18nManager.defaultLanguage, template.customData["name"].asString))
 
     return itemMeta
   }
-
-  data class Config(
-    var lore: Boolean = true,
-    var attributes: Boolean = true,
-    var enchants: Boolean = true,
-    @SerializedName("insert_space_after")
-    var insertSpaceAfter: MutableMap<String, Boolean> = mutableMapOf(
-      "lore" to true,
-      "attributes" to true,
-      "enchants" to true
-    ),
-    @SerializedName("rounded_attributes")
-    var roundedAttributes: List<String> = listOf(),
-    @SerializedName("should_translate_items")
-    var shouldTranslateItems: Boolean = true
-  )
 
   object Rarities {
     fun getPrefix(rarity: String) = I18nManager["rarity.$rarity.prefix"]

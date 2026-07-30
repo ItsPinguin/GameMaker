@@ -1,0 +1,17 @@
+{
+  "type": "lang",
+  "id": "your_lang_id",
+  "locale": "your_locale",
+  "translations": {
+    "path": {
+      "to": {
+        "key": "value here",
+        "colored_key": "<red>value <green>here",
+        "multiple_lines": [
+          "value 1",
+          "value 2"
+        ]
+      }
+    }
+  }
+}

@@ -5,36 +5,40 @@ import fr.ping.gamemaker.utils.adapter.ComponentTypeAdapter
 import fr.ping.utils.resources.ResourceManager
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextReplacementConfig
+import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
-import org.jetbrains.annotations.ApiStatus
 import java.util.*
 import java.util.regex.Pattern
 
 object I18nManager {
   val languages : MutableMap<String, MutableMap<String, Any?>> = mutableMapOf()
   val config
-    get() = GameMakerPlugin.getInstance().config.langConfig
+    get() = GameMakerPlugin.getInstance().config.getConfigurationSection("lang")
+  val defaultLanguage : String
+    get() = config?.getString("default") ?: "ENGLISH"
+  val fallbacks : ConfigurationSection?
+  get() = config?.getConfigurationSection("lang.fallbacks")
 
   val playerLanguages : MutableMap<UUID, String> = mutableMapOf()
 
-  operator fun get(key: String, vararg args: Any?) : Component = get(config.defaultLanguage, key, *args)
+  operator fun get(key: String, vararg args: Any?) : Component = get(defaultLanguage, key, *args)
 
   operator fun get(locale: String, key: String, vararg args: Any?) : Component {
     return getComponent(locale, key, *args)
   }
 
   operator fun get(player: Player, key: String, vararg args: Any?) : Component =
-    get(playerLanguages[player.uniqueId] ?: config.defaultLanguage, key, *args)
+    get(playerLanguages[player.uniqueId] ?: defaultLanguage, key, *args)
 
   operator fun get(uuid: UUID, key: String, vararg args: Any?) : Component =
-    get(playerLanguages[uuid] ?: config.defaultLanguage, key, *args)
+    get(playerLanguages[uuid] ?: defaultLanguage, key, *args)
 
   fun getString(locale : String, key : String, vararg args : Any?) : String {
     val value = getAnyOrFallback(locale, key).toString()
     return if (args.isEmpty()) value else insertIntoString(value, *args)
   }
 
-  fun getString(key : String, vararg args : Any?) : String = getString(config.defaultLanguage, key, *args)
+  fun getString(key : String, vararg args : Any?) : String = getString(defaultLanguage, key, *args)
 
   fun getStringIfIndicator(locale: String, key: String, vararg args : Any?) : String {
     return if (!key.startsWith("$")) key
@@ -54,11 +58,11 @@ object I18nManager {
   }
 
   fun getFallback(locale: String) : String {
-    return config.languageFallbacks[locale] ?: config.defaultLanguage
+    return fallbacks?.getString(locale) ?: defaultLanguage
   }
 
   fun getAny(locale : String, key : String) : Any? {
-    val translations = languages[locale] ?: languages[config.languageFallbacks[locale]] ?: languages[config.defaultLanguage] ?: return null
+    val translations = languages[locale] ?: languages[fallbacks?.getString(locale) ?: defaultLanguage] ?: return null
     val path = key.lowercase().split(".")
     var current: Any? = translations
     for (part in path) {
@@ -71,7 +75,7 @@ object I18nManager {
   }
 
   fun getAnyOrFallback(locale : String, key : String) : Any {
-    if (locale == config.defaultLanguage) return getAny(locale, key) ?: key
+    if (locale == defaultLanguage) return getAny(locale, key) ?: key
     return getAny(locale, key) ?: getAnyOrFallback(getFallback(locale), key)
   }
 

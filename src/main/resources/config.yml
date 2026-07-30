@@ -1,0 +1,23 @@
+resources:
+  paths:
+    - resources
+  #should-save: true
+  replace-editor-files: false
+  replace-example-files: false
+  check-scheme: false
+  verbose: false
+item-template:
+  lore-order:
+    - attributes
+    - lore
+    - enchants
+  builtin:
+    insert-space-after:
+      - lore
+    enable-lore: true
+    enable-enchants: true
+    enable-attributes: true
+lang:
+  default: ENGLISH
+  fallbacks:
+    FRENCH: ENGLISH

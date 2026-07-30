@@ -1,0 +1,55 @@
+{
+  "type": "menu_template",
+  "id": "editor.resource",
+  "title": "Registries Menu",
+  "inventory_type": "CHEST",
+  "rows": 6,
+  "contents": [
+    {
+      "item": {
+        "material": "air"
+      },
+      "slots": ["10:16", "19:25", "28:34"],
+      "list": "editor.resource"
+    },
+    {
+      "item": "",
+      "page_offset": "1",
+      "list": "editor.resource",
+      "slots": [53],
+      "actions": [
+        {
+          "action": "change_page",
+          "page_offset": 1,
+          "list": "editor.resource"
+        }
+      ]
+    },
+    {
+      "item": "",
+      "page_offset": "-1",
+      "list": "editor.resource",
+      "slots": [45],
+      "actions": [
+        {
+          "action": "change_page",
+          "page_offset": -1,
+          "list": "editor.resource"
+        }
+      ]
+    },
+    {
+      "item": {
+        "material": "OAK_DOOR",
+        "name": "§aGo back"
+      },
+      "slots": [49],
+      "actions": [
+        {
+          "action": "open_menu",
+          "menu": "editor.registries"
+        }
+      ]
+    }
+  ]
+}

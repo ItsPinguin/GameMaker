@@ -69,7 +69,7 @@ object MenuManager {
       lastOpened[player.uniqueId] = templateId
     }
     val title = I18nManager.getComponentIfIndicator(
-      I18nManager.playerLanguages[player.uniqueId] ?: I18nManager.config.defaultLanguage,
+      I18nManager.playerLanguages[player.uniqueId] ?: I18nManager.defaultLanguage,
       template.title, System.currentTimeMillis())
     val inventory =
       if (template.inventoryType == InventoryType.CHEST)

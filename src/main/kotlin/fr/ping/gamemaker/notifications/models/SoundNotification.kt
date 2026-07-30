@@ -1,6 +1,5 @@
 package fr.ping.gamemaker.notifications.models
 
-import fr.ping.gamemaker.GameMakerPlugin
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 

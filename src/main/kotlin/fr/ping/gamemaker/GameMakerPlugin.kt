@@ -2,7 +2,6 @@ package fr.ping.gamemaker
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.annotations.SerializedName
 import fr.ping.fr.ping.utils.resources.registry.ReadyRegistry
 import fr.ping.gamemaker.actions.ActionExecutor
 import fr.ping.gamemaker.actions.models.Action
@@ -13,9 +12,7 @@ import fr.ping.gamemaker.dialog.Dialog
 import fr.ping.gamemaker.editor.impl.RegistryItemListBuilder
 import fr.ping.gamemaker.editor.impl.ResourceItemListBuilder
 import fr.ping.gamemaker.i18n.I18n
-import fr.ping.gamemaker.i18n.I18nConfig
 import fr.ping.gamemaker.i18n.I18nManager
-import fr.ping.gamemaker.items.builders.impl.BuiltinItemBuilder
 import fr.ping.gamemaker.items.builders.models.ItemBuilder
 import fr.ping.gamemaker.items.builders.models.ItemListBuilder
 import fr.ping.gamemaker.items.templates.models.ItemTemplate
@@ -35,19 +32,24 @@ import org.bukkit.event.inventory.InventoryType
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.util.Vector
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.net.JarURLConnection
+import java.util.*
+import java.util.jar.JarEntry
 
 class GameMakerPlugin : JavaPlugin() {
-  var config: Config = Config()
-
   override fun onLoad() {
-    config.load()
+    saveResource("config.yml", false)
+    reloadConfig()
+    load()
 
-    ResourceManager.addAllResourcePaths(config.resourcePaths)
+    ResourceManager.addAllResourcePaths(config.getStringList("resources.paths"))
     ResourceManager.registerTypeAdapter(Vector::class.java, VectorTypeAdapter)
     ResourceManager.registerTypeAdapter(Location::class.java, LocationTypeAdapter)
     ResourceManager.registerTypeAdapter(Sound::class.java, SoundTypeAdapter)
-    ResourceManager.registerTypeAdapter(Material::class.java, MaterialTypeAdapter)
-    ResourceManager.registerTypeAdapter(InventoryType::class.java, InventoryTypeTypeAdapter)
+    ResourceManager.registerTypeAdapter(Material::class.java, EnumTypeAdapter(Material::class.java))
+    ResourceManager.registerTypeAdapter(InventoryType::class.java, EnumTypeAdapter(InventoryType::class.java))
     ResourceManager.registerTypeAdapter(Component::class.java, ComponentTypeAdapter)
     ResourceManager.registerTypeAdapter(org.bukkit.event.block.Action::class.java, EnumTypeAdapter(org.bukkit.event.block.Action::class.java))
 
@@ -55,15 +57,13 @@ class GameMakerPlugin : JavaPlugin() {
   }
 
   override fun onEnable() {
-
-    ResourceManager.addResourcePath(getResourceFolder().path)
     ResourceManager.findSchemeResources(true)
-    ResourceManager.loadAllResources(validate = true, verbose = true)
+    ResourceManager.loadAllResources(config.getBoolean("resources.check-scheme", false), config.getBoolean("resources.verbose", false))
     I18nManager.compileLoadedI18n()
 
     itemListBuilderRegistry.registerResource("levels", TestListProvider())
-    itemListBuilderRegistry.registerResource("editor/registries", RegistryItemListBuilder)
-    itemListBuilderRegistry.registerResource("editor/resource", ResourceItemListBuilder)
+    itemListBuilderRegistry.registerResource("editor.registries", RegistryItemListBuilder)
+    itemListBuilderRegistry.registerResource("editor.resource", ResourceItemListBuilder)
 
     registerCommands()
     registerEvents()
@@ -88,26 +88,10 @@ class GameMakerPlugin : JavaPlugin() {
     server.pluginManager.registerEvents(ItemListener, this)
   }
 
-  data class Config(
-    @SerializedName("resource_paths")
-    var resourcePaths: List<String> = listOf("resources", "plugins/GameMaker/data"),
-    var saveResources: Boolean = true,
-    var builtins: Builtins = Builtins(),
-    @SerializedName("item_lore_order")
-    var itemLoreOrder: List<String> = listOf("attributes", "lore", "enchants"),
-    @SerializedName("lang_config")
-    var langConfig : I18nConfig = I18nConfig()
-  ) {
-    data class Builtins(
-      var itemBuilder : BuiltinItemBuilder.Config = BuiltinItemBuilder.Config()
-    )
-
-    fun load() {
-      getInstance().dataFolder.mkdirs()
-      if (File(getInstance().dataFolder, "config.json").exists())
-        getInstance().config = gson.fromJson(File(getInstance().dataFolder, "config.json").readText(), Config::class.java) ?: getInstance().config
-      File(getInstance().dataFolder, "config.json").writeText(gson.toJson(getInstance().config))
-    }
+  fun load() {
+    copyResourcesDir("editor", dataFolder.resolve("editor"), config.getBoolean("resources.replace-editor-files", false))
+    copyResourcesDir("example", dataFolder.resolve("example"), config.getBoolean("resources.replace-example-files", false))
+    ResourceManager.addResourcePath(dataFolder.path)
   }
 
   companion object {
@@ -128,12 +112,47 @@ class GameMakerPlugin : JavaPlugin() {
       return getPlugin(GameMakerPlugin::class.java)
     }
 
-    fun getResourceFolder() : File {
-      return getInstance().dataFolder.resolve("data")
-    }
-
     init {
       actionExecutorRegistry.registerResource("notify", NotifyActionExecutor())
+    }
+
+    fun copyResourcesDir(sourceDir: String, targetDir: File, replace : Boolean = false) {
+      if (!targetDir.exists())
+        targetDir.mkdirs()
+      val resource = javaClass.classLoader.getResource(sourceDir) ?: return
+
+      try {
+        val connection: JarURLConnection = resource.openConnection() as JarURLConnection
+        connection.jarFile.use { jarFile ->
+          val entries: Enumeration<JarEntry> = jarFile.entries()
+          while (entries.hasMoreElements()) {
+            val entry: JarEntry = entries.nextElement()
+            val name: String = entry.getName()
+
+            if (name.startsWith("$sourceDir/") && !entry.isDirectory) {
+              val relativePath = name.substring(sourceDir.length)
+              val outFile = File(targetDir, relativePath)
+
+              if (!outFile.exists() || replace) {
+                outFile.getParentFile().mkdirs()
+
+                jarFile.getInputStream(entry).use { `in` ->
+                  FileOutputStream(outFile).use { out ->
+                    val buffer = ByteArray(1024)
+                    var bytesRead: Int
+                    while ((`in`.read(buffer).also { bytesRead = it }) != -1) {
+                      out.write(buffer, 0, bytesRead)
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      } catch (e: IOException) {
+        println("Error copying resources from JAR to directory: $e")
+        e.printStackTrace()
+      }
     }
   }
 }

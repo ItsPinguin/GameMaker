@@ -3,7 +3,6 @@ package fr.ping.gamemaker.commands
 import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.GameMakerPlugin.Companion.itemTemplateRegistry
 import fr.ping.gamemaker.GameMakerPlugin.Companion.menuTemplateRegistry
-import fr.ping.gamemaker.i18n.I18n
 import fr.ping.gamemaker.i18n.I18nManager
 import fr.ping.gamemaker.items.ItemManager
 import fr.ping.gamemaker.menus.MenuManager
@@ -40,7 +39,7 @@ object GameMakerCommand : TabExecutor {
     when (args.getOrNull(0) ?: "help") {
       "reload" -> {
         sender.sendMessage("§fReloading...")
-        GameMakerPlugin.getInstance().config.load()
+        GameMakerPlugin.getInstance().reloadConfig()
         measureTime {
           ResourceManager.loadAllResources(validate = true, verbose = false)
           I18nManager.compileLoadedI18n()
