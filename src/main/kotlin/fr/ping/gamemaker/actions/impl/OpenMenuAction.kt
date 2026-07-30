@@ -4,7 +4,6 @@ import fr.ping.gamemaker.actions.ActionContext
 import fr.ping.gamemaker.actions.ActionExecutor
 import fr.ping.gamemaker.actions.models.Action
 import fr.ping.gamemaker.menus.MenuManager
-import org.bukkit.entity.Player
 
 object OpenMenuAction : ActionExecutor() {
   override fun execute(

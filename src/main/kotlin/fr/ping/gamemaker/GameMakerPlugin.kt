@@ -21,18 +21,12 @@ import fr.ping.gamemaker.items.builders.models.ItemListBuilder
 import fr.ping.gamemaker.items.templates.models.ItemTemplate
 import fr.ping.gamemaker.listeners.InventoryListener
 import fr.ping.gamemaker.listeners.ItemListener
-import fr.ping.gamemaker.listeners.TriggerEventListener
 import fr.ping.gamemaker.menus.TestListProvider
 import fr.ping.gamemaker.menus.models.MenuTemplate
 import fr.ping.gamemaker.notifications.impl.NotifyActionExecutor
 import fr.ping.gamemaker.notifications.models.ComposedNotification
-import fr.ping.gamemaker.triggers.Trigger
 import fr.ping.gamemaker.utils.adapter.*
 import fr.ping.utils.resources.ResourceManager
-import io.papermc.paper.command.brigadier.Commands
-import io.papermc.paper.plugin.lifecycle.event.handler.LifecycleEventHandler
-import io.papermc.paper.plugin.lifecycle.event.registrar.ReloadableRegistrarEvent
-import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents
 import net.kyori.adventure.text.Component
 import org.bukkit.Location
 import org.bukkit.Material
@@ -64,7 +58,7 @@ class GameMakerPlugin : JavaPlugin() {
 
     ResourceManager.addResourcePath(getResourceFolder().path)
     ResourceManager.findSchemeResources(true)
-    ResourceManager.loadAllResources(true, true)
+    ResourceManager.loadAllResources(validate = true, verbose = true)
     I18nManager.compileLoadedI18n()
 
     itemListBuilderRegistry.registerResource("levels", TestListProvider())
@@ -90,7 +84,6 @@ class GameMakerPlugin : JavaPlugin() {
   }
 
   private fun registerEvents() {
-    server.pluginManager.registerEvents(TriggerEventListener, this)
     server.pluginManager.registerEvents(InventoryListener, this)
     server.pluginManager.registerEvents(ItemListener, this)
   }
@@ -122,7 +115,6 @@ class GameMakerPlugin : JavaPlugin() {
     val itemBuilderRegistry = ReadyRegistry(ItemBuilder::class.java, "item_builder")
     val actionRegistry = ReadyRegistry(Action::class.java, "action")
     val actionExecutorRegistry = ReadyRegistry(ActionExecutor::class.java, "action_executor")
-    val triggerRegistry = ReadyRegistry(Trigger::class.java, "trigger")
     val dialogRegistry = ReadyRegistry(Dialog::class.java, "dialog")
     val criterionCheckerRegistry = ReadyRegistry(CriterionChecker::class.java, "criterion_checker")
     val langRegistry = ReadyRegistry(I18n::class.java, "lang")

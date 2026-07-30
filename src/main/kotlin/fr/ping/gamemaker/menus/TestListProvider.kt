@@ -2,6 +2,7 @@ package fr.ping.gamemaker.menus
 
 import fr.ping.gamemaker.items.ItemBuilderContext
 import fr.ping.gamemaker.items.builders.models.ItemListBuilder
+import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
@@ -11,7 +12,7 @@ class TestListProvider : ItemListBuilder() {
     if (index >= 100) return null
     val itemStack = ItemStack(Material.STONE)
     val itemMeta = itemStack.itemMeta ?: return itemStack
-    itemMeta.setItemName("§aINDEX: §e$index")
+    itemMeta.itemName(Component.text("§aINDEX: §e$index"))
     itemStack.itemMeta = itemMeta
     return itemStack
   }

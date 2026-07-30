@@ -12,6 +12,5 @@ commands:
     aliases:
       - gm
       - gmk
-      - gmkr
       - gmaker
 

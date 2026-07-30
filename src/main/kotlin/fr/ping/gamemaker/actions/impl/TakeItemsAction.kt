@@ -1,6 +1,5 @@
 package fr.ping.gamemaker.actions.impl
 
-import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.actions.ActionContext
 import fr.ping.gamemaker.actions.ActionExecutor
 import fr.ping.gamemaker.actions.models.Action
@@ -9,7 +8,6 @@ import fr.ping.gamemaker.criteria.models.Criterion
 import fr.ping.gamemaker.items.ItemManager
 import fr.ping.utils.resources.ResourceManager
 import org.bukkit.Sound
-import org.bukkit.entity.Player
 
 object TakeItemsAction : ActionExecutor() {
   override fun execute(

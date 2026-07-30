@@ -2,7 +2,6 @@ package fr.ping.gamemaker.notifications.models
 
 import fr.ping.gamemaker.GameMakerPlugin
 import org.bukkit.Bukkit
-import org.bukkit.Particle
 import org.bukkit.entity.Player
 
 data class ComposedNotification (

@@ -15,7 +15,6 @@ import org.bukkit.entity.Player
 import kotlin.time.measureTime
 
 object GameMakerCommand : TabExecutor {
-  private val i18n by lazy { ResourceManager.getHandle("items/en_US", I18n::class.java) }
   override fun onTabComplete(
     sender: CommandSender,
     command: Command,
@@ -29,7 +28,7 @@ object GameMakerCommand : TabExecutor {
       }
       return null
     }
-    return listOf("help", "giveall", "reload", "translate", "give", "menu", "clear_cached_menus")
+    return listOf("help", "give_all", "reload", "translate", "give", "menu", "clear_cached_menus")
   }
 
   override fun onCommand(
@@ -43,13 +42,13 @@ object GameMakerCommand : TabExecutor {
         sender.sendMessage("§fReloading...")
         GameMakerPlugin.getInstance().config.load()
         measureTime {
-          ResourceManager.loadAllResources(true, true)
+          ResourceManager.loadAllResources(validate = true, verbose = false)
           I18nManager.compileLoadedI18n()
         }.let {
           sender.sendMessage("§7Done reloading. Took §f${it.inWholeMilliseconds} ms")
         }
       }
-      "giveall" -> {
+      "give_all" -> {
         if (sender !is Player) return true
         itemTemplateRegistry.listResources().forEach {
           sender.inventory.addItem(ItemManager.buildItem(it))
@@ -78,14 +77,19 @@ object GameMakerCommand : TabExecutor {
         MenuManager.open(sender, menu)
       }
       "translate" -> {
-        if (args.size == 1) {
-          sender.sendMessage(I18nManager["ENGLISH", "some.key.to.something", System.currentTimeMillis(), sender.name])
-        } else if (args.size == 2) {
-          sender.sendMessage(I18nManager["ENGLISH", args[1], System.currentTimeMillis(), sender.name])
-        } else if (args.size == 3) {
-          sender.sendMessage(I18nManager[args[1], args[2], System.currentTimeMillis(), sender.name])
-        } else {
-          sender.sendMessage(I18nManager[args[1], args[2], args.sliceArray(3 until args.size).toList().toTypedArray()])
+        when (args.size) {
+          1 -> {
+            sender.sendMessage(I18nManager["ENGLISH", "some.key.to.something", System.currentTimeMillis(), sender.name])
+          }
+          2 -> {
+            sender.sendMessage(I18nManager["ENGLISH", args[1], System.currentTimeMillis(), sender.name])
+          }
+          3 -> {
+            sender.sendMessage(I18nManager[args[1], args[2], System.currentTimeMillis(), sender.name])
+          }
+          else -> {
+            sender.sendMessage(I18nManager[args[1], args[2], args.sliceArray(3 until args.size).toList().toTypedArray()])
+          }
         }
       }
       else -> {

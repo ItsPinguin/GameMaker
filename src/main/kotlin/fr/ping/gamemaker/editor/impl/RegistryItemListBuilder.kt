@@ -8,6 +8,7 @@ import fr.ping.gamemaker.items.ItemBuilderContext
 import fr.ping.gamemaker.items.builders.models.ItemListBuilder
 import fr.ping.gamemaker.menus.models.MenuInstance
 import fr.ping.utils.resources.ResourceManager
+import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -29,11 +30,11 @@ object RegistryItemListBuilder : ItemListBuilder() {
       Material.CHEST })
     val itemMeta = itemStack.itemMeta ?: return itemStack
 
-    itemMeta.setItemName("§a" + registry.type.simpleName)
-    itemMeta.lore = listOf(
-      "§7Id: §f${registryPair.key}",
-      "§7Resource count: §f${registry.listHandles().size}"
-    )
+    itemMeta.itemName(Component.text("§a" + registry.type.simpleName))
+    itemMeta.lore(listOf(
+      Component.text("§7Id: §f${registryPair.key}"),
+      Component.text("§7Resource count: §f${registry.listHandles().size}")
+    ))
 
     itemStack.itemMeta = itemMeta
     return itemStack

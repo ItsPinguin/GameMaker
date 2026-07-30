@@ -9,15 +9,12 @@ import fr.ping.gamemaker.items.ItemManager
 import fr.ping.gamemaker.menus.models.MenuButton
 import fr.ping.gamemaker.menus.models.MenuInstance
 import fr.ping.gamemaker.menus.models.PageState
-import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
-import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryType
 import org.bukkit.inventory.Inventory
-import org.bukkit.inventory.ItemStack
 import java.util.*
 
 object MenuManager {

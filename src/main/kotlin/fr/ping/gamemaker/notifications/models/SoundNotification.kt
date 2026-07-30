@@ -11,16 +11,5 @@ data class SoundNotification(
 ) : Notification() {
   override fun notify(player: Player) {
     player.playSound(player.location, sound, volume, pitch)
-
-  }
-
-  fun notifyNow(player: Player) {
-    if (delay > 0) player.server.scheduler.runTaskLater(
-      GameMakerPlugin.getInstance(),
-      Runnable {
-        notifyNow(player)
-      },
-      delay
-    ) else notifyNow(player)
   }
 }

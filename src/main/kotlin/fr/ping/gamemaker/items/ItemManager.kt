@@ -3,8 +3,6 @@ package fr.ping.gamemaker.items
 import com.google.gson.Gson
 import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.GameMakerPlugin.Companion.itemBuilderRegistry
-import fr.ping.gamemaker.i18n.I18nManager
-import fr.ping.gamemaker.i18n.I18nManager.config
 import fr.ping.gamemaker.items.builders.impl.BuiltinItemBuilder
 import fr.ping.gamemaker.items.builders.impl.BuiltinItemTemplateItemListBuilder
 import fr.ping.gamemaker.items.templates.models.ItemTemplate
@@ -12,7 +10,6 @@ import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
-import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 

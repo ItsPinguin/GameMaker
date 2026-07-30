@@ -5,12 +5,10 @@ import fr.ping.gamemaker.utils.adapter.ComponentTypeAdapter
 import fr.ping.utils.resources.ResourceManager
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextReplacementConfig
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.entity.Player
 import org.jetbrains.annotations.ApiStatus
-import java.util.UUID
+import java.util.*
 import java.util.regex.Pattern
-import kotlin.toString
 
 object I18nManager {
   val languages : MutableMap<String, MutableMap<String, Any?>> = mutableMapOf()
@@ -153,53 +151,11 @@ object I18nManager {
     return component
   }
 
-  @Deprecated("") @ApiStatus.ScheduledForRemoval
-  fun translateIfIndicator(key : String, indicator : String = "$", vararg args : Any?) : Component = translateIfIndicator(Component.text(key), indicator, *args)
-
-  @Deprecated("") @ApiStatus.ScheduledForRemoval
-  fun translateIfIndicator(component: Component, indicator: String = "$", vararg args: Any?): Component {
-    val plainText = PlainTextComponentSerializer.plainText().serialize(component)
-
-    if (!plainText.startsWith(indicator)) return component
-
-    val translationKey = plainText.substring(indicator.length)
-    val languageMap = languages[config.defaultLanguage] ?: return component
-
-    return translateAndInsert(languageMap, translationKey, *args)
-  }
-
   fun compileLoadedI18n() {
     GameMakerPlugin.langRegistry.listResources().forEach { i18n ->
       languages.getOrPut(i18n.locale) { mutableMapOf() }.apply {
         i18n.translations.forEach { (key, value) -> put(key, value) }
       }
     }
-  }
-
-  @ApiStatus.ScheduledForRemoval @Deprecated("")
-  private fun translate(translations: MutableMap<String, Any?>, key: String): Component {
-    if (translations.containsKey("_cache.$key")) return translations["_cache.$key"] as Component
-    val path = key.lowercase().split(".")
-    var current: Any? = translations
-
-    for (part in path) {
-      if (current !is Map<*, *>) {
-        return Component.text(key)
-      }
-      current = current[part]
-      if (current == null) {
-        return Component.text(key)
-      }
-    }
-    val component = ResourceManager.parseAny<Component>(current) ?: Component.text(current.toString())
-
-    translations["_cache.$key"] = component
-    return component
-  }
-
-  @ApiStatus.ScheduledForRemoval @Deprecated("")
-  private fun translateAndInsert(translations: MutableMap<String, Any?>, key: String, vararg args: Any?): Component {
-    val baseComponent = translate(translations, key)
-    return if (args.isEmpty()) baseComponent else insertIntoComponent(baseComponent, *args)
   }
 }

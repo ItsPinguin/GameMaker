@@ -8,8 +8,6 @@ import fr.ping.utils.resources.Resource
 import org.bukkit.entity.Player
 
 data class Dialog(
-  @Transient
-  var _id: String = "",
   @SerializedName("dialog_lines")
   var dialogLines: MutableList<DialogLine> = mutableListOf(DialogLine("Hello world!")),
   var cooldown: Double = -1.0,
@@ -28,7 +26,7 @@ data class Dialog(
   val indexes = mutableMapOf<String, Int>()
 
   fun use(context: Map<String, Any?> = mapOf()) {
-    var player = context["player"] as? Player ?: return
+    val player = context["player"] as? Player ?: return
     val playerName = player.name
     val index = indexes.getOrPut(playerName) { 0 }
     val line = dialogLines.getOrNull(index) ?: return

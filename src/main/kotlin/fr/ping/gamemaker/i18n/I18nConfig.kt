@@ -5,5 +5,4 @@ data class I18nConfig(
   val languageFallbacks : MutableMap<String, String> = mutableMapOf(
     "FRENCH" to "ENGLISH",
   )
-) {
-}
+)

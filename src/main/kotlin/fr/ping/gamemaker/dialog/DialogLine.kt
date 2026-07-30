@@ -8,9 +8,8 @@ import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
 import fr.ping.gamemaker.GameMakerPlugin
 import fr.ping.gamemaker.actions.models.Action
-import fr.ping.gamemaker.dialog.DialogLine.Adapter
 import fr.ping.gamemaker.criteria.models.Criterion
-import kotlin.collections.get
+import fr.ping.gamemaker.dialog.DialogLine.Adapter
 
 @JsonAdapter(Adapter::class)
 data class DialogLine(
@@ -47,7 +46,7 @@ data class DialogLine(
         out?.jsonValue(GameMakerPlugin.gson.toJson(data))
     }
 
-    override fun read(`in`: JsonReader?): DialogLine? {
+    override fun read(`in`: JsonReader?): DialogLine {
       if (`in` == null) return DialogLine()
       when (`in`.peek()) {
         JsonToken.STRING -> {

@@ -4,6 +4,7 @@ import fr.ping.gamemaker.items.ItemBuilderContext
 import fr.ping.gamemaker.menus.models.MenuInstance
 import fr.ping.gamemaker.menus.models.PageState
 import fr.ping.utils.resources.Resource
+import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
@@ -47,7 +48,7 @@ open class ItemListBuilder : Resource() {
     itemMeta.lore = listOf(
       "§e§lCLICK §7to go to page ${pageOffset + pageState.page + 1}/${(pageState.total/pageState.pageSize) + 1}"
     )
-    itemMeta.setItemName("§aTurn Page")
+    itemMeta.itemName(Component.text("§aTurn Page"))
     itemStack.itemMeta = itemMeta
     return itemStack
   }

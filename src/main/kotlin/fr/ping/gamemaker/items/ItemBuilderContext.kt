@@ -2,7 +2,6 @@ package fr.ping.gamemaker.items
 
 import fr.ping.gamemaker.menus.models.MenuButton
 import fr.ping.gamemaker.menus.models.MenuInstance
-import fr.ping.gamemaker.menus.models.SlotFillInfo
 import org.bukkit.entity.Player
 
 sealed class ItemBuilderContext(

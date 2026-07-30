@@ -12,7 +12,6 @@ import fr.ping.gamemaker.items.templates.models.ItemTemplate
 import fr.ping.gamemaker.utils.adapter.ComponentTypeAdapter
 import fr.ping.utils.resources.ResourceManager
 import net.kyori.adventure.text.Component
-import org.bukkit.Material
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
@@ -20,9 +19,6 @@ import org.bukkit.inventory.meta.ItemMeta
 object BuiltinItemBuilder : ItemBuilder() {
   private val config : Config
     get() = GameMakerPlugin.getInstance().config.builtins.itemBuilder
-  private val i18n by lazy {
-    ResourceManager["item_build/en_US", I18n::class.java]
-  }
 
   override fun buildItemLore(
     template: ItemTemplate,
