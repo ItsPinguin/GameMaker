@@ -4,14 +4,31 @@
 {
   "type": "item_template",
   "id": "your_item_id",
-  "material": "YOUR_MATERIAL",
-  "name": "Your Item Name",
-  "lore": [
-    "Multiple",
-    "Lines"
+  "material": "diamond_sword",
+  "components": {
+    "enchantements": {
+      "sharpness": 5
+    },
+    "rarity": "epic",
+    "custom_data": {
+      "PublicBukkitValues": {
+        "your_plugin:key": "value"
+      }
+    }
+  },
+  "removed_components": [
+    "weapon",
+    "attribute_modifiers"
   ],
-  "actions": [],
-  "skull_texture": "kgshdkhgfhksdgfhkgsdhkgfshjgdjfhgsjhdgfhsgdhjsdg"
+  "custom_data": {
+    "name": "Your Item Name",
+    "lore": [
+      "Multiple",
+      "Lines"
+    ],
+    "actions": []
+  },
+  "amount": 2
 }
 ```
 
