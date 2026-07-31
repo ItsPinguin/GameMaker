@@ -1,0 +1,28 @@
+package fr.itspinguin.gamemaker.notifications.models
+
+import fr.itspinguin.gamemaker.GameMakerPlugin
+import org.bukkit.Bukkit
+import org.bukkit.entity.Player
+
+data class ComposedNotification (
+  var sounds : List<SoundNotification> = listOf(),
+  var messages : List<MessageNotification> = listOf(),
+  var titles : List<TitleNotification> = listOf(),
+  var particles : List<ParticleNotification> = listOf(),
+) : Notification() {
+  override fun notify(player: Player) {
+    val notifications = listOf(sounds, messages, titles, particles).flatten()
+    notifications.forEach { notifyWithDelay(player, it) }
+  }
+
+  fun notifyWithDelay(player: Player, notification: Notification) {
+    if (notification.delay > 0) Bukkit.getScheduler().runTaskLater(
+      GameMakerPlugin.getInstance(),
+      Runnable {
+        notification.notify(player)
+      },
+      notification.delay
+    )
+    else notification.notify(player)
+  }
+}

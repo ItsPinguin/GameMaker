@@ -1,0 +1,100 @@
+package fr.itspinguin.gamemaker.commands
+
+import fr.itspinguin.gamemaker.GameMakerPlugin
+import fr.itspinguin.gamemaker.GameMakerPlugin.Companion.itemTemplateRegistry
+import fr.itspinguin.gamemaker.GameMakerPlugin.Companion.menuTemplateRegistry
+import fr.itspinguin.gamemaker.i18n.I18nManager
+import fr.itspinguin.gamemaker.items.ItemManager
+import fr.itspinguin.gamemaker.menus.MenuManager
+import fr.itspinguin.resourcemanager.ResourceManager
+import org.bukkit.command.Command
+import org.bukkit.command.CommandSender
+import org.bukkit.command.TabExecutor
+import org.bukkit.entity.Player
+import kotlin.time.measureTime
+
+object GameMakerCommand : TabExecutor {
+  override fun onTabComplete(
+    sender: CommandSender,
+    command: Command,
+    label: String,
+    args: Array<out String>
+  ): List<String?>? {
+    if ((args.size) > 1) {
+      when (args.getOrNull(0) ?: "") {
+        "give" -> return listOf(*itemTemplateRegistry.listIds().toTypedArray())
+        "menu" -> return listOf(*menuTemplateRegistry.listIds().toTypedArray())
+      }
+      return null
+    }
+    return listOf("help", "give_all", "reload", "translate", "give", "menu", "clear_cached_menus")
+  }
+
+  override fun onCommand(
+    sender: CommandSender,
+    command: Command,
+    label: String,
+    args: Array<out String>
+  ): Boolean {
+    when (args.getOrNull(0) ?: "help") {
+      "reload" -> {
+        sender.sendMessage("§fReloading...")
+        GameMakerPlugin.getInstance().reloadConfig()
+        measureTime {
+          ResourceManager.loadAllResources(validate = true, verbose = false)
+          I18nManager.compileLoadedI18n()
+        }.let {
+          sender.sendMessage("§7Done reloading. Took §f${it.inWholeMilliseconds} ms")
+        }
+      }
+      "give_all" -> {
+        if (sender !is Player) return true
+        itemTemplateRegistry.listResources().forEach {
+          sender.inventory.addItem(ItemManager.buildItem(it))
+        }
+        sender.sendMessage("§7Gave §f${itemTemplateRegistry.listResources().size} items")
+      }
+      "give" -> {
+        if (sender !is Player) return true
+        val item = args.getOrNull(1) ?: run {
+          sender.sendMessage("§7Usage: §f/gamemaker give <item>")
+          return true
+        }
+        sender.inventory.addItem(ItemManager.buildItem(item))
+        sender.sendMessage("§7Gave §f$item")
+      }
+      "clear_cached_menus" -> {
+        MenuManager.menus.clear()
+        sender.sendMessage("§7Cleared all cached menus")
+      }
+      "menu" -> {
+        if (sender !is Player) return true
+        val menu = args.getOrNull(1) ?: run {
+          sender.sendMessage("§7Usage: §f/gamemaker menu <menu>")
+          return true
+        }
+        MenuManager.open(sender, menu)
+      }
+      "translate" -> {
+        when (args.size) {
+          1 -> {
+            sender.sendMessage(I18nManager["ENGLISH", "some.key.to.something", System.currentTimeMillis(), sender.name])
+          }
+          2 -> {
+            sender.sendMessage(I18nManager["ENGLISH", args[1], System.currentTimeMillis(), sender.name])
+          }
+          3 -> {
+            sender.sendMessage(I18nManager[args[1], args[2], System.currentTimeMillis(), sender.name])
+          }
+          else -> {
+            sender.sendMessage(I18nManager[args[1], args[2], args.sliceArray(3 until args.size).toList().toTypedArray()])
+          }
+        }
+      }
+      else -> {
+        sender.sendMessage("reload")
+      }
+    }
+    return true
+  }
+}

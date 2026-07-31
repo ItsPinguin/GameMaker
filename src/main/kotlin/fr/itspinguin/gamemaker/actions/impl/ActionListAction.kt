@@ -1,0 +1,31 @@
+package fr.itspinguin.gamemaker.actions.impl
+
+import fr.itspinguin.gamemaker.actions.ActionContext
+import fr.itspinguin.gamemaker.actions.ActionExecutor
+import fr.itspinguin.gamemaker.actions.ActionManager
+import fr.itspinguin.gamemaker.actions.models.Action
+import fr.itspinguin.gamemaker.criteria.CriteriaManager
+import fr.itspinguin.gamemaker.criteria.models.Criterion
+import fr.itspinguin.resourcemanager.ResourceManager
+
+object ActionListAction : ActionExecutor() {
+  override fun execute(
+    action: Action,
+    context: ActionContext
+  ) {
+    val actions : List<Action> =
+      if ((action.data["actions"] as? List<*>)?.all { it is Action } == false)
+        ResourceManager.parseAny<List<Action>>(action.data["actions"]) ?: listOf()
+      else
+        action.data["actions"] as List<Action>
+
+    val criteria : List<Criterion> =
+      if ((action.data["criteria"] as? List<*>)?.all { it is Map<*, *> } == false)
+        ResourceManager.parseAny<List<Criterion>>(action.data["criteria"]) ?: listOf()
+      else
+        action.data["criteria"] as List<Criterion>
+
+    if (!CriteriaManager.checkCriteria(criteria, context.metadata)) return
+    actions.forEach { ActionManager.executeAction(it, context) }
+  }
+}

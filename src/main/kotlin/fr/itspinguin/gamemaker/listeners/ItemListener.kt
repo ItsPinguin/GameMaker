@@ -1,0 +1,29 @@
+package fr.itspinguin.gamemaker.listeners
+
+import fr.itspinguin.gamemaker.GameMakerPlugin
+import fr.itspinguin.gamemaker.actions.ActionContext
+import fr.itspinguin.gamemaker.actions.ActionManager
+import fr.itspinguin.gamemaker.actions.models.Action
+import fr.itspinguin.gamemaker.items.ItemManager
+import fr.itspinguin.resourcemanager.ResourceManager
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerInteractEvent
+
+object ItemListener : Listener {
+  @EventHandler
+  fun onInteract(e : PlayerInteractEvent) {
+    val item = ItemManager.getItemId(e.item ?: return)
+    val itemTemplate = GameMakerPlugin.itemTemplateRegistry.getResource(item) ?: return
+    val actions : List<Action> = ResourceManager.parseAny<List<Action>>(itemTemplate.customData.get("actions") ?: return) ?: return
+    actions.forEach { action ->
+      val triggers : List<org.bukkit.event.block.Action> = action.interactionTriggers ?: listOf(e.action)
+      if (!triggers.contains(e.action)) return@forEach
+      ActionManager.executeAction(action, ActionContext.ItemInteractActionContext(
+        e.player,
+        itemTemplate,
+        e
+      ))
+    }
+  }
+}

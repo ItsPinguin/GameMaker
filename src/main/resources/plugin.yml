@@ -1,6 +1,6 @@
 name: GameMaker
 version: '1.0.0'
-main: fr.ping.gamemaker.GameMakerPlugin
+main: fr.itspinguin.gamemaker.GameMakerPlugin
 api-version: '26.1.2'
 prefix: GameMaker
 load: STARTUP
