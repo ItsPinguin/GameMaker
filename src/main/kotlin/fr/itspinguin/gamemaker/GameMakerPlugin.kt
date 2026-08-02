@@ -93,8 +93,8 @@ class GameMakerPlugin : JavaPlugin() {
   }
 
   fun load() {
-    copyResourcesDir("editor", dataFolder.resolve("editor"), config.getBoolean("resources.replace-editor-files", false))
-    copyResourcesDir("example", dataFolder.resolve("example"), config.getBoolean("resources.replace-example-files", false))
+    copyResourcesDir(this, "editor", dataFolder.resolve("editor"), config.getBoolean("resources.replace-editor-files", false))
+    copyResourcesDir(this, "example", dataFolder.resolve("example"), config.getBoolean("resources.replace-example-files", false))
     ResourceManager.addResourcePath(dataFolder.path)
   }
 
@@ -120,10 +120,10 @@ class GameMakerPlugin : JavaPlugin() {
       actionExecutorRegistry.registerResource("notify", NotifyActionExecutor())
     }
 
-    fun copyResourcesDir(sourceDir: String, targetDir: File, replace : Boolean = false) {
+    fun copyResourcesDir(javaPlugin: JavaPlugin, sourceDir: String, targetDir: File, replace : Boolean = false) {
       if (!targetDir.exists())
         targetDir.mkdirs()
-      val resource = javaClass.classLoader.getResource(sourceDir) ?: return
+      val resource = javaPlugin.javaClass.classLoader.getResource(sourceDir) ?: return
 
       try {
         val connection: JarURLConnection = resource.openConnection() as JarURLConnection
