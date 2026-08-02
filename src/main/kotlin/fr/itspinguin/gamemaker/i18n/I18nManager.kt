@@ -17,7 +17,7 @@ object I18nManager {
   val defaultLanguage : String
     get() = config?.getString("default") ?: "ENGLISH"
   val fallbacks : ConfigurationSection?
-  get() = config?.getConfigurationSection("lang.fallbacks")
+  get() = config?.getConfigurationSection("fallbacks")
 
   val playerLanguages : MutableMap<UUID, String> = mutableMapOf()
 
