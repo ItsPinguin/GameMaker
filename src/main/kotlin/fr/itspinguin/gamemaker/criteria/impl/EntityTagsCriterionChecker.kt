@@ -1,5 +1,6 @@
 package fr.itspinguin.gamemaker.criteria.impl
 
+import com.google.gson.JsonObject
 import fr.itspinguin.gamemaker.criteria.CriterionChecker
 import fr.itspinguin.gamemaker.criteria.models.Criterion
 import org.bukkit.entity.Entity
@@ -8,7 +9,7 @@ object
 EntityTagsCriterionChecker : CriterionChecker(){
   override fun check(
     criterion: Criterion,
-    context: Map<String, Any?>
+    context: JsonObject
   ): Boolean {
     if (criterion.criterion !in listOf("entity_tag", "entity_tags")) return true
     val entity = (context["entity"] as? Entity?) ?: return false

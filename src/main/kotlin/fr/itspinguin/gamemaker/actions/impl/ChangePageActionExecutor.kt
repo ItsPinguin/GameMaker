@@ -11,8 +11,8 @@ object ChangePageActionExecutor : ActionExecutor() {
     context: ActionContext
   ) {
     if (context !is ActionContext.MenuClickActionContext) return
-    val list = action.data["list"] as? String ?: return
-    val pageOffset = action.data["page_offset"].toString().toDoubleOrNull()?.toInt() ?: return
+    val list = action.data["list"]?.asString ?: return
+    val pageOffset = action.data["page_offset"]?.asInt ?: return
     MenuManager.changePage(context.player, context.menu, list, pageOffset)
   }
 }

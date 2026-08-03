@@ -13,7 +13,7 @@
       }
     },
     "max_stack_size": 2,
-    "unbreakable": true
+    "unbreakable": {}
   },
   "removed_components": [
     "attribute_modifiers"

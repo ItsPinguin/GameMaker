@@ -1,5 +1,6 @@
 package fr.itspinguin.gamemaker.dialog
 
+import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import fr.itspinguin.gamemaker.actions.ActionContext
 import fr.itspinguin.gamemaker.actions.ActionManager
@@ -25,7 +26,7 @@ data class Dialog(
   @Transient
   val indexes = mutableMapOf<String, Int>()
 
-  fun use(context: Map<String, Any?> = mapOf()) {
+  fun use(context: JsonObject) {
     val player = context["player"] as? Player ?: return
     val playerName = player.name
     val index = indexes.getOrPut(playerName) { 0 }

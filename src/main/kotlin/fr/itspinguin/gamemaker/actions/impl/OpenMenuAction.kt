@@ -7,7 +7,8 @@ import fr.itspinguin.gamemaker.menus.MenuManager
 
 object OpenMenuAction : ActionExecutor() {
   override fun execute(
-    action: Action,
+    action:
+    Action,
     context: ActionContext
   ) {
     if (context !is ActionContext.PlayerActionContext) return

@@ -11,7 +11,7 @@ object DialogAction : ActionExecutor() {
     action: Action,
     context: ActionContext
   ) {
-    val dialogId = action.data["dialog"] as? String ?: return
+    val dialogId = action.data["dialog"]?.asString ?: return
     @Suppress("DEPRECATION")
     val dialog = ResourceManager[dialogId, Dialog::class.java] ?: return
     dialog.resource?.use(context.metadata)

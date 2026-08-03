@@ -1,5 +1,6 @@
 package fr.itspinguin.gamemaker.criteria.impl
 
+import com.google.gson.JsonObject
 import fr.itspinguin.gamemaker.criteria.CriterionChecker
 import fr.itspinguin.gamemaker.criteria.models.Criterion
 import org.bukkit.entity.Player
@@ -9,12 +10,12 @@ object CooldownCriterionChecker : CriterionChecker() {
 
   override fun check(
     criterion: Criterion,
-    context: Map<String, Any?>
+    context: JsonObject
   ) : Boolean {
     if (criterion.criterion !in listOf("cooldown", "cooldown_action", "cooldown_check")) return true
-    val owner = criterion.data["owner"] as? String ?: (context["player"] as? Player)?.name ?: return true
-    val group = criterion.data["group"] as? String ?: "global"
-    val cooldown = criterion.data["cooldown"] as? Double ?: 0.0
+    val owner = criterion.data["owner"]?.asString ?: (context["player"] as? Player)?.name ?: return true
+    val group = criterion.data["group"]?.asString ?: "global"
+    val cooldown = criterion.data["cooldown"]?.asDouble ?: 0.0
     return (cooldowns.getOrPut(group) { mutableMapOf() }.getOrPut(owner) { Double.MIN_VALUE } < System.currentTimeMillis()).let {
       if (it)
         cooldowns[group]?.set(owner, System.currentTimeMillis() + cooldown * 1000)

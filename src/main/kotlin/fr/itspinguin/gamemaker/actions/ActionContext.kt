@@ -1,5 +1,6 @@
 package fr.itspinguin.gamemaker.actions
 
+import com.google.gson.JsonObject
 import fr.itspinguin.gamemaker.items.templates.models.ItemTemplate
 import fr.itspinguin.gamemaker.menus.models.MenuInstance
 import org.bukkit.entity.Player
@@ -7,10 +8,10 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerInteractEvent
 
 sealed class ActionContext(
-  open val metadata: Map<String, Any?> = mutableMapOf()
+  open val metadata: JsonObject = JsonObject()
 ) {
   data class GenericActionContext(
-    override val metadata: Map<String, Any?> = mutableMapOf()
+    override val metadata: JsonObject = JsonObject()
   ) : ActionContext(metadata)
 
   open class PlayerActionContext(

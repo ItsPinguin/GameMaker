@@ -6,6 +6,7 @@ import fr.itspinguin.gamemaker.actions.models.Action
 import fr.itspinguin.gamemaker.criteria.CriteriaManager
 import fr.itspinguin.gamemaker.criteria.models.Criterion
 import fr.itspinguin.gamemaker.items.ItemManager
+import fr.itspinguin.gamemaker.items.templates.models.ItemTemplate
 import fr.itspinguin.resourcemanager.ResourceManager
 import org.bukkit.Sound
 
@@ -15,8 +16,8 @@ object GiveItemsAction: ActionExecutor() {
     context: ActionContext
   ) {
     if (context !is ActionContext.PlayerActionContext) return
-    val criteria = action.data["criteria"] as? List<*> ?: mutableListOf<String>()
-    val items = action.data["items"] as? List<*> ?: return
+    val criteria = ResourceManager.parseJson<List<Criterion>>(action.data["criteria"]) ?: listOf()
+    val items = ResourceManager.parseJson<List<ItemTemplate>>(action.data["items"]) ?: listOf()
 
     val parsedCriteria = criteria.map { ResourceManager.getGson().fromJson(
       ResourceManager.getGson().toJson(it), Criterion::class.java) }
@@ -31,17 +32,9 @@ object GiveItemsAction: ActionExecutor() {
 
     val itemMap = mutableMapOf<String, Int>()
     items.forEach { item ->
-      if (item is String) {
-        val itemStack = ItemManager.buildItem(item)
-        context.player.inventory.addItem(itemStack)
-        itemMap[item] = itemMap.getOrDefault(item, 0) + 1
-      }
-      if (item is Map<*, *>) {
-        val itemStack = ItemManager.buildItem(item["id"] as? String ?: return)
-        val count = item["count"].toString().toDoubleOrNull()?.toInt() ?: 1
-        context.player.inventory.addItem(itemStack.apply { amount = count })
-        itemMap[item["id"] as? String ?: return] = itemMap.getOrDefault(item["id"] as? String ?: return, 0) + count
-      }
+      itemMap[item.id] = itemMap.getOrDefault(item.id, 0) + 1
+      val itemStack = ItemManager.buildItem(item)
+      context.player.inventory.addItem(itemStack)
     }
 
     itemMap.forEach { (key, value) ->

@@ -13,17 +13,9 @@ object ActionListAction : ActionExecutor() {
     action: Action,
     context: ActionContext
   ) {
-    val actions : List<Action> =
-      if ((action.data["actions"] as? List<*>)?.all { it is Action } == false)
-        ResourceManager.parseAny<List<Action>>(action.data["actions"]) ?: listOf()
-      else
-        action.data["actions"] as List<Action>
+    val actions : List<Action> = ResourceManager.parseJson<List<Action>>(action.data["actions"]) ?: listOf()
 
-    val criteria : List<Criterion> =
-      if ((action.data["criteria"] as? List<*>)?.all { it is Map<*, *> } == false)
-        ResourceManager.parseAny<List<Criterion>>(action.data["criteria"]) ?: listOf()
-      else
-        action.data["criteria"] as List<Criterion>
+    val criteria : List<Criterion> = ResourceManager.parseJson<List<Criterion>>(action.data["criteria"]) ?: listOf()
 
     if (!CriteriaManager.checkCriteria(criteria, context.metadata)) return
     actions.forEach { ActionManager.executeAction(it, context) }

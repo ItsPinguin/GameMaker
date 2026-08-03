@@ -10,6 +10,6 @@ object CommandAction : ActionExecutor() {
     context: ActionContext
   ) {
     if (context !is ActionContext.PlayerActionContext) return
-    context.player.performCommand(action.data["command"] as? String ?: return)
+    context.player.performCommand(action.data["command"]?.asString ?: return)
   }
 }

@@ -11,6 +11,6 @@ object MessagePlayer : ActionExecutor() {
     context: ActionContext
   ) {
     if (context !is ActionContext.PlayerActionContext) return
-    context.player.sendMessage(I18nManager[action.data["message"] as? String ?: "no_message"])
+    context.player.sendMessage(I18nManager[action.data["message"]?.asString ?: "no_message"])
   }
 }

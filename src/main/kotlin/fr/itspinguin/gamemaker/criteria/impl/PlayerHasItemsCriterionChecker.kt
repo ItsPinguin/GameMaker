@@ -1,5 +1,6 @@
 package fr.itspinguin.gamemaker.criteria.impl
 
+import com.google.gson.JsonObject
 import fr.itspinguin.gamemaker.GameMakerPlugin
 import fr.itspinguin.gamemaker.criteria.CriterionChecker
 import fr.itspinguin.gamemaker.criteria.models.Criterion
@@ -9,7 +10,7 @@ import org.bukkit.entity.Player
 object PlayerHasItemsCriterionChecker : CriterionChecker() {
   override fun check(
     criterion: Criterion,
-    context: Map<String, Any?>
+    context: JsonObject
   ): Boolean {
     if (criterion.criterion != "player_has_items")
       return true

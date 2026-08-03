@@ -1,5 +1,6 @@
 package fr.itspinguin.gamemaker.editor.impl
 
+import com.google.gson.JsonElement
 import fr.itspinguin.gamemaker.i18n.I18nManager
 import fr.itspinguin.gamemaker.items.ItemBuilderContext
 import fr.itspinguin.gamemaker.items.builders.models.ItemListBuilder
@@ -12,12 +13,12 @@ import org.bukkit.inventory.ItemStack
 object ResourceItemListBuilder : ItemListBuilder() {
   override fun getListSize(context: ItemBuilderContext): Int {
     if (context !is ItemBuilderContext.MenuSlotItemBuilderContext) return 0
-    return ResourceManager.getRegistryMap()[context.menuInstance.data["registry"] ?: return 0]?.listHandles()?.size ?: 0
+    return ResourceManager.getRegistryMap()[(context.menuInstance.data["registry"] as JsonElement?)?.asString ?: return 0]?.listHandles()?.size ?: 0
   }
 
   override fun getItem(index: Int, context: ItemBuilderContext): ItemStack? {
     if (context !is ItemBuilderContext.MenuSlotItemBuilderContext) return null
-    val registry = ResourceManager.getRegistryMap()[context.menuInstance.data["registry"] ?: return null] ?: return null
+    val registry = ResourceManager.getRegistryMap()[(context.menuInstance.data["registry"] as JsonElement?)?.asString ?: return null] ?: return null
     if (index !in registry.listHandles().indices) return null
     val resource = registry.listResources().getOrNull(index) ?: return null
     val itemStack = ItemStack(

@@ -104,9 +104,13 @@ object MenuManager {
     val filledSlots = button.getFilledSlots()
     val listProvider = GameMakerPlugin.itemListBuilderRegistry.getResource(button.list)
     if (button.list != null && button.pageOffset == null) {
+      if (listProvider == null) let {
+        println("List provider not found: ${button.list}")
+        return
+      }
       menuInstance.pageStates.getOrPut(button.list!!) { PageState(0, 0) }.apply {
         pageSize = filledSlots.size
-        total = listProvider!!.getListSize(ItemBuilderContext.MenuSlotItemBuilderContext(
+        total = listProvider.getListSize(ItemBuilderContext.MenuSlotItemBuilderContext(
           actualSlot = 0,
           index = 0,
           menuInstance = menuInstance,

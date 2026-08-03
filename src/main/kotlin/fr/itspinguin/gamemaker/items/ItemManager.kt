@@ -27,7 +27,15 @@ object ItemManager {
         )
       }
       .joinToString(",")
-    val itemStack = Bukkit.getItemFactory().createItemStack("${template.material.lowercase()}[${componentString}]")
+    val itemStack = try {
+      Bukkit.getItemFactory().createItemStack("${template.material.lowercase()}[${componentString}]")
+    } catch (e: Exception) {
+      try {
+        Bukkit.getItemFactory().createItemStack(template.material.lowercase())
+      } catch (e: Exception) {
+        return ItemStack(Material.AIR)
+      }
+    }
     itemStack.amount = template.amount
     if (itemStack.type == Material.AIR) return itemStack
     var itemMeta = itemStack.itemMeta ?: return itemStack
