@@ -40,10 +40,14 @@ object I18nManager {
 
   fun getString(key : String, vararg args : Any?) : String = getString(defaultLanguage, key, *args)
 
+  fun getString(player: Player, key : String, vararg args : Any?) : String = getString(playerLanguages[player.uniqueId] ?: defaultLanguage, key, *args)
+
   fun getStringIfIndicator(locale: String, key: String, vararg args : Any?) : String {
     return if (!key.startsWith("$")) key
     else getString(locale, key.substring(1), *args)
   }
+
+  fun getStringIfIndicator(player: Player, key: String, vararg args : Any?) : String = getString(playerLanguages[player.uniqueId] ?: defaultLanguage, key, *args)
 
   fun getComponent(locale : String, key : String, vararg args : Any?) : Component {
     val current = getAnyOrFallback(locale, key)
@@ -52,10 +56,14 @@ object I18nManager {
     return if (args.isEmpty()) component else insertIntoComponent(component, *args)
   }
 
+  fun getComponent(player: Player, key : String, vararg args : Any?) : Component = getComponent(playerLanguages[player.uniqueId] ?: defaultLanguage, key, *args)
+
   fun getComponentIfIndicator(locale: String, key: String, vararg args : Any?) : Component {
     return if (!key.startsWith("$")) ComponentTypeAdapter.parseComponent(key)
     else getComponent(locale, key.substring(1), *args)
   }
+
+  fun getComponentIfIndicator(player: Player, key: String, vararg args : Any?) : Component = getComponent(playerLanguages[player.uniqueId] ?: defaultLanguage, key, *args)
 
   fun getFallback(locale: String) : String {
     return fallbacks?.getString(locale) ?: defaultLanguage

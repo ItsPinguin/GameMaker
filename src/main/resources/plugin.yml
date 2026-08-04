@@ -1,7 +1,7 @@
 name: GameMaker
-version: '1.0.0'
+version: '1.0.1-SNAPSHOT'
 main: fr.itspinguin.gamemaker.GameMakerPlugin
-api-version: '26.1.2'
+api-version: '26.2'
 prefix: GameMaker
 load: STARTUP
 authors: [ ItsPinguin ]
