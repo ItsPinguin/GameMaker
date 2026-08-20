@@ -1,5 +1,5 @@
 name: GameMaker
-version: '1.0.1-SNAPSHOT'
+version: '1.1.0'
 main: fr.itspinguin.gamemaker.GameMakerPlugin
 api-version: '26.2'
 prefix: GameMaker
