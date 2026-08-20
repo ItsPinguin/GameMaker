@@ -60,6 +60,7 @@ object I18nManager {
 
     return if (args.isEmpty()) component else insertIntoComponent(component, *args)
   }
+
   fun getComponentIfIndicator(locale: String, key: String, vararg args: Any?): Component {
     return if (!key.startsWith("$")) ComponentTypeAdapter.parseComponent(key)
     else getComponent(locale, key.substring(1), *args)
@@ -194,7 +195,15 @@ object I18nManager {
     return I18nManager.getComponentIfIndicator(getLanguage(), key, *args)
   }
 
+  @Deprecated(
+    "Use message instead",
+    ReplaceWith("message(key, *args)", "fr.itspinguin.gamemaker.i18n.I18nManager.message")
+  )
   fun UUID.sendComponent(key: String, vararg args: Any?) {
+    message(key, *args)
+  }
+
+  fun UUID.message(key: String, vararg args: Any?) {
     Bukkit.getPlayer(this)?.sendMessage(getComponent(key, *args))
   }
 
@@ -222,7 +231,15 @@ object I18nManager {
     return uniqueId.getComponentIfIndicator(key, *args)
   }
 
+  @Deprecated(
+    "Use message instead",
+    ReplaceWith("message(key, *args)", "fr.itspinguin.gamemaker.i18n.I18nManager.message")
+  )
   fun Player.sendComponent(key: String, vararg args: Any?) {
-     sendMessage(getComponent(key, *args))
+    message(key, *args)
+  }
+
+  fun Player.message(key: String, vararg args: Any?) {
+    sendMessage(getComponent(key, *args))
   }
 }
