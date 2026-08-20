@@ -39,15 +39,7 @@ object MenuManager {
     val template = menuInstance.template.resource ?: return
     val slot = template.getButton(e.slot)
     e.isCancelled = slot.cancel ?: template.cancelByDefault
-    slot.actions.forEach { action ->
-      val triggers : List<ClickType> = action.inventoryTriggers ?: listOf(e.click)
-      if (!triggers.contains(e.click)) return@forEach
-      ActionManager.executeAction(action, ActionContext.MenuClickActionContext(
-        e.whoClicked as Player,
-        menuInstance,
-        e
-      ))
-    }
+    executeActionsIfTriggered(slot, e.whoClicked as Player, menuInstance, e)
     if (slot.list != null && slot.pageOffset == null) {
       val builder = GameMakerPlugin.itemListBuilderRegistry.getResource(slot.list) ?: return
       val pageState = menuInstance.pageStates.getOrPut(slot.list!!) { PageState(0, 0) }
@@ -57,6 +49,19 @@ object MenuManager {
         index + pageState.getOffset(),
         e, menuInstance
       )
+      executeActionsIfTriggered(slot, e.whoClicked as Player, menuInstance, e)
+    }
+  }
+
+  private fun executeActionsIfTriggered(slot : MenuButton, player : Player, menuInstance : MenuInstance, e : InventoryClickEvent) {
+    slot.actions.forEach { action ->
+      val triggers : List<ClickType> = action.inventoryTriggers ?: listOf(e.click)
+      if (!triggers.contains(e.click)) return@forEach
+      ActionManager.executeAction(action, ActionContext.MenuClickActionContext(
+        player,
+        menuInstance,
+        e
+      ))
     }
   }
 
