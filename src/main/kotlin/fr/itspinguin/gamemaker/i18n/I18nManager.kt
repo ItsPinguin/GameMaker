@@ -5,71 +5,75 @@ import fr.itspinguin.gamemaker.utils.adapter.ComponentTypeAdapter
 import fr.itspinguin.resourcemanager.ResourceManager
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextReplacementConfig
+import org.bukkit.Bukkit
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import java.util.regex.Pattern
 
 object I18nManager {
-  val languages : MutableMap<String, MutableMap<String, Any?>> = mutableMapOf()
+  val languages: MutableMap<String, MutableMap<String, Any?>> = mutableMapOf()
   val config
     get() = GameMakerPlugin.getInstance().config.getConfigurationSection("lang")
-  val defaultLanguage : String
+  val defaultLanguage: String
     get() = config?.getString("default") ?: "ENGLISH"
-  val fallbacks : ConfigurationSection?
-  get() = config?.getConfigurationSection("fallbacks")
+  val fallbacks: ConfigurationSection?
+    get() = config?.getConfigurationSection("fallbacks")
 
-  val playerLanguages : MutableMap<UUID, String> = mutableMapOf()
+  val playerLanguages: MutableMap<UUID, String> = ConcurrentHashMap<UUID, String>()
 
-  operator fun get(key: String, vararg args: Any?) : Component = get(defaultLanguage, key, *args)
+  operator fun get(key: String, vararg args: Any?): Component = get(defaultLanguage, key, *args)
 
-  operator fun get(locale: String, key: String, vararg args: Any?) : Component {
+  operator fun get(locale: String, key: String, vararg args: Any?): Component {
     return getComponent(locale, key, *args)
   }
 
-  operator fun get(player: Player, key: String, vararg args: Any?) : Component =
+  operator fun get(player: Player, key: String, vararg args: Any?): Component =
     get(playerLanguages[player.uniqueId] ?: defaultLanguage, key, *args)
 
-  operator fun get(uuid: UUID, key: String, vararg args: Any?) : Component =
+  operator fun get(uuid: UUID, key: String, vararg args: Any?): Component =
     get(playerLanguages[uuid] ?: defaultLanguage, key, *args)
 
-  fun getString(locale : String, key : String, vararg args : Any?) : String {
+  fun getString(locale: String, key: String, vararg args: Any?): String {
     val value = getAnyOrFallback(locale, key).toString()
     return if (args.isEmpty()) value else insertIntoString(value, *args)
   }
 
-  fun getString(key : String, vararg args : Any?) : String = getString(defaultLanguage, key, *args)
+  fun getString(key: String, vararg args: Any?): String = getString(defaultLanguage, key, *args)
 
-  fun getString(player: Player, key : String, vararg args : Any?) : String = getString(playerLanguages[player.uniqueId] ?: defaultLanguage, key, *args)
+  fun getString(player: Player, key: String, vararg args: Any?): String =
+    getString(playerLanguages[player.uniqueId] ?: defaultLanguage, key, *args)
 
-  fun getStringIfIndicator(locale: String, key: String, vararg args : Any?) : String {
+  fun getStringIfIndicator(locale: String, key: String, vararg args: Any?): String {
     return if (!key.startsWith("$")) key
     else getString(locale, key.substring(1), *args)
   }
 
-  fun getStringIfIndicator(player: Player, key: String, vararg args : Any?) : String = getString(playerLanguages[player.uniqueId] ?: defaultLanguage, key, *args)
+  fun getStringIfIndicator(player: Player, key: String, vararg args: Any?): String =
+    getString(playerLanguages[player.uniqueId] ?: defaultLanguage, key, *args)
 
-  fun getComponent(locale : String, key : String, vararg args : Any?) : Component {
+  fun getComponent(locale: String, key: String, vararg args: Any?): Component {
     val current = getAnyOrFallback(locale, key)
-    val component = ResourceManager.parseAny<Component>(current) ?: ComponentTypeAdapter.parseComponent(current.toString())
+    val component =
+      ResourceManager.parseAny<Component>(current) ?: ComponentTypeAdapter.parseComponent(current.toString())
 
     return if (args.isEmpty()) component else insertIntoComponent(component, *args)
   }
 
-  fun getComponent(player: Player, key : String, vararg args : Any?) : Component = getComponent(playerLanguages[player.uniqueId] ?: defaultLanguage, key, *args)
+  fun getComponent(player: Player, key: String, vararg args: Any?): Component =
+    getComponent(playerLanguages[player.uniqueId] ?: defaultLanguage, key, *args)
 
-  fun getComponentIfIndicator(locale: String, key: String, vararg args : Any?) : Component {
+  fun getComponentIfIndicator(locale: String, key: String, vararg args: Any?): Component {
     return if (!key.startsWith("$")) ComponentTypeAdapter.parseComponent(key)
     else getComponent(locale, key.substring(1), *args)
   }
 
-  fun getComponentIfIndicator(player: Player, key: String, vararg args : Any?) : Component = getComponent(playerLanguages[player.uniqueId] ?: defaultLanguage, key, *args)
-
-  fun getFallback(locale: String) : String {
+  fun getFallback(locale: String): String {
     return fallbacks?.getString(locale) ?: defaultLanguage
   }
 
-  fun getAny(locale : String, key : String) : Any? {
+  fun getAny(locale: String, key: String): Any? {
     val translations = languages[locale] ?: languages[fallbacks?.getString(locale) ?: defaultLanguage] ?: return null
     val path = key.lowercase().split(".")
     var current: Any? = translations
@@ -82,12 +86,12 @@ object I18nManager {
     return current
   }
 
-  fun getAnyOrFallback(locale : String, key : String) : Any {
+  fun getAnyOrFallback(locale: String, key: String): Any {
     if (locale == defaultLanguage) return getAny(locale, key) ?: key
     return getAny(locale, key) ?: getAnyOrFallback(getFallback(locale), key)
   }
 
-  fun insertIntoString(value : String, vararg args : Any?) : String {
+  fun insertIntoString(value: String, vararg args: Any?): String {
     val pattern = Pattern.compile("\\{(\\d+)(?::([^}]+))?}")
 
     var newValue = value
@@ -121,7 +125,7 @@ object I18nManager {
     return value
   }
 
-  fun insertIntoComponent(component : Component, vararg args : Any?) : Component {
+  fun insertIntoComponent(component: Component, vararg args: Any?): Component {
     var component = component
     val pattern = Pattern.compile("\\{(\\d+)(?::([^}]+))?}")
 
@@ -152,10 +156,8 @@ object I18nManager {
         argumentValue?.toString() ?: "null"
       }
 
-      val replacementConfig = TextReplacementConfig.builder()
-        .matchLiteral(fullPlaceholder)
-        .replacement(formattedReplacement)
-        .build()
+      val replacementConfig =
+        TextReplacementConfig.builder().matchLiteral(fullPlaceholder).replacement(formattedReplacement).build()
 
       component = component.replaceText(replacementConfig)
     }
@@ -169,5 +171,63 @@ object I18nManager {
         i18n.translations.forEach { (key, value) -> put(key, value) }
       }
     }
+  }
+
+
+  fun UUID.setLanguage(locale: String) {
+    playerLanguages[this] = locale
+  }
+
+
+  fun UUID.getLanguage(): String {
+    return playerLanguages[this] ?: defaultLanguage
+  }
+
+  fun UUID.getText(key: String, vararg args: Any?): String {
+    return getString(getLanguage(), key, args)
+  }
+
+  fun UUID.getComponent(key: String, vararg args: Any?): Component {
+    return getComponent(getLanguage(), key, args)
+  }
+
+  fun UUID.getTextIfIndicator(key: String, vararg args: Any?): String {
+    return getStringIfIndicator(getLanguage(), key, args)
+  }
+
+  fun UUID.getComponentIfIndicator(key: String, vararg args: Any?): Component {
+    return getComponentIfIndicator(getLanguage(), key)
+  }
+
+  fun UUID.sendComponent(key: String, vararg args: Any?) {
+    Bukkit.getPlayer(this)?.sendMessage(getComponent(key, args))
+  }
+
+  fun Player.setLanguage(locale: String) {
+    uniqueId.setLanguage(locale)
+  }
+
+  fun Player.getLanguage(): String {
+    return uniqueId.getLanguage()
+  }
+
+  fun Player.getText(key: String, vararg args: Any?): String {
+    return uniqueId.getText(key, args)
+  }
+
+  fun Player.getComponent(key: String, vararg args: Any?): Component {
+    return uniqueId.getComponent(key, args)
+  }
+
+  fun Player.getTextIfIndicator(key: String, vararg args: Any?): String {
+    return uniqueId.getTextIfIndicator(key, args)
+  }
+
+  fun Player.getComponentIfIndicator(key: String, vararg args: Any?): Component {
+    return uniqueId.getComponentIfIndicator(key, args)
+  }
+
+  fun Player.sendComponent(key: String, vararg args: Any?) {
+    uniqueId.sendComponent(key, args)
   }
 }
