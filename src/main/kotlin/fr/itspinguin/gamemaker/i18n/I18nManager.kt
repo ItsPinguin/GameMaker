@@ -60,10 +60,6 @@ object I18nManager {
 
     return if (args.isEmpty()) component else insertIntoComponent(component, *args)
   }
-
-  fun getComponent(player: Player, key: String, vararg args: Any?): Component =
-    getComponent(playerLanguages[player.uniqueId] ?: defaultLanguage, key, *args)
-
   fun getComponentIfIndicator(locale: String, key: String, vararg args: Any?): Component {
     return if (!key.startsWith("$")) ComponentTypeAdapter.parseComponent(key)
     else getComponent(locale, key.substring(1), *args)
@@ -188,7 +184,7 @@ object I18nManager {
   }
 
   fun UUID.getComponent(key: String, vararg args: Any?): Component {
-    return getComponent(getLanguage(), key, args)
+    return I18nManager.getComponent(getLanguage(), key, args)
   }
 
   fun UUID.getTextIfIndicator(key: String, vararg args: Any?): String {
@@ -196,7 +192,7 @@ object I18nManager {
   }
 
   fun UUID.getComponentIfIndicator(key: String, vararg args: Any?): Component {
-    return getComponentIfIndicator(getLanguage(), key)
+    return I18nManager.getComponentIfIndicator(getLanguage(), key)
   }
 
   fun UUID.sendComponent(key: String, vararg args: Any?) {
