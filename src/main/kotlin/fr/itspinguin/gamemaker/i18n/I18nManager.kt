@@ -174,29 +174,28 @@ object I18nManager {
     playerLanguages[this] = locale
   }
 
-
   fun UUID.getLanguage(): String {
     return playerLanguages[this] ?: defaultLanguage
   }
 
   fun UUID.getText(key: String, vararg args: Any?): String {
-    return getString(getLanguage(), key, args)
+    return getString(getLanguage(), key, *args)
   }
 
   fun UUID.getComponent(key: String, vararg args: Any?): Component {
-    return I18nManager.getComponent(getLanguage(), key, args)
+    return I18nManager.getComponent(getLanguage(), key, *args)
   }
 
   fun UUID.getTextIfIndicator(key: String, vararg args: Any?): String {
-    return getStringIfIndicator(getLanguage(), key, args)
+    return getStringIfIndicator(getLanguage(), key, *args)
   }
 
   fun UUID.getComponentIfIndicator(key: String, vararg args: Any?): Component {
-    return I18nManager.getComponentIfIndicator(getLanguage(), key)
+    return I18nManager.getComponentIfIndicator(getLanguage(), key, *args)
   }
 
   fun UUID.sendComponent(key: String, vararg args: Any?) {
-    Bukkit.getPlayer(this)?.sendMessage(getComponent(key, args))
+    Bukkit.getPlayer(this)?.sendMessage(getComponent(key, *args))
   }
 
   fun Player.setLanguage(locale: String) {
@@ -208,22 +207,22 @@ object I18nManager {
   }
 
   fun Player.getText(key: String, vararg args: Any?): String {
-    return uniqueId.getText(key, args)
+    return uniqueId.getText(key, *args)
   }
 
   fun Player.getComponent(key: String, vararg args: Any?): Component {
-    return uniqueId.getComponent(key, args)
+    return uniqueId.getComponent(key, *args)
   }
 
   fun Player.getTextIfIndicator(key: String, vararg args: Any?): String {
-    return uniqueId.getTextIfIndicator(key, args)
+    return uniqueId.getTextIfIndicator(key, *args)
   }
 
   fun Player.getComponentIfIndicator(key: String, vararg args: Any?): Component {
-    return uniqueId.getComponentIfIndicator(key, args)
+    return uniqueId.getComponentIfIndicator(key, *args)
   }
 
   fun Player.sendComponent(key: String, vararg args: Any?) {
-    uniqueId.sendComponent(key, args)
+     sendMessage(getComponent(key, *args))
   }
 }
