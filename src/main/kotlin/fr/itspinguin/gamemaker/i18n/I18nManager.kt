@@ -3,9 +3,11 @@ package fr.itspinguin.gamemaker.i18n
 import fr.itspinguin.gamemaker.GameMakerPlugin
 import fr.itspinguin.gamemaker.utils.adapter.ComponentTypeAdapter
 import fr.itspinguin.resourcemanager.ResourceManager
+import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextReplacementConfig
 import org.bukkit.Bukkit
+import org.bukkit.command.ConsoleCommandSender
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
 import java.util.*
@@ -21,7 +23,10 @@ object I18nManager {
   val fallbacks: ConfigurationSection?
     get() = config?.getConfigurationSection("fallbacks")
 
-  val playerLanguages: MutableMap<UUID, String> = ConcurrentHashMap<UUID, String>()
+  val consoleId: UUID = UUID.randomUUID()
+  val playerLanguages: MutableMap<UUID, String> = ConcurrentHashMap<UUID, String>().apply {
+    put(consoleId, defaultLanguage)
+  }
 
   operator fun get(key: String, vararg args: Any?): Component = get(defaultLanguage, key, *args)
 
@@ -207,28 +212,33 @@ object I18nManager {
     Bukkit.getPlayer(this)?.sendMessage(getComponent(key, *args))
   }
 
-  fun Player.setLanguage(locale: String) {
-    uniqueId.setLanguage(locale)
+  fun Audience.getUniqueId() : UUID {
+    if (this is Player) return uniqueId
+    return consoleId
   }
 
-  fun Player.getLanguage(): String {
-    return uniqueId.getLanguage()
+  fun Audience.setLanguage(locale: String) {
+    getUniqueId().setLanguage(locale)
   }
 
-  fun Player.getText(key: String, vararg args: Any?): String {
-    return uniqueId.getText(key, *args)
+  fun Audience.getLanguage(): String {
+    return getUniqueId().getLanguage()
   }
 
-  fun Player.getComponent(key: String, vararg args: Any?): Component {
-    return uniqueId.getComponent(key, *args)
+  fun Audience.getText(key: String, vararg args: Any?): String {
+    return getUniqueId().getText(key, *args)
   }
 
-  fun Player.getTextIfIndicator(key: String, vararg args: Any?): String {
-    return uniqueId.getTextIfIndicator(key, *args)
+  fun Audience.getComponent(key: String, vararg args: Any?): Component {
+    return getUniqueId().getComponent(key, *args)
   }
 
-  fun Player.getComponentIfIndicator(key: String, vararg args: Any?): Component {
-    return uniqueId.getComponentIfIndicator(key, *args)
+  fun Audience.getTextIfIndicator(key: String, vararg args: Any?): String {
+    return getUniqueId().getTextIfIndicator(key, *args)
+  }
+
+  fun Audience.getComponentIfIndicator(key: String, vararg args: Any?): Component {
+    return getUniqueId().getComponentIfIndicator(key, *args)
   }
 
   @Deprecated(
@@ -239,7 +249,7 @@ object I18nManager {
     message(key, *args)
   }
 
-  fun Player.message(key: String, vararg args: Any?) {
+  fun Audience.message(key: String, vararg args: Any?) {
     sendMessage(getComponent(key, *args))
   }
 }
