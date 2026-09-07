@@ -13,6 +13,7 @@ import org.bukkit.entity.Player
 object ModernGameMakerCommand {
   fun register() {
     val root : LiteralCommandNode<CommandSourceStack> = Commands.literal("gmk-modern")
+      .requires { sender -> sender.sender.hasPermission("op") }
       .then(Commands.literal("reload"))
       .then(Commands.literal("menu")
         .then(Commands.argument("menu", StringArgumentType.word())
