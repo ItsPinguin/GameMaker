@@ -10,13 +10,18 @@ group = "fr.itspinguin.gamemaker"
 version = "1.1.0"
 
 repositories {
+  maven {
+    name = "papermc"
+    url = uri("https://repo.papermc.io/repository/maven-public/")
+  }
+
   mavenCentral()
   mavenLocal()
 }
 
 dependencies {
   implementation(kotlin("stdlib"))
-  compileOnly("io.papermc.paper:paper-api:26.2.build.121-stable")
+  compileOnly("io.papermc.paper:paper-api:26.2.build.+")
   implementation("fr.itspinguin.resourcemanager:resource-manager:1.0.0")
 
   testImplementation(kotlin("test"))
