@@ -6,7 +6,7 @@ plugins {
   `maven-publish`
 }
 
-group = "fr.itspinguin.gamemaker"
+group = "fr.itspinguin.game-maker"
 version = "1.1.0"
 
 repositories {
@@ -22,7 +22,7 @@ repositories {
 dependencies {
   implementation(kotlin("stdlib"))
   compileOnly("io.papermc.paper:paper-api:26.2.build.+")
-  implementation("fr.itspinguin.resourcemanager:resource-manager:1.0.0")
+  implementation("fr.itspinguin.resource-manager:resource-manager:1.0.0")
 
   testImplementation(kotlin("test"))
   testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
